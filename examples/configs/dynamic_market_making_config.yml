@@ -1,0 +1,57 @@
+version: 1.0.0
+
+# Simulation parameters - 1000 blocks with high volatility price action
+common:
+  block_number_start: 18725000 # Historical Ethereum block number
+  block_number_end: 18726000 # 1000 blocks simulation (~3-4 hours)
+  block_step_metrics: 50 # Collect metrics every 50 blocks
+  numeraire: USDC # Use USDC as base currency for calculations
+  plot_output: true # Generate performance charts
+  save_metrics: false # Don't save detailed metrics to file
+  arbitrage_block_frequency: 5 # Check arbitrage opportunities every 5 blocks
+
+# Price model for ETH/USDC (volatile pair)
+spot:
+  spot_list:
+    - name: WETH/USDC
+      gbm: # Geometric Brownian Motion model
+        s0: 2000 # Starting price: $2000 per ETH
+        mu: 0. # No drift (neutral market expectation)
+        vol: 0.4 # 40% annual volatility (high volatility)
+  correlation: [[1]] # Single asset, perfect self-correlation
+
+# Protocol and pool setup
+simulation_environment:
+  protocols_to_simulate:
+    uniswap_v3:
+      initial_state:
+        custom_state:
+          pools:
+            - pool_name: uniswapv3_eth_usdc
+              symbol_token0: ETH # First token in the pair
+              symbol_token1: USDC # Second token in the pair
+              fee_tier: 0.0005 # 0.05% fee tier (5 basis points)
+              initial_balance:
+                amount: 10000000 # 10M USDC initial pool liquidity
+                unit: token1 # Specify liquidity amount in USDC
+
+# Market maker agent strategy
+agents:
+  - name: market_maker
+    wallet:
+      USDC: 50000 # Start with $50k USDC
+      ETH: 25 # Start with 25 ETH (~$50k at $2000)
+    strategy:
+      timed_events:
+        # Create liquidity position at simulation start
+        - name: initial_position
+          block_number: 18725001 # Execute on block 1
+          actions:
+            - action_name: create_position
+              protocol_id: uniswapv3_eth_usdc
+              name: mint # Provide liquidity
+              args:
+                amount1: 20000 # Use $20k USDC for liquidity
+                price_lower: 1800 # Lower price bound ($1800)
+                price_upper: 2200 # Upper price bound ($2200)
+                token_id: mm_position # Position identifier
