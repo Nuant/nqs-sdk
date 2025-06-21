@@ -1,0 +1,71 @@
+version: 1.0.0
+
+# Simulation parameters - short 3-block simulation for demonstration
+common:
+  block_number_start: 18725000 # Start at a specific historical block
+  block_number_end: 18725002 # Run for just 3 blocks
+  block_step_metrics: 1 # Collect metrics every block
+  numeraire: USDC # Use USDC as base currency
+  gas_fee: 10 # Gas cost per transaction
+  gas_fee_ccy: USDC # Pay gas in USDC
+  arbitrage_block_frequency: 100 # Low arbitrage frequency
+
+# Price model for USDC/USDT (stable pair)
+spot:
+  spot_list:
+    - name: USDC/USDT
+      custom: # Custom price path
+        timestamps: [1701838079, 1701838091, 1701838103]
+        path: [1.0, 1.0, 1.0] # Stable $1.00 price
+
+# Protocol and pool setup
+simulation_environment:
+  tokens_info:
+    USDC: { decimals: 6 } # USDC has 6 decimal places
+    USDT: { decimals: 6 } # USDT has 6 decimal places
+  protocols_to_simulate:
+    uniswap_v3:
+      initial_state:
+        custom_state:
+          pools:
+            - pool_name: univ3_usdc_usdt_001
+              symbol_token0: USDC
+              symbol_token1: USDT
+              fee_tier: 0.01 # 0.01% fee tier (1 basis point)
+              initial_balance:
+                amount: 100000000 # 100M initial pool liquidity
+                unit: token0
+
+# Trading agent strategy
+agents:
+  - name: liquidity_provider
+    wallet:
+      USDC: 10000 # Start with $10k USDC
+      USDT: 10000 # Start with $10k USDT
+    strategy:
+      timed_events:
+        # Block 1: Create liquidity position
+        - name: create_position
+          block_number: 18725001
+          actions:
+            - action_name: mint_liquidity
+              protocol_id: univ3_usdc_usdt_001
+              name: raw_mint # Low-level mint operation
+              args:
+                tick_lower: -101 # Lower price bound (around $0.99)
+                tick_upper: 101 # Upper price bound (around $1.01)
+                amount: 1985301236174 # Precise liquidity amount
+                token_id: stable_position
+
+        # Block 2: Close position and collect fees
+        - name: close_position
+          block_number: 18725002
+          actions:
+            - action_name: burn_liquidity
+              protocol_id: univ3_usdc_usdt_001
+              name: raw_burn # Remove liquidity
+              args:
+                tick_lower: -101
+                tick_upper: 101
+                amount: 1985301236174 # Remove all liquidity
+                collect: true # Automatically collect fees + principal

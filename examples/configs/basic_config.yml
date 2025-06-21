@@ -1,0 +1,80 @@
+version: 1.0.0
+
+common:
+  block_number_start: 18725000
+  block_number_end: 18726000
+  block_step_metrics: 100
+  arbitrage_block_frequency: 1
+  plot_output: False
+  save_metrics: False
+  numeraire: USDC
+  gas_fee_ccy: WETH
+  gas_fee: 0.0000000001
+
+spot:
+  spot_list:
+    - name: USDC/DAI
+      historical:
+    - name: USDC/USDT
+      historical:
+    - name: WETH/DAI
+      historical:
+    - name: WETH/WBTC
+      historical:
+    - name: wstETH/WETH
+      historical:
+  correlation:
+    [
+      [1., 0.5, 0.5, 0.2, 0.2],
+      [0.5, 1., 0.5, 0.2, 0.2],
+      [0.2, 0.2, 1., 0.5, 0.5],
+      [0.2, 0.2, 0.5, 1., 0.5],
+      [0.2, 0.2, 0.5, 0.5, 1.],
+    ]
+
+backtest_environment:
+  token_addresses:
+    DAI: "0x6b175474e89094c44da98b954eedeac495271d0f"
+    USDC: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    USDT: "0xdac17f958d2ee523a2206206994597c13d831ec7"
+    WETH: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    WBTC: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
+  protocols_to_replay:
+    uniswap_v3:
+      pools:
+        - pool_name: univ3_usdc_usdt
+          address: "0x3416cf6c708da44db2624d63ea0aaef7113527c6"
+        - pool_name: univ3_wbtc_eth
+          address: "0xCBCdF9626bC03E24f779434178A73a0B4bad62eD"
+
+simulation_environment:
+
+agents:
+  - name: agent_1
+    wallet:
+      USDT: 100000
+      USDC: 100000
+      DAI: 100000
+      WETH: 100
+      WBTC: 0
+
+    strategy:
+      continuous_events:
+        - name: event1
+          block_number: 18725000
+          frequency: 100
+          actions:
+            - action_name: action1
+              condition: common.market_spot:{"WETH/USDC"} < 2000.2 OR common.market_spot:{"DAI/WETH"} < 1 / 2000.6
+              protocol_id: univ3_usdc_usdt
+              name: mint
+              args:
+                amount: 10.
+                price_lower: 0.5
+                price_upper: 1.5
+
+            - action_name: action2
+              protocol_id: univ3_wbtc_eth
+              name: swap
+              args:
+                amount1_in: 1.
