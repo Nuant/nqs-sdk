@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RawUniswapV3Action",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "args",
+        "name"
+      ],
+      "properties": {
+        "args": {
+          "type": "object",
+          "required": [
+            "amount",
+            "tick_lower",
+            "tick_upper"
+          ],
+          "properties": {
+            "amount": {
+              "$ref": "#/definitions/SimUint128"
+            },
+            "from": {
+              "description": "override address of sender, useful with agents. if the wallet does not exist it has infinite liquidity",
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/EthAddr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "tick_lower": {
+              "$ref": "#/definitions/SimInt24"
+            },
+            "tick_upper": {
+              "$ref": "#/definitions/SimInt24"
+            },
+            "token_id": {
+              "description": "the label of the position, used to query the position in uniswap_v3_agent_metrics",
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/ArcStr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "raw_mint"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "args",
+        "name"
+      ],
+      "properties": {
+        "args": {
+          "type": "object",
+          "required": [
+            "amount",
+            "tick_lower",
+            "tick_upper"
+          ],
+          "properties": {
+            "amount": {
+              "$ref": "#/definitions/SimUint128"
+            },
+            "collect": {
+              "description": "if the burn should auto collect",
+              "default": false,
+              "type": "boolean"
+            },
+            "from": {
+              "description": "override address of sender, useful with agents. if the wallet does not exist it has infinite liquidity",
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/EthAddr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "tick_lower": {
+              "$ref": "#/definitions/SimInt24"
+            },
+            "tick_upper": {
+              "$ref": "#/definitions/SimInt24"
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "raw_burn"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "args",
+        "name"
+      ],
+      "properties": {
+        "args": {
+          "type": "object",
+          "required": [
+            "amount_specified",
+            "zero_for_one"
+          ],
+          "properties": {
+            "amount_specified": {
+              "$ref": "#/definitions/SimInt256"
+            },
+            "from": {
+              "description": "override address of sender, useful with agents. if the wallet does not exist it has infinite liquidity",
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/EthAddr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sqrt_price_limit_x96": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/SimUint160"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "zero_for_one": {
+              "type": "boolean"
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "raw_swap"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "args",
+        "name"
+      ],
+      "properties": {
+        "args": {
+          "type": "object",
+          "required": [
+            "amount_0_requested",
+            "amount_1_requested",
+            "tick_lower",
+            "tick_upper"
+          ],
+          "properties": {
+            "amount_0_requested": {
+              "$ref": "#/definitions/SimUint128"
+            },
+            "amount_1_requested": {
+              "$ref": "#/definitions/SimUint128"
+            },
+            "from": {
+              "description": "override address of sender, useful with agents. if the wallet does not exist it has infinite liquidity",
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/EthAddr"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "tick_lower": {
+              "$ref": "#/definitions/SimInt24"
+            },
+            "tick_upper": {
+              "$ref": "#/definitions/SimInt24"
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "raw_collect"
+          ]
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "ArcStr": {
+      "description": "[ArcStr] allows us to have immutable str that can be cheaply cloned and possibly cheaply compared if they have the same pointer.",
+      "type": "string"
+    },
+    "EthAddr": {
+      "type": "string"
+    },
+    "SimInt24": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string",
+          "pattern": "^-?[0-9][0-9_]*((e|E)[0-9][0-9_]*)?$"
+        }
+      ]
+    },
+    "SimInt256": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string",
+          "pattern": "^-?[0-9][0-9_]*((e|E)[0-9][0-9_]*)?$"
+        }
+      ]
+    },
+    "SimUint128": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0.0
+        },
+        {
+          "type": "string",
+          "pattern": "^(0x[0-9a-fA-F_]+|[0-9][0-9_]*((e|E)[0-9][0-9_]*)?)$"
+        }
+      ],
+      "minimum": 0.0
+    },
+    "SimUint160": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0.0
+        },
+        {
+          "type": "string",
+          "pattern": "^(0x[0-9a-fA-F_]+|[0-9][0-9_]*((e|E)[0-9][0-9_]*)?)$"
+        }
+      ],
+      "minimum": 0.0
+    }
+  }
+}
