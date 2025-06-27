@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.core.protocol_manager &#8212; NQS SDK 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../_static/documentation_options.js?v=b489f392"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.core.protocol_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_pycore</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolFactoryAdapter</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.protocol_registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolID</span><span class="p">,</span> <span class="n">ProtocolRegistry</span>
+
+
+<div class="viewcode-block" id="ProtocolManager">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProtocolManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manager for individual protocol integrations</span>
+
+<span class="sd">    This component serves as a facade for protocol-specific factories, handling the</span>
+<span class="sd">    instantiation and configuration of protocol implementations. Each ProtocolManager</span>
+<span class="sd">    represents a single protocol type (e.g. Uniswap V3, Compound V2...)</span>
+
+<span class="sd">    The manager abstracts away the complexity of protocol factory instantiation</span>
+<span class="sd">    and provides a unified interface for the Simulation class to work with</span>
+<span class="sd">    different protocol types</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        protocol_id: Unique identifier for the protocol type</span>
+<span class="sd">        _factory_instance: Internal factory instance for creating protocol objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProtocolManager.__init__">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a protocol manager for the specified protocol type</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            protocol_id: Identifier for the protocol (e.g., &quot;uniswap_v3&quot;, &quot;compound_v2&quot;)</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If protocol_id is not recognized or supported</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; uniswap_manager = ProtocolManager(&quot;uniswap_v3&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; compound_manager = ProtocolManager(&quot;compound_v2&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocol_id</span> <span class="o">=</span> <span class="n">protocol_id</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocol_identifier</span> <span class="o">=</span> <span class="n">ProtocolID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">protocol_id</span><span class="p">)</span>
+
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">ProtocolRegistry</span><span class="o">.</span><span class="n">get_factory</span><span class="p">(</span><span class="n">protocol_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">ProtocolFactoryAdapter</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_factory_instance</span> <span class="o">=</span> <span class="n">factory</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_factory_instance</span> <span class="o">=</span> <span class="n">ProtocolFactoryAdapter</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProtocolManager.get_factory">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager.get_factory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the protocol factory instance</span>
+
+<span class="sd">        Returns the factory object responsible for creating instances of this</span>
+<span class="sd">        protocol type. The factory handles protocol-specific configuration</span>
+<span class="sd">        and state initialization</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ProtocolFactoryAdapter wrapping the protocol-specific factory</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The factory is wrapped in a ProtocolFactoryAdapter to provide</span>
+<span class="sd">            a consistent interface across different protocol implementations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factory_instance</span></div>
+
+
+<div class="viewcode-block" id="ProtocolManager.get_available_protocols">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager.get_available_protocols">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_protocols</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a mapping of all available protocol types</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary mapping protocol IDs to their implementation source:</span>
+<span class="sd">            - &quot;native&quot;: Built-in protocol implementations</span>
+<span class="sd">            - &quot;custom&quot;: User-defined protocol implementations</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; available = ProtocolManager.get_available_protocols()</span>
+<span class="sd">            &gt;&gt;&gt; print(available)</span>
+<span class="sd">            {&#39;uniswap_v3&#39;: &#39;native&#39;, &#39;compound_v2&#39;: &#39;native&#39;, &#39;custom_amm&#39;: &#39;custom&#39;}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ProtocolRegistry</span><span class="o">.</span><span class="n">get_available_protocols</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ProtocolManager.from_id">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager.from_id">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_id</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">ProtocolID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProtocolManager&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a ProtocolManager from a ProtocolID object</span>
+
+<span class="sd">        This class method provides an alternative constructor that accepts a structured</span>
+<span class="sd">        ProtocolID object instead of a raw string. It&#39;s particularly useful when working</span>
+<span class="sd">        with namespaced protocols or when the protocol identifier is already encapsulated</span>
+<span class="sd">        in a ProtocolID type</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id: ProtocolID object containing the protocol identifier information.</span>
+<span class="sd">                This is typically a structured identifier that may include namespace,</span>
+<span class="sd">                version, or other metadata</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            New ProtocolManager instance configured for the specified protocol</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the ProtocolID cannot be converted to a valid protocol string</span>
+<span class="sd">                    or if the resulting protocol is not found in the registry</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from nqs_sdk.core.protocol_id import ProtocolID</span>
+<span class="sd">            &gt;&gt;&gt; protocol_id = ProtocolID(namespace=&quot;v2&quot;, name=&quot;uniswap&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; manager = ProtocolManager.from_id(protocol_id)</span>
+<span class="sd">            &gt;&gt;&gt; # Equivalent to: ProtocolManager(&quot;v2.uniswap&quot;)</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The ProtocolID is converted to string using str(id), so ensure your</span>
+<span class="sd">            ProtocolID class has a proper __str__ implementation that returns</span>
+<span class="sd">            the expected protocol identifier format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ProtocolManager.__str__">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager.__str__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a human-readable string representation of the ProtocolManager</span>
+
+<span class="sd">        Provides a clear, descriptive string showing which protocol this manager</span>
+<span class="sd">        handles. Useful for logging, debugging, and user-facing messages</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            String in the format &quot;ProtocolManager for {protocol_id}&quot;</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; manager = ProtocolManager(&quot;uniswap_v3&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; print(manager)</span>
+<span class="sd">            &quot;ProtocolManager for uniswap_v3&quot;</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; manager = ProtocolManager.from_id(ProtocolID(&quot;custom&quot;, &quot;my_amm&quot;))</span>
+<span class="sd">            &gt;&gt;&gt; str(manager)</span>
+<span class="sd">            &quot;ProtocolManager for custom.my_amm&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ProtocolManager for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">protocol_id</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="ProtocolManager.__repr__">
+<a class="viewcode-back" href="../../../api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager.__repr__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a string representation suitable for debugging and development</span>
+
+<span class="sd">        This method delegates to __str__ to provide consistent representation</span>
+<span class="sd">        across different contexts (print, debugger, REPL, etc.). In this case,</span>
+<span class="sd">        the string representation is sufficient for both user-facing and</span>
+<span class="sd">        developer-facing contexts</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Same as __str__() - &quot;ProtocolManager for {protocol_id}&quot;</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; manager = ProtocolManager(&quot;compound_v2&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; repr(manager)</span>
+<span class="sd">            &quot;ProtocolManager for compound_v2&quot;</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; # In a list or when debugging</span>
+<span class="sd">            &gt;&gt;&gt; managers = [ProtocolManager(&quot;uniswap_v3&quot;), ProtocolManager(&quot;compound_v2&quot;)]</span>
+<span class="sd">            &gt;&gt;&gt; managers</span>
+<span class="sd">            [ProtocolManager for uniswap_v3, ProtocolManager for compound_v2]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Core &#8212; NQS SDK 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=b489f392"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Protocols" href="api_reference_protocols.html" />
+    <link rel="prev" title="API Reference" href="api_reference.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nqs_sdk.core.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#protocol-manager">Protocol Manager</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nqs_sdk.core.protocol_manager.ProtocolManager"><code class="docutils literal notranslate"><span class="pre">ProtocolManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nqs_sdk.core.config.ConfigLoader"><code class="docutils literal notranslate"><span class="pre">ConfigLoader</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference_protocols.html">Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="micro_language.html">Micro-Language Expression Guide</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api_reference.html">API Reference</a><ul>
+      <li>Previous: <a href="api_reference.html" title="previous chapter">API Reference</a></li>
+      <li>Next: <a href="api_reference_protocols.html" title="next chapter">Protocols</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="core">
+<h1>Core<a class="headerlink" href="#core" title="Link to this heading">¶</a></h1>
+<section id="simulation">
+<h2>Simulation<a class="headerlink" href="#simulation" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Simulation</span></code> class is the main orchestrator for running simulations involving multiple DeFi protocols.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.core.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main orchestrator for running simulations.</p>
+<p>This class serves as the primary interface for users to configure, build, and execute
+simulations involving multiple DeFi protocols. It handles the coordination between
+protocol managers, configuration loading, and simulation execution.</p>
+<p>Protocols and configuration are provided during initialization, and the simulation
+can be run multiple times with different parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.protocols">
+<span class="sig-name descname"><span class="pre">protocols</span></span><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.protocols" title="Link to this definition">¶</a></dt>
+<dd><p>List of protocol managers that define the DeFi protocols to simulate</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration data (file path, dict, or YAML/JSON content)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.simulator">
+<span class="sig-name descname"><span class="pre">simulator</span></span><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.simulator" title="Link to this definition">¶</a></dt>
+<dd><p>Internal rust-based simulator instance (built lazily)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a new simulation with specified protocols and configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>protocols</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#nqs_sdk.core.protocol_manager.ProtocolManager" title="nqs_sdk.core.protocol_manager.ProtocolManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#nqs_sdk.core.protocol_manager.ProtocolManager" title="nqs_sdk.core.protocol_manager.ProtocolManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolManager</span></code></a>]]</span>) – Single ProtocolManager or list of ProtocolManagers defining
+the protocols to include in the simulation</p></li>
+<li><p><strong>config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>]</span>) – Configuration for the simulation. Can be:
+- Path to a YAML/JSON configuration file
+- Dictionary containing configuration parameters
+- String containing YAML/JSON configuration content</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolManager</span><span class="p">,</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniswap</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compound</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;compound_v2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">([</span><span class="n">uniswap</span><span class="p">,</span> <span class="n">compound</span><span class="p">],</span> <span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.get_protocol">
+<span class="sig-name descname"><span class="pre">get_protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation.get_protocol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.get_protocol" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve a protocol instance by its identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>protocol_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Unique identifier for the protocol (e.g., “uniswap_v3”)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The protocol instance corresponding to the given ID</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If simulation hasn’t been built yet</p></li>
+<li><p><strong>KeyError</strong> – If protocol_id doesn’t exist in the simulation</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">uniswap_protocol</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_protocol</span><span class="p">(</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">current_price</span> <span class="o">=</span> <span class="n">uniswap_protocol</span><span class="o">.</span><span class="n">get_current_price</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execute the simulation and return results.</p>
+<p>This method runs the entire simulation from start to end block/timestamp,
+processing all transactions and collecting metrics along the way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Object containing all simulation data including:</dt><dd><ul class="simple">
+<li><p>Protocol states at each block</p></li>
+<li><p>Agent portfolio values over time</p></li>
+<li><p>Transaction logs and fees</p></li>
+<li><p>Observable metrics and KPIs</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>SimulationResults</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If simulation hasn’t been built yet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">portfolio_value</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get_agent_metric</span><span class="p">(</span><span class="s2">&quot;alice&quot;</span><span class="p">,</span> <span class="s2">&quot;total_holding&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.to_json" title="Link to this definition">¶</a></dt>
+<dd><p>Serialize the simulation configuration to JSON.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON representation of the complete simulation configuration,
+including all protocols, agents, and parameters</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If simulation hasn’t been built yet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.from_json">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Deserialize a simulation from JSON configuration.</p>
+<p>This class method allows reconstructing a Simulation instance from
+a previously serialized JSON configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>json_data</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – JSON string containing simulation configuration</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#nqs_sdk.core.simulation.Simulation" title="nqs_sdk.core.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New Simulation instance configured from the JSON data</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If JSON is malformed or contains invalid configuration</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">json_config</span> <span class="o">=</span> <span class="n">previous_sim</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">json_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.from_namespace">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_namespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/simulation.html#Simulation.from_namespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.from_namespace" title="Link to this definition">¶</a></dt>
+<dd><p>Create a simulation from a namespace and protocol names.</p>
+<p>This class method provides a convenient way to instantiate a simulation when
+protocols are organized within a specific namespace. Instead of manually creating
+ProtocolManager instances, this method automatically constructs them using
+namespaced protocol identifiers.</p>
+<p>This is particularly useful for:
+- Organizing protocols by version, source, or domain
+- Working with custom protocol implementations
+- Simplified simulation setup when protocols share a common namespace</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>namespace</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The namespace identifier for the protocols (e.g., “v2”, “custom”, “staging”)</p></li>
+<li><p><strong>protocol_names</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – List of protocol names within the namespace (e.g., [“uniswap”, “compound”])</p></li>
+<li><p><strong>config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>]</span>) – Configuration for the simulation. Can be:
+- Path to a YAML/JSON configuration file
+- Dictionary containing configuration parameters
+- String containing YAML/JSON configuration content</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#nqs_sdk.core.simulation.Simulation" title="nqs_sdk.core.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulation</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New Simulation instance with protocols from the specified namespace</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If any protocol name is invalid or not found in the namespace</p></li>
+<li><p><strong>FileNotFoundError</strong> – If configuration file doesn’t exist</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create simulation with custom protocol implementations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">from_namespace</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;custom_v1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">protocol_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;uniswap&quot;</span><span class="p">,</span> <span class="s2">&quot;compound&quot;</span><span class="p">,</span> <span class="s2">&quot;aave&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">config</span><span class="o">=</span><span class="s2">&quot;custom_protocols_config.yaml&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using staging protocols for testing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="o">.</span><span class="n">from_namespace</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;staging&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">protocol_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">,</span> <span class="s2">&quot;curve&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;simulation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">}}</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="protocol-manager">
+<h2>Protocol Manager<a class="headerlink" href="#protocol-manager" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ProtocolManager</span></code> class handles individual protocol integrations and serves as a facade for protocol-specific factories.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.core.protocol_manager.</span></span><span class="sig-name descname"><span class="pre">ProtocolManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manager for individual protocol integrations</p>
+<p>This component serves as a facade for protocol-specific factories, handling the
+instantiation and configuration of protocol implementations. Each ProtocolManager
+represents a single protocol type (e.g. Uniswap V3, Compound V2…)</p>
+<p>The manager abstracts away the complexity of protocol factory instantiation
+and provides a unified interface for the Simulation class to work with
+different protocol types</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.protocol_id">
+<span class="sig-name descname"><span class="pre">protocol_id</span></span><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.protocol_id" title="Link to this definition">¶</a></dt>
+<dd><p>Unique identifier for the protocol type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager._factory_instance">
+<span class="sig-name descname"><span class="pre">_factory_instance</span></span><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager._factory_instance" title="Link to this definition">¶</a></dt>
+<dd><p>Internal factory instance for creating protocol objects</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a protocol manager for the specified protocol type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>protocol_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier for the protocol (e.g., “uniswap_v3”, “compound_v2”)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If protocol_id is not recognized or supported</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">uniswap_manager</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compound_manager</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;compound_v2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.get_factory">
+<span class="sig-name descname"><span class="pre">get_factory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager.get_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.get_factory" title="Link to this definition">¶</a></dt>
+<dd><p>Get the protocol factory instance</p>
+<p>Returns the factory object responsible for creating instances of this
+protocol type. The factory handles protocol-specific configuration
+and state initialization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ProtocolFactoryAdapter wrapping the protocol-specific factory</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The factory is wrapped in a ProtocolFactoryAdapter to provide
+a consistent interface across different protocol implementations</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.get_available_protocols">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_available_protocols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager.get_available_protocols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.get_available_protocols" title="Link to this definition">¶</a></dt>
+<dd><p>Get a mapping of all available protocol types</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>“native”: Built-in protocol implementations</p></li>
+<li><p>”custom”: User-defined protocol implementations</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary mapping protocol IDs to their implementation source</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">available</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="o">.</span><span class="n">get_available_protocols</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">available</span><span class="p">)</span>
+<span class="go">{&#39;uniswap_v3&#39;: &#39;native&#39;, &#39;compound_v2&#39;: &#39;native&#39;, &#39;custom_amm&#39;: &#39;custom&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.from_id">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager.from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.from_id" title="Link to this definition">¶</a></dt>
+<dd><p>Create a ProtocolManager from a ProtocolID object</p>
+<p>This class method provides an alternative constructor that accepts a structured
+ProtocolID object instead of a raw string. It’s particularly useful when working
+with namespaced protocols or when the protocol identifier is already encapsulated
+in a ProtocolID type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolID</span></code></span>) – ProtocolID object containing the protocol identifier information.
+This is typically a structured identifier that may include namespace,
+version, or other metadata</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#nqs_sdk.core.protocol_manager.ProtocolManager" title="nqs_sdk.core.protocol_manager.ProtocolManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolManager</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New ProtocolManager instance configured for the specified protocol</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the ProtocolID cannot be converted to a valid protocol string
+    or if the resulting protocol is not found in the registry</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.core.protocol_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protocol_id</span> <span class="o">=</span> <span class="n">ProtocolID</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;v2&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;uniswap&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="o">.</span><span class="n">from_id</span><span class="p">(</span><span class="n">protocol_id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Equivalent to: ProtocolManager(&quot;v2.uniswap&quot;)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ProtocolID is converted to string using str(id), so ensure your
+ProtocolID class has a proper __str__ implementation that returns
+the expected protocol identifier format</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager.__str__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.__str__" title="Link to this definition">¶</a></dt>
+<dd><p>Return a human-readable string representation of the ProtocolManager</p>
+<p>Provides a clear, descriptive string showing which protocol this manager
+handles. Useful for logging, debugging, and user-facing messages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>String in the format “ProtocolManager for {protocol_id}”</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+<span class="go">&quot;ProtocolManager for uniswap_v3&quot;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="o">.</span><span class="n">from_id</span><span class="p">(</span><span class="n">ProtocolID</span><span class="p">(</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span> <span class="s2">&quot;my_amm&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+<span class="go">&quot;ProtocolManager for custom.my_amm&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.protocol_manager.ProtocolManager.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/protocol_manager.html#ProtocolManager.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.protocol_manager.ProtocolManager.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return a string representation suitable for debugging and development</p>
+<p>This method delegates to __str__ to provide consistent representation
+across different contexts (print, debugger, REPL, etc.). In this case,
+the string representation is sufficient for both user-facing and
+developer-facing contexts</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Same as __str__() - “ProtocolManager for {protocol_id}”</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;compound_v2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">repr</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+<span class="go">&quot;ProtocolManager for compound_v2&quot;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># In a list or when debugging</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">managers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">),</span> <span class="n">ProtocolManager</span><span class="p">(</span><span class="s2">&quot;compound_v2&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">managers</span>
+<span class="go">[ProtocolManager for uniswap_v3, ProtocolManager for compound_v2]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ConfigLoader</span></code> class provides utilities for loading and processing simulation configuration files in various formats.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nqs_sdk.core.config.ConfigLoader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.core.config.</span></span><span class="sig-name descname"><span class="pre">ConfigLoader</span></span><a class="reference internal" href="_modules/nqs_sdk/core/config.html#ConfigLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.config.ConfigLoader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utility class for loading and processing simulation configuration files</p>
+<p>This class provides static methods for handling different configuration formats
+(JSON, YAML) and sources (files, strings, dictionaries). It includes validation
+and format detection capabilities to ensure robust configuration loading</p>
+<p>The loader supports both file-based and string-based configurations, with
+automatic format detection based on content or file extensions</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.config.ConfigLoader.load">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/config.html#ConfigLoader.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.config.ConfigLoader.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load configuration from various sources and return standardized format</p>
+<p>This method handles multiple input types and automatically detects the
+configuration format, returning a tuple of (content, format_type)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>]</span>) – Configuration source, can be:
+- dict: Configuration dictionary (converted to JSON)
+- str: JSON string, YAML string, or file path
+- Path: Path object pointing to configuration file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>content_string: String representation of the configuration</p></li>
+<li><p>format_type: Either “json” or “yaml”</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of (content_string, format_type) where</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If file path doesn’t exist</p></li>
+<li><p><strong>ValueError</strong> – If string appears to be malformed JSON or unsupported format</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">content</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">load</span><span class="p">({</span><span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">content</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">content</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;{&quot;simulation&quot;: {&quot;blocks&quot;: 1000}}&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.config.ConfigLoader.merge_configs">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nqs_sdk/core/config.html#ConfigLoader.merge_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.config.ConfigLoader.merge_configs" title="Link to this definition">¶</a></dt>
+<dd><p>Recursively merge two configuration dictionaries</p>
+<p>Performs a deep merge where nested dictionaries are merged recursively,
+and non-dictionary values in update_config override those in base_config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – Base configuration dictionary</p></li>
+<li><p><strong>update_config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – Configuration updates to apply</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New dictionary containing the merged configuration</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">base</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;simulation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">update</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;simulation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;timestep&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merged</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">merge_configs</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Result: {&quot;simulation&quot;: {&quot;blocks&quot;: 1000, &quot;timestep&quot;: 12},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#          &quot;agents&quot;: [], &quot;protocols&quot;: {}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

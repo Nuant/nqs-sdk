@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>NQS SDK &#8212; NQS SDK 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=b489f392"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting_started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="getting_started.html" title="next chapter">Getting Started</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="nqs-sdk">
+<h1>NQS SDK<a class="headerlink" href="#nqs-sdk" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#environment-configuration">Environment Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#verify-installation">Verify Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#basic-use-case">Basic Use Case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#getting-involved">Getting Involved</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#known-issues-and-roadmap">Known issues and roadmap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#architecture-components">Architecture Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#simulations">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#protocol-managers">Protocol Managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#agents">Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#agent-action">Agent Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#data-flow">Data Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#generator">Generator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_concepts.html#historical-generator">Historical Generator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_concepts.html#random-generator">Random Generator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#observer">Observer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#protocol">Protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#spots">Spots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#state">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#transaction">Transaction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build.html#complete-configuration-example">Complete Configuration Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="build.html#configuration-file-structure">Configuration File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#working-with-configurations">Working with Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#running-a-configuration">Running A Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#practical-examples">Practical Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="build.html#example-1-basic-liquidity-management">Example 1: Basic Liquidity Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#example-2-dynamic-market-making">Example 2: Dynamic Market Making</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference_core.html">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference_core.html#simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference_core.html#nqs_sdk.core.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference_core.html#protocol-manager">Protocol Manager</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference_core.html#nqs_sdk.core.protocol_manager.ProtocolManager"><code class="docutils literal notranslate"><span class="pre">ProtocolManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference_core.html#configuration">Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference_core.html#nqs_sdk.core.config.ConfigLoader"><code class="docutils literal notranslate"><span class="pre">ConfigLoader</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference_protocols.html">Protocols</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="protocols_uniswap_v3.html">Uniswap V3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="protocols_uniswap_v3.html#metrics">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="protocols_uniswap_v3.html#components">Components</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config_file_grammar.html">Config file schema</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#common-configuration">Common Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_file_grammar.html#common-configuration-parameters">Common Configuration Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#uniswapv3-protocol-configuration">UniswapV3 Protocol Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_file_grammar.html#pool-configuration">Pool Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#uniswapv3-actions">UniswapV3 Actions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_file_grammar.html#python-actions">Python Actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="config_file_grammar.html#raw-actions">Raw Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#spot-configuration">Spot Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="config_file_grammar.html#spot-process-types">Spot Process Types</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#conditions-and-expressions">Conditions and Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config_file_grammar.html#data-types">Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="micro_language.html">Micro-Language Expression Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#basic-syntax">Basic Syntax</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="micro_language.html#metrics-structure">Metrics Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#expression-types">Expression Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="micro_language.html#numerical-expressions">Numerical Expressions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="micro_language.html#boolean-expressions">Boolean Expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#aggregation-operations">Aggregation Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#built-in-functions">Built-in Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#custom-functions">Custom Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro_language.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="micro_language.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

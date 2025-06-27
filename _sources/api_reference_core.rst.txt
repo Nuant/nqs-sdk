@@ -1,0 +1,32 @@
+Core
+====
+
+Simulation
+----------
+
+The ``Simulation`` class is the main orchestrator for running simulations involving multiple DeFi protocols.
+
+.. autoclass:: nqs_sdk.core.simulation.Simulation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Protocol Manager
+----------------
+
+The ``ProtocolManager`` class handles individual protocol integrations and serves as a facade for protocol-specific factories.
+
+.. autoclass:: nqs_sdk.core.protocol_manager.ProtocolManager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Configuration
+-------------
+
+The ``ConfigLoader`` class provides utilities for loading and processing simulation configuration files in various formats.
+
+.. autoclass:: nqs_sdk.core.config.ConfigLoader
+   :members:
+   :undoc-members:
+   :show-inheritance:

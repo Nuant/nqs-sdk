@@ -1,0 +1,153 @@
+====================================
+Micro-Language Expression Guide
+====================================
+
+This guide explains how to use micro-language expressions and conditions for data analysis and metrics evaluation.
+
+Basic Syntax
+------------
+
+Metrics Structure
+~~~~~~~~~~~~~~~~~
+
+Metrics can be accessed in two forms:
+
+* Basic metric without options::
+
+    protocol.metric_name
+
+* Metric with options::
+
+    protocol.metric_name:{positional_option, named_option="value"}
+
+.. note::
+    Using '@' as a prefix triggers a contextual popup in the IDE for any metric.
+
+Expression Types
+----------------
+
+Numerical Expressions
+~~~~~~~~~~~~~~~~~~~~~
+
+The following operators are supported:
+
+* Addition: ``+``
+* Subtraction: ``-``
+* Multiplication: ``*``
+* Division: ``/``
+* Exponentiation: ``**`` or ``^``
+* Parentheses for grouping: ``(expression)``
+* Function calls: ``function_name(args...)``
+* Numeric literals
+* Aggregations: ``aggregation of expression on window``
+
+Boolean Expressions
+~~~~~~~~~~~~~~~~~~~
+
+Comparison operators:
+
+* Equal: ``=``
+* Less than: ``<``
+* Less than or equal: ``<=``
+* Greater than: ``>``
+* Greater than or equal: ``>=``
+
+Logical operators:
+
+* AND (``and`` or ``AND``)
+* OR (``or`` or ``OR``)
+* Parentheses for grouping: ``(boolean_expression)``
+* Boolean literals: ``true``, ``false``
+
+Aggregation Operations
+----------------------
+
+Syntax::
+
+    <operator> of <expression> on <window>
+
+Available aggregation operators:
+
+* ``last_value`` - Last observed value
+* ``min`` - Minimum value
+* ``max`` - Maximum value
+* ``mean`` - Average value
+* ``sharpe_ratio`` - Sharpe ratio calculation
+* ``sortino_ratio`` - Sortino ratio calculation
+* ``calmar_ratio`` - Calmar ratio calculation
+* ``max_drawdown`` - Maximum drawdown
+* ``volatility`` - Volatility measurement
+* ``return`` - Return calculation
+* ``abs_return`` - Absolute return
+* ``ewma`` - Exponentially weighted moving average
+* ``sum`` - Sum of values
+
+Built-in Functions
+------------------
+
+Mathematical functions available:
+
+* ``min()`` - Minimum of arguments
+* ``max()`` - Maximum of arguments
+* ``abs()`` - Absolute value
+* ``sqrt()`` - Square root
+* ``exp()`` - Exponential function
+* ``ln()`` - Natural logarithm
+* ``pow()`` - Power function
+* ``log10()`` - Base-10 logarithm
+* ``log()`` - Logarithm
+* ``erf()`` - Error function
+* ``normal_cdf()`` - Normal cumulative distribution function
+
+Custom Functions
+----------------
+
+Define custom functions using the following syntax::
+
+    function name(arg1, arg2...) {
+        statements...
+    }
+
+Supported statements:
+
+* Assignment: ``identifier = expression``
+* Conditional: ``if condition { statements... } else { statements... }``
+* Return: ``return expression``
+
+Examples
+--------
+
+1. Simple condition::
+
+    dex_pool.dex_spot > 2
+
+2. Aggregation condition::
+
+    max of dex_pool.dex_spot between last_update and t > 2
+
+3. Combined conditions::
+
+    (dex_pool.dex_spot > 2) AND (max of dex_pool.dex_spot between last_update and t > 2)
+
+4. Arithmetic operations::
+
+    dex_pool.dex_spot / 2 + dex_pool.total_value_locked > 2e9
+
+5. Custom function usage::
+
+    function f(x) { return log(x)+sqrt(x) }
+    f(dex_pool.dex_spot) > 2
+
+Troubleshooting
+---------------
+
+Common Issues
+~~~~~~~~~~~~~
+
+**Missing Market Price Error**
+
+If you encounter::
+
+    Undefined key 'common.market_price:{"WETH/USD"}'
+
+This indicates that the required market price entry is missing from the evaluator dictionary.
