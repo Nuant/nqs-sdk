@@ -5,4 +5,4 @@ from nqs_sdk.core.protocol_registry.discovery import print_protocol_info
 print_protocol_info()
 
 # Get details for a specific protocol
-print_protocol_info("uniswap_v3")
+print_protocol_info("uniswap_v3_rust")

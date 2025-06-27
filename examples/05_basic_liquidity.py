@@ -35,7 +35,7 @@ def main():
     print()
     
     print("[INIT] Initializing Uniswap V3 protocol manager...")
-    uniswap_v3 = ProtocolManager("uniswap_v3")
+    uniswap_v3 = ProtocolManager("uniswap_v3_rust")
     
     config_path = "./configs/basic_liquidity_config.yml"
     print(f"[CONFIG] Loading configuration from {config_path}")
