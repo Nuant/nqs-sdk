@@ -27,12 +27,15 @@ Get your API key from
 
 <a href="https://agents.nuant.ai/subscribe" target="_blank" rel="noopener noreferrer">https://agents.nuant.ai/subscribe</a>
 
-Then, create a file `nuant-quantlib.toml` to set up your environment with the following content:
+This following command creates a `nuant-quantlib.toml` file with the required proxy configuration for accessing Nuant’s GraphQL API.
+Make sure to replace `YOUR_API_KEY`.
 
-```toml
-[proxy]
-url = "https://data.app.nuant.com/graphql"
-api-key = "YOUR_API_KEY" # <- the one, you got previously
+```bash
+(
+echo "[proxy]"
+echo 'url = "https://data.app.nuant.com/graphql"'
+echo 'api-key = "YOUR_API_KEY" # <- the one, you got previously'
+) > nuant-quantlib.toml
 ```
 
 Then, export it as an environment variable:
@@ -102,7 +105,7 @@ Coming soon:
 
 And later:
 
-- Compound V2 support, more protocols we follow
+- Compound V2 support, more protocols will follow
 - EVM based *any* protocol executions
 
 Known issues:
