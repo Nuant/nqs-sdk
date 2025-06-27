@@ -1,69 +1,112 @@
-# Nuant Quantitative System SDK
+# Getting Started
 
-The Nuant Quantitative System (NQS) SDK is a Python package that provides tools and utilities for quantitative analysis. 
-This repository serves as a public endpoint for the `nqs-sdk` package, which is published on PyPI.
+**Nuant Quantitative System SDK** is a purpose-built SDK for decentralized finance. It enables a unified lifecycle that supports research, protocol-level simulation, backtesting, optimization, and live monitoring. Designed to empower quants, researchers, and developers, NQS makes it easy to experiment, iterate, and bring DeFi protocols and strategies from concept to execution.
+
+This repository is the public endpoint for the nqs-sdk package, available on PyPI, providing all the tools needed to build, test, and run strategies within a single, integrated environment.
+
+## Prerequisites
+
+Before installing the NQS SDK, ensure you have:
+
+- Python 3.12 (currently supported version; more versions coming soon)
+- pip package manager
 
 ## Installation
 
-You can install the NQS SDK using pip:
+Install the NQS SDK using pip:
 
 ```bash
 pip install nqs-sdk
 ```
 
-NB: currently, we only support Python 3.12 for Linux x64, Windows x64 and macOS arm64 and x64.
+Note: This installation will also include several other packages provided by Nuant.
 
-## Usage
+### Environment Configuration
 
-Here's a simple example of how to use the NQS SDK:
+Get your API key from
 
-```python
-import nqs_sdk
+<a href="https://agents.nuant.ai/subscribe" target="_blank" rel="noopener noreferrer">https://agents.nuant.ai/subscribe</a>
 
-# Basic usage example
-# For more detailed examples, see the examples directory
-```
-
-To run any simulation requiring onchain data, you need a config file referenced by the environment variable
-`QUANTLIB_CONFIG`:
+Then, create a file `nuant-quantlib.toml` to set up your environment with the following content:
 
 ```toml
 [proxy]
 url = "https://data.app.nuant.com/graphql"
-api-key = "<your-api-key>"
+api-key = "YOUR_API_KEY" # <- the one, you got previously
 ```
 
-To speed up and minimize data queries, you can define the `QUANTLIB_CACHE_DIR` environment variable to reference an
-existing directory that will be used for caching.
+Then, export it as an environment variable:
 
-## Examples
+```bash
+export QUANTLIB_CONFIG=/path/to/nuant-quantlib.toml
+```
 
-Check out the [examples](./examples) directory for more detailed usage examples.
+### Verify Installation
 
-## Documentation
+First, verify that the installation was successful:
 
-For detailed documentation, please refer to the [docs](./docs) directory:
+```python
+import nqs_sdk
+print(f"NQS SDK version: {nqs_sdk.__version__}")
+```
 
-- [Getting Started Guide](./docs/getting_started.md)
-- [FAQ](./docs/faq.md)
-- [Examples](./examples)
+## Quick Start
 
-## Reporting Issues
+### Basic Use Case
 
-If you encounter any issues or bugs, please report them by creating an issue in this repository. When reporting an
-issue, please include:
+Here’s a simple example to get you started with the NQS SDK:
 
-1. A clear and descriptive title
-2. Steps to reproduce the issue
-3. Expected behavior
-4. Actual behavior
-5. Any error messages or logs
-6. Your environment (OS, Python version, nqs-sdk version)
+```python
+import nqs_sdk.preload  # noqa: F401 # should be always on top
+from nqs_sdk import Simulation, ProtocolManager
+import json
 
-## License
+# Create protocol managers
+uniswap = ProtocolManager("uniswap_v3_rust")
 
-This project is licensed under the License - see the [LICENSE](./LICENSE) file for details.
+# Initialize simulation with protocols and configuration
+# You can use the example config or create your own with create_config.py
+sim = Simulation([uniswap], "./examples/configs/basic_config.yml")
 
-## Contact
+# Run the simulation
+all_observables_str = sim.run() # this intermediate step will be fixed soon
+all_observables = json.loads(all_observables_str)
 
-For additional support or questions, please [contact us](mailto:thelab@nuant.ai).
+# Access results
+print(f"Simulation completed with {len(all_observables)} observables")
+```
+
+### Getting Involved
+
+- **Documentation**: [https://nuant.github.io/nqs-sdk/](https://nuant.github.io/nqs-sdk/)
+- **GitHub Issues**: [https://github.com/Nuant/nqs-sdk/issues](https://github.com/Nuant/nqs-sdk/issues)
+- **Contact**: Contact us to [thelab@nuant.ai](mailto:thelab@nuant.ai) for joining us on private Telegram channel
+- **Examples**: Explore practical implementations in the [examples](https://github.com/Nuant/nqs-sdk/tree/master/examples) directory. [JSON schemas](https://github.com/Nuant/nqs-sdk/tree/master/examples/configs/schemas) are provided to ensure proper format and validation.
+
+## Next Steps
+
+Now that you have the NQS SDK installed and understand the basics, you might want to:
+
+1. **Explore Core Concepts** - Learn about the fundamental architecture and components ([Core Concepts](core_concepts.md))
+2. **Study How to Build** - Dive deeper into configuration and practical examples ([Build](build.md))
+3. **Check the API Reference** - Detailed documentation of all classes and methods ([API Reference](api_reference.md))
+4. **Join the Community** - Connect with other users and contributors
+5. **Contribute** - Help improve the NQS SDK by reporting issues or submitting pull requests
+
+## Known issues and roadmap
+
+Coming soon:
+
+- Programmatic API to manage simulation and backtest directly in Python
+- API stabilisation
+
+And later:
+
+- Compound V2 support, more protocols we follow
+- EVM based *any* protocol executions
+
+Known issues:
+
+- Support of Python 3.13
+- Improve protocol naming to reflect implementation variants (e.g. uniswap_v3_rust)
+- Replace default String sim.run() output by a native Python dict
