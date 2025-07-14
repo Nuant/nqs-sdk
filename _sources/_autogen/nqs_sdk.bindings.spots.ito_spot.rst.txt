@@ -1,0 +1,7 @@
+nqs\_sdk.bindings.spots.ito\_spot module
+========================================
+
+.. automodule:: nqs_sdk.bindings.spots.ito_spot
+   :members:
+   :show-inheritance:
+   :undoc-members:

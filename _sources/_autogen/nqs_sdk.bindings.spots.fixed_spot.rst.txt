@@ -1,0 +1,7 @@
+nqs\_sdk.bindings.spots.fixed\_spot module
+==========================================
+
+.. automodule:: nqs_sdk.bindings.spots.fixed_spot
+   :members:
+   :show-inheritance:
+   :undoc-members:

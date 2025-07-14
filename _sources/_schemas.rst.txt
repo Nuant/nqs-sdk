@@ -1,0 +1,3 @@
+* `config_file_schema.json <_static/_schemas/config_file_schema.json>`_
+* `uniswap_v3_py_action_schema.json <_static/_schemas/uniswap_v3_py_action_schema.json>`_
+* `uniswap_v3_raw_action_schema.json <_static/_schemas/uniswap_v3_raw_action_schema.json>`_

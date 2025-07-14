@@ -1,0 +1,428 @@
+==================
+Config file schema
+==================
+
+This document describes the grammar of the configuration files used in the simulator, with a focus on the UniswapV3 protocol.
+
+The complete JSON schemas can be downloaded in the :ref:`comprehensive_json_schemas` section below.
+
+
+Overall Structure
+=================
+
+Configuration files follow a JSON schema and can be in YAML or JSON format. The top-level structure includes:
+
+.. code-block:: yaml
+
+    version: "1.0.0"
+    common:
+      # Common configuration settings
+
+    # Environment (one of the following)
+    simulation_environment:
+      # Simulation environment settings
+
+    # OR
+
+    backtest_environment:
+      # Backtest environment settings
+
+    # Optional sections
+    agents:
+      # List of agents
+
+    spot:
+      # Spot market configuration
+
+Common Configuration
+====================
+
+The `common` section contains essential configuration parameters for the simulation. There are two alternative configurations:
+
+1. Time-based configuration (using timestamps):
+
+.. code-block:: yaml
+
+    common:
+      # Required parameters
+      numeraire: "USDC"  # Reference token for value calculations
+      timestamp_start: 1609459200  # Start time (Unix timestamp)
+      timestamp_end: 1612137600  # End time (Unix timestamp)
+
+      # Optional parameters
+      arbitrage_block_frequency: 10  # Frequency of arbitrage opportunities (0 = disabled)
+      block_step_metrics: 1  # Blocks between metrics collection (0 = disabled)
+      collect_all_observables: true  # Whether to collect all observables
+      gas_fee: 0.001  # Gas fee amount
+      gas_fee_ccy: "ETH"  # Gas fee currency
+      mandatory_tokens: ["USDC", "ETH", "WBTC"]  # Essential tokens for the simulation
+      plot_output: true  # Whether to generate plots
+      save_metrics: true  # Whether to save metrics
+      use_arbitrageur: true  # Whether to use the arbitrageur
+
+2. Block-based configuration (using block numbers):
+
+.. code-block:: yaml
+
+    common:
+      # Required parameters
+      numeraire: "USDC"  # Reference token for value calculations
+      block_number_start: 12000000  # Start block number
+      block_number_end: 12100000  # End block number
+
+      # Optional parameters
+      arbitrage_block_frequency: 10  # Frequency of arbitrage opportunities (0 = disabled)
+      block_step_metrics: 1  # Blocks between metrics collection (0 = disabled)
+      collect_all_observables: true  # Whether to collect all observables
+      gas_fee: 0.001  # Gas fee amount
+      gas_fee_ccy: "ETH"  # Gas fee currency
+      mandatory_tokens: ["USDC", "ETH", "WBTC"]  # Essential tokens for the simulation
+      plot_output: true  # Whether to generate plots
+      save_metrics: true  # Whether to save metrics
+      use_arbitrageur: true  # Whether to use the arbitrageur
+
+Common Configuration Parameters
+--------------------------------
+
+- **numeraire**: Reference token used for value calculations and comparisons
+- **timestamp_start/block_number_start**: Starting point of the simulation (time or block)
+- **timestamp_end/block_number_end**: Ending point of the simulation (time or block)
+- **arbitrage_block_frequency**: How often arbitrage opportunities occur (0 disables arbitrage simulation)
+- **block_step_metrics**: Number of blocks between metrics collection (0 disables output)
+- **collect_all_observables**: If true, exports all available observables; if false, only exports selected ones
+- **gas_fee**: Amount of gas fee for transactions
+- **gas_fee_ccy**: Currency used for gas fees (usually ETH)
+- **mandatory_tokens**: List of essential tokens required for the simulation
+- **plot_output**: Whether to generate visual plots of output data
+- **save_metrics**: Whether to save trading metrics and data
+- **use_arbitrageur**: Whether to enable the arbitrageur in the simulation
+
+UniswapV3 Protocol Configuration
+================================
+
+The UniswapV3 protocol can be configured in the initial state of the simulation environment.
+
+.. code-block:: yaml
+
+    simulation_environment:
+      initial_state:
+        protocols:
+          uniswap_v3:
+            # UniswapV3 protocol configuration
+            pools:
+              # Pool configurations
+
+Pool Configuration
+------------------
+
+Pools can be configured in two ways:
+
+1. Custom state:
+
+.. code-block:: yaml
+
+    pools:
+      custom:
+        - pool_address: "0x..."
+          token0: "0x..."
+          token1: "0x..."
+          fee: 3000  # Fee in hundredths of a bip (e.g., 3000 = 0.3%)
+          sqrt_price_x96: "..."  # Initial price
+          tick: 0  # Current tick
+          liquidity: "0"  # Initial liquidity
+
+2. Historical state:
+
+.. code-block:: yaml
+
+    pools:
+      historical:
+        - pool_address: "0x..."
+          block_number: 12345678  # Ethereum block number
+
+UniswapV3 Actions
+=================
+
+Actions are used to interact with the UniswapV3 protocol. There are two types of actions:
+
+1. Python actions (higher-level, more user-friendly)
+2. Raw actions (lower-level, more direct mapping to contract functions)
+
+Python Actions
+--------------
+
+1. **mint** - Add liquidity to a position
+
+.. code-block:: yaml
+
+    action_name: "mint_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "mint"
+      args:
+        # Either tick_lower and tick_upper
+        tick_lower: 123
+        tick_upper: 456
+
+        # OR price_lower and price_upper
+        price_lower: 1000.0
+        price_upper: 2000.0
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+        token_id: "position1"  # Label for the position
+
+2. **burn** - Remove liquidity from a position
+
+.. code-block:: yaml
+
+    action_name: "burn_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "burn"
+      args:
+        # Either tick_lower and tick_upper
+        tick_lower: 123
+        tick_upper: 456
+
+        # OR price_lower and price_upper
+        price_lower: 1000.0
+        price_upper: 2000.0
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+
+3. **swap** - Swap tokens
+
+.. code-block:: yaml
+
+    action_name: "swap_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "swap"
+      args:
+        # Specify at least one of the following
+        amount0_in: 100.0  # Amount of token0 to swap in
+        amount1_in: 100.0  # Amount of token1 to swap in
+        amount0_out: 100.0  # Amount of token0 to receive
+        amount1_out: 100.0  # Amount of token1 to receive
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+        price_limit: 1500.0  # Price limit for the swap
+        sqrt_price_limit_x96: "..."  # Square root price limit
+
+4. **collect** - Collect fees from a position
+
+.. code-block:: yaml
+
+    action_name: "collect_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "collect"
+      args:
+        # Either tick_lower and tick_upper
+        tick_lower: 123
+        tick_upper: 456
+
+        # OR price_lower and price_upper
+        price_lower: 1000.0
+        price_upper: 2000.0
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+
+Raw Actions
+-----------
+
+1. **raw_mint** - Add liquidity to a position (low-level)
+
+.. code-block:: yaml
+
+    action_name: "raw_mint_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "raw_mint"
+      args:
+        amount: "1000000000000000000"  # Amount of liquidity to add
+        tick_lower: 123
+        tick_upper: 456
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+        token_id: "position1"  # Label for the position
+
+2. **raw_burn** - Remove liquidity from a position (low-level)
+
+.. code-block:: yaml
+
+    action_name: "raw_burn_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "raw_burn"
+      args:
+        amount: "1000000000000000000"  # Amount of liquidity to remove
+        tick_lower: 123
+        tick_upper: 456
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+        collect: true  # Whether to automatically collect fees
+
+3. **raw_swap** - Swap tokens (low-level)
+
+.. code-block:: yaml
+
+    action_name: "raw_swap_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "raw_swap"
+      args:
+        amount_specified: "1000000000000000000"  # Amount to swap
+        zero_for_one: true  # Direction of swap (true = token0 to token1)
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+        sqrt_price_limit_x96: "..."  # Square root price limit
+
+4. **raw_collect** - Collect fees from a position (low-level)
+
+.. code-block:: yaml
+
+    action_name: "raw_collect_action"
+    protocol_id: "uniswap_v3"
+    args:
+      name: "raw_collect"
+      args:
+        amount_0_requested: "1000000000000000000"  # Amount of token0 to collect
+        amount_1_requested: "1000000000000000000"  # Amount of token1 to collect
+        tick_lower: 123
+        tick_upper: 456
+
+        # Optional parameters
+        from: "0x..."  # Sender address
+
+Spot Configuration
+===================
+
+The `spot` section configures spot price processes for token pairs. These processes can be used to simulate price movements in the market.
+
+.. code-block:: yaml
+
+    spot:
+      correlation:
+        # Optional correlation matrix between spot processes
+        - [1.0, 0.5]
+        - [0.5, 1.0]
+      spot_list:
+        # List of spot processes
+        - name: "WETH/USDC"
+          # Process type (one of the following)
+          wgn:
+            # White Gaussian Noise parameters
+            s0: 1500.0  # Initial price
+            vol: 0.02   # Volatility
+
+        - name: "WBTC/USDC"
+          # Geometric Brownian Motion
+          gbm:
+            s0: 30000.0  # Initial price
+            mu: 0.05     # Drift
+            vol: 0.03    # Volatility
+
+        - name: "DAI/USDC"
+          # Ornstein-Uhlenbeck process (mean-reverting)
+          ou:
+            s0: 1.0      # Initial price
+            mean: 1.0    # Mean value
+            vol: 0.005   # Volatility
+
+        - name: "LINK/USDC"
+          # Custom price path
+          custom:
+            timestamps: [1609459200, 1609545600, 1609632000]
+            path: [10.0, 11.5, 10.8]
+
+        - name: "UNI/USDC"
+          # Historical price data
+          historical:
+            process_start_timestamp: 1609459200  # Optional start time
+
+Spot Process Types
+-------------------
+
+1. **White Gaussian Noise (WGN)**: Random market fluctuations
+   - `s0`: Initial price
+   - `vol`: Volatility
+
+2. **Geometric Brownian Motion (GBM)**: Common model for asset price dynamics
+   - `s0`: Initial price
+   - `mu`: Drift parameter
+   - `vol`: Volatility
+
+3. **Ornstein-Uhlenbeck (OU)**: Mean-reverting process
+   - `s0`: Initial price
+   - `mean`: Long-term mean value
+   - `vol`: Volatility
+
+4. **Custom**: User-defined price path
+   - `timestamps`: Array of timestamps
+   - `path`: Array of price values corresponding to timestamps
+
+5. **Historical**: Uses historical price data
+   - `process_start_timestamp`: Optional timestamp to start the historical process
+
+Conditions and Expressions
+==========================
+
+Actions in the configuration file can include conditions that determine when they are triggered. These conditions are written using a micro-language that can reference protocol metrics.
+
+.. code-block:: yaml
+
+    action_name: "example_action"
+    protocol_id: "uniswap_v3"
+    condition: "dex_pool.dex_spot > 1500 and max of dex_pool.liquidity between last_update and t > 1000000"
+    args:
+      # Action arguments
+
+The condition is a string containing a micro-language expression that evaluates to a boolean value. The expression can use:
+
+1. **Protocol metrics**: Values reported by protocols (see :doc:`protocols_uniswap_v3`)
+   - Example: `dex_pool.dex_spot` (spot price in a Uniswap V3 pool)
+   - Example: `dex_pool.liquidity` (liquidity in a Uniswap V3 pool)
+
+2. **Comparison operators**: `=`, `<`, `<=`, `>`, `>=`
+   - Example: `dex_pool.dex_spot > 1500`
+
+3. **Logical operators**: `and`, `or`
+   - Example: `(dex_pool.dex_spot > 1500) and (dex_pool.liquidity > 1000000)`
+
+4. **Aggregation operations**: `min`, `max`, `mean`, etc. over time windows
+   - Example: `max of dex_pool.dex_spot between last_update and t`
+
+5. **Mathematical functions**: `min()`, `max()`, `abs()`, `sqrt()`, etc.
+   - Example: `sqrt(dex_pool.dex_spot) > 30`
+
+For more details on the micro-language syntax and available functions, see :doc:`micro_language`.
+
+For a list of available UniswapV3 metrics that can be used in conditions, see :doc:`protocols_uniswap_v3`.
+
+.. _comprehensive_json_schemas:
+
+Comprehensive JSON schemas
+==========================
+
+Below links contain comprehensive JSON schema files that define the complete configuration structure. These schema files provide detailed validation rules, allowed values, and dependencies between different configuration sections.
+
+.. include:: _schemas.rst
+
+These configuration files use several data types:
+
+- **Amount**: A decimal number (can be specified as a string or a number)
+- **EthAddr**: An Ethereum address as a string
+- **SimInt24**: A 24-bit signed integer (can be specified as an integer or a string)
+- **SimUint128**: A 128-bit unsigned integer (can be specified as a number or a string)
+- **SimInt256**: A 256-bit signed integer (can be specified as an integer or a string)
+- **SimUint160**: A 160-bit unsigned integer (can be specified as a number or a string)
+- **ArcStr**: A string identifier
+- **RawCondition**: A string containing a micro-language expression that evaluates to a boolean
