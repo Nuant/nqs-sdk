@@ -10,12 +10,12 @@ common:
   save_metrics: false # Don't save detailed metrics to file
   arbitrage_block_frequency: 5 # Check arbitrage opportunities every 5 blocks
 
-# Price model for ETH/USDC (volatile pair)
+# Price model for WETH/USDC (volatile pair)
 spot:
   spot_list:
     - name: WETH/USDC
       gbm: # Geometric Brownian Motion model
-        s0: 2000 # Starting price: $2000 per ETH
+        s0: 2000 # Starting price: $2000 per WETH
         mu: 0. # No drift (neutral market expectation)
         vol: 0.4 # 40% annual volatility (high volatility)
   correlation: [[1]] # Single asset, perfect self-correlation
@@ -28,7 +28,7 @@ simulation_environment:
         custom_state:
           pools:
             - pool_name: uniswapv3_eth_usdc
-              symbol_token0: ETH # First token in the pair
+              symbol_token0: WETH # First token in the pair
               symbol_token1: USDC # Second token in the pair
               fee_tier: 0.0005 # 0.05% fee tier (5 basis points)
               initial_balance:
@@ -40,7 +40,7 @@ agents:
   - name: market_maker
     wallet:
       USDC: 50000 # Start with $50k USDC
-      ETH: 25 # Start with 25 ETH (~$50k at $2000)
+      WETH: 25 # Start with 25 WETH (~$50k at $2000)
     strategy:
       timed_events:
         # Create liquidity position at simulation start

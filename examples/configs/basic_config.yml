@@ -47,8 +47,6 @@ backtest_environment:
         - pool_name: univ3_wbtc_eth
           address: "0xCBCdF9626bC03E24f779434178A73a0B4bad62eD"
 
-simulation_environment:
-
 agents:
   - name: agent_1
     wallet:
