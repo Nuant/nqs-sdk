@@ -1,14 +1,18 @@
+<!-- WARNING: original source file is docs/getting_started.rst -->
+
 # Getting Started
 
 **Nuant Quantitative System SDK** is a purpose-built SDK for decentralized finance. It enables a unified lifecycle that supports research, protocol-level simulation, backtesting, optimization, and live monitoring. Designed to empower quants, researchers, and developers, NQS makes it easy to experiment, iterate, and bring DeFi protocols and strategies from concept to execution.
 
 This repository is the public endpoint for the nqs-sdk package, available on PyPI, providing all the tools needed to build, test, and run strategies within a single, integrated environment.
 
+For additional examples and tests, please visit the companion repository at [https://github.com/Nuant/nqs-sdk-extension/](https://github.com/Nuant/nqs-sdk-extension/).
+
 ## Prerequisites
 
 Before installing the NQS SDK, ensure you have:
 
-- Python 3.12 (currently supported version; more versions coming soon)
+- Python 3.12 or 3.13
 - pip package manager
 
 ## Installation
@@ -60,16 +64,14 @@ print(f"NQS SDK version: {nqs_sdk.__version__}")
 Here’s a simple example to get you started with the NQS SDK:
 
 ```python
-import nqs_sdk.preload  # noqa: F401 # should be always on top
-from nqs_sdk import Simulation, ProtocolManager
+from nqs_sdk import Simulation
+from nqs_sdk.protocols import UniswapV3
 import json
-
-# Create protocol managers
-uniswap = ProtocolManager("uniswap_v3_rust")
 
 # Initialize simulation with protocols and configuration
 # You can use the example config or create your own with create_config.py
-sim = Simulation([uniswap], "./examples/configs/basic_config.yml")
+uniswap_v3 = UniswapV3Factory() # factory for all UniswapV3 instances
+sim = Simulation([uniswap_v3], "./examples/configs/basic_config.yml")
 
 # Run the simulation
 all_observables_str = sim.run() # this intermediate step will be fixed soon
@@ -82,34 +84,32 @@ print(f"Simulation completed with {len(all_observables)} observables")
 ### Getting Involved
 
 - **Documentation**: [https://nuant.github.io/nqs-sdk/](https://nuant.github.io/nqs-sdk/)
+  > - [Explore Core Concepts](https://nuant.github.io/nqs-sdk/core_concepts.html) - Learn about the fundamental architecture and components
+  > - [Study How to Build](https://nuant.github.io/nqs-sdk/build.html) - Dive deeper into configuration and practical examples
+  > - [Check the API Reference](https://nuant.github.io/nqs-sdk/api_reference.html) - Detailed documentation of all classes and methods
 - **GitHub Issues**: [https://github.com/Nuant/nqs-sdk/issues](https://github.com/Nuant/nqs-sdk/issues)
 - **Contact**: Contact us to [thelab@nuant.ai](mailto:thelab@nuant.ai) for joining us on private Telegram channel
 - **Examples**: Explore practical implementations in the [examples](https://github.com/Nuant/nqs-sdk/tree/master/examples) directory. [JSON schemas](https://github.com/Nuant/nqs-sdk/tree/master/examples/configs/schemas) are provided to ensure proper format and validation.
 
-## Next Steps
-
 Now that you have the NQS SDK installed and understand the basics, you might want to:
-
-1. **Explore Core Concepts** - Learn about the fundamental architecture and components ([Core Concepts](core_concepts.md))
-2. **Study How to Build** - Dive deeper into configuration and practical examples ([Build](build.md))
-3. **Check the API Reference** - Detailed documentation of all classes and methods ([API Reference](api_reference.md))
-4. **Join the Community** - Connect with other users and contributors
-5. **Contribute** - Help improve the NQS SDK by reporting issues or submitting pull requests
 
 ## Known issues and roadmap
 
 Coming soon:
 
-- Programmatic API to manage simulation and backtest directly in Python
 - API stabilisation
+- API examples with arbitrageur or other multi-agents scenarios
 
 And later:
 
 - Compound V2 support, more protocols will follow
+- Open Rust API to extend core interfaces directly in Rust
+- API for external data provider
+
+  (currently the NQS SDK uses quantlib and data.app.nuant.com for data handling)
 - EVM based *any* protocol executions
 
 Known issues:
 
-- Support of Python 3.13
-- Improve protocol naming to reflect implementation variants (e.g. uniswap_v3_rust)
-- Replace default String sim.run() output by a native Python dict
+- Support of Python 3.11
+- Support of Linux arm64
