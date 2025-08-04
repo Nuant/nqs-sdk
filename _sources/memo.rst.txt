@@ -1,0 +1,13 @@
+
+https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#sections
+# with overline, for parts
+* with overline, for chapters
+=, for sections
+-, for subsections
+^, for subsubsections
+", for paragraphs
+
+(do not use not official ~ format)
+
+Sphinx vs Markdown : https://chatgpt.com/share/68728859-3dc4-8013-ba12-f362effa2d60
+voir l'option MyST (proche de Markdown)

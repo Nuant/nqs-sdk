@@ -1,0 +1,21 @@
+nqs\_sdk.bindings.spots package
+===============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nqs_sdk.bindings.spots.fixed_spot
+   nqs_sdk.bindings.spots.ito_spot
+   nqs_sdk.bindings.spots.spot_generator
+   nqs_sdk.bindings.spots.wgn_spot
+
+Module contents
+---------------
+
+.. automodule:: nqs_sdk.bindings.spots
+   :members:
+   :show-inheritance:
+   :undoc-members:

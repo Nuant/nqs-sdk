@@ -1,0 +1,25 @@
+Environment variables
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 25 25 50
+   :header-rows: 1
+
+   * - Variable name
+     - Example
+     - Description
+   * - ``QUANTLIB_CONFIG``
+     - ``nuant-quantlib.toml``
+     - Path to a config file in TOML format
+   * - ``QUANTLIB_CACHE``
+     - ``./your_dir/.cache``
+     - | Cache directory to optimize quantlib calls
+       | (be sure to create the directory)
+   * - ``QUANTLIB_LOG``
+     - ``./your_dir/quantlib.log``
+     - | Log of all quantlib calls
+       | Includes network and cache usages
+       | The file will be appended by default and created if it doesn't exist
+   * - ``RUST_LOG``
+     - ``debug``
+     - Configure the log level of core engine
