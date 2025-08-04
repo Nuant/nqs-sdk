@@ -1,4 +1,4 @@
-<!-- WARNING: original source file is docs/getting_started.rst -->
+WARNING: original source file is docs/getting_started.rst
 
 # Getting Started
 
@@ -31,7 +31,7 @@ Get your API key from
 
 <a href="https://agents.nuant.ai/subscribe" target="_blank" rel="noopener noreferrer">https://agents.nuant.ai/subscribe</a>
 
-This following command creates a `nuant-quantlib.toml` file with the required proxy configuration for accessing Nuant’s GraphQL API.
+The following command creates a `nuant-quantlib.toml` file with the required proxy configuration for accessing Nuant’s GraphQL API.
 Make sure to replace `YOUR_API_KEY`.
 
 ```bash
@@ -65,21 +65,26 @@ Here’s a simple example to get you started with the NQS SDK:
 
 ```python
 from nqs_sdk import Simulation
-from nqs_sdk.protocols import UniswapV3
+from nqs_sdk.protocols import UniswapV3Factory
 import json
 
 # Initialize simulation with protocols and configuration
-# You can use the example config or create your own with create_config.py
 uniswap_v3 = UniswapV3Factory() # factory for all UniswapV3 instances
 sim = Simulation([uniswap_v3], "./examples/configs/basic_config.yml")
 
 # Run the simulation
-all_observables_str = sim.run() # this intermediate step will be fixed soon
-all_observables = json.loads(all_observables_str)
+all_observables = sim.run()
 
 # Access results
 print(f"Simulation completed with {len(all_observables)} observables")
 ```
+
+Tips:
+
+- By default, the execution is quiet, and you can make it verbose to watch the execution flow.
+- Data queries to feed the simulation can be expensive; consider setting the quantlib cache to make it faster.
+
+for both, see [Useful environment variables]() section below.
 
 ### Getting Involved
 
@@ -98,7 +103,7 @@ Now that you have the NQS SDK installed and understand the basics, you might wan
 Coming soon:
 
 - API stabilisation
-- API examples with arbitrageur or other multi-agents scenarios
+- API examples with arbitrageur or other multi-agent scenarios
 
 And later:
 
@@ -106,10 +111,20 @@ And later:
 - Open Rust API to extend core interfaces directly in Rust
 - API for external data provider
 
-  (currently the NQS SDK uses quantlib and data.app.nuant.com for data handling)
+  (Currently, the NQS SDK uses quantlib and data.app.nuant.com for data handling.)
 - EVM based *any* protocol executions
 
 Known issues:
 
 - Support of Python 3.11
 - Support of Linux arm64
+
+### Useful environment variables
+
+| Variable name     | Example               | Description                                                                                          |
+|-------------------|-----------------------|------------------------------------------------------------------------------------------------------|
+| `QUANTLIB_CONFIG` | `nuant-quantlib.toml` | Path to a config file in TOML format                                                                 |
+| `QUANTLIB_CACHE`  | `./your_dir/.cache`   | Cache directory to optimize quantlib calls<br/><br/><br/>(be sure to create the directory)<br/><br/> |
+| `RUST_LOG`        | `debug`               | Configure the log level of core engine                                                               |
+
+For more environment variables, see [Environment variables](https://nuant.github.io/nqs-sdk/environment_variables.html)

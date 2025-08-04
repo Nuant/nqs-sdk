@@ -8,8 +8,6 @@ This example demonstrates market making with volatile price action:
 """
 
 import logging
-import os
-import sys
 import warnings
 
 
@@ -17,10 +15,6 @@ warnings.filterwarnings("ignore")
 logging.getLogger().setLevel(logging.ERROR)
 logging.getLogger("root").setLevel(logging.ERROR)
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
-import nqs_sdk.preload  # noqa: F401 E402
 from nqs_sdk import Simulation  # noqa: E402
 from nqs_sdk.protocols import UniswapV3Factory  # noqa: E402
 

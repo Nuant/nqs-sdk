@@ -1,4 +1,3 @@
-import nqs_sdk.preload  # noqa: F401
 from nqs_sdk import Simulation
 from nqs_sdk.protocols import UniswapV3Factory
 
