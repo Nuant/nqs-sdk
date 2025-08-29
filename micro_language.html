@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Micro-Language Expression Guide &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=8539da10"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Environment variables" href="environment_variables.html" />
+    <link rel="prev" title="Config file schema" href="config_file_grammar.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="_autogen/nqs_sdk.html">nqs_sdk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Micro-Language Expression Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-in-configuration-files">Usage in Configuration Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-from-configuration-files">Examples from Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-syntax">Basic Syntax</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#metrics-structure">Metrics Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#expression-types">Expression Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#numerical-expressions">Numerical Expressions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#boolean-expressions">Boolean Expressions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregation-operations">Aggregation Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#built-in-functions">Built-in Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-functions">Custom Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#practical-examples">Practical Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-conditions">Basic Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#time-based-analysis">Time-Based Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#combined-conditions">Combined Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#complex-calculations">Complex Calculations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#real-world-use-cases">Real-World Use Cases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#common-errors">Common Errors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api_reference.html">API Reference</a><ul>
+      <li>Previous: <a href="config_file_grammar.html" title="previous chapter">Config file schema</a></li>
+      <li>Next: <a href="environment_variables.html" title="next chapter">Environment variables</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="micro-language-expression-guide">
+<h1>Micro-Language Expression Guide<a class="headerlink" href="#micro-language-expression-guide" title="Link to this heading">¶</a></h1>
+<p>This guide explains how to use micro-language expressions and conditions for data analysis and metrics evaluation in the Nuant Quantitative System.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Micro-expressions are a powerful domain-specific language used to define conditions, calculate values, and create dynamic behaviors in simulation configurations. They allow you to reference protocol metrics, perform calculations, and create complex logical conditions.</p>
+</section>
+<section id="usage-in-configuration-files">
+<h2>Usage in Configuration Files<a class="headerlink" href="#usage-in-configuration-files" title="Link to this heading">¶</a></h2>
+<p>Micro-expressions are primarily used within configuration files to define quantities through formulas or conditions. They provide a powerful way to:</p>
+<ol class="arabic simple">
+<li><p><strong>Access protocol metrics</strong> - Reference values from the simulation environment</p></li>
+<li><p><strong>Define conditions</strong> - Create triggers for actions based on market conditions</p></li>
+<li><p><strong>Calculate values</strong> - Compute amounts dynamically based on current state</p></li>
+</ol>
+<p>Common use cases include:</p>
+<ul class="simple">
+<li><p><strong>Conditional execution of actions</strong> - Execute trades only when specific market conditions are met</p></li>
+<li><p><strong>Dynamic parameter calculation</strong> - Set position sizes or price ranges based on current market data</p></li>
+<li><p><strong>Complex decision logic</strong> - Combine multiple conditions with logical operators</p></li>
+</ul>
+<p>For detailed information on how to use micro-expressions in configuration files, see <a class="reference internal" href="config_file_grammar.html"><span class="doc">Config file schema</span></a>.</p>
+<section id="examples-from-configuration-files">
+<h3>Examples from Configuration Files<a class="headerlink" href="#examples-from-configuration-files" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Price comparison condition</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">condition</span><span class="p">:</span> <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">}</span> <span class="o">&lt;</span> <span class="mf">2000.2</span> <span class="n">OR</span> <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;DAI/WETH&quot;</span><span class="p">}</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">2000.6</span>
+</pre></div>
+</div>
+<p>This condition triggers an action when either ETH price falls below $2000.2 or when the DAI/ETH rate indicates ETH is below $2000.6.</p>
+</li>
+<li><p><strong>Protocol metric evaluation</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="n">AND</span> <span class="nb">max</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">between</span> <span class="n">last_update</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>This expression combines a current value check with a historical maximum check over a time window.</p>
+</li>
+<li><p><strong>Mathematical formula</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">total_value_locked</span> <span class="o">&gt;</span> <span class="mf">2e9</span>
+</pre></div>
+</div>
+<p>This expression performs arithmetic operations on protocol metrics to create a complex condition.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="basic-syntax">
+<h2>Basic Syntax<a class="headerlink" href="#basic-syntax" title="Link to this heading">¶</a></h2>
+<p>This section covers the fundamental syntax elements of the micro-language.</p>
+<section id="metrics-structure">
+<h3>Metrics Structure<a class="headerlink" href="#metrics-structure" title="Link to this heading">¶</a></h3>
+<p>Metrics are the core building blocks of micro-expressions, allowing you to access protocol and simulation data.</p>
+<p>Metrics can be accessed in two forms:</p>
+<ul>
+<li><p><strong>Basic metric without options</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">protocol</span><span class="o">.</span><span class="n">metric_name</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Metric with options</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">protocol</span><span class="o">.</span><span class="n">metric_name</span><span class="p">:{</span><span class="n">positional_option</span><span class="p">,</span> <span class="n">named_option</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>For example, to access the spot price of a specific token pair:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using ‘&#64;’ as a prefix triggers a contextual popup in the Nuant’s IDE for any metric, providing documentation and available options.</p>
+</div>
+<p>For a list of available protocol metrics, see:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="protocols_uniswap_v3.html"><span class="doc">Uniswap V3</span></a> - Metrics for Uniswap V3 protocol</p></li>
+</ul>
+</section>
+</section>
+<section id="expression-types">
+<h2>Expression Types<a class="headerlink" href="#expression-types" title="Link to this heading">¶</a></h2>
+<p>The micro-language supports both numerical and boolean expressions, allowing for complex calculations and conditions.</p>
+<section id="numerical-expressions">
+<h3>Numerical Expressions<a class="headerlink" href="#numerical-expressions" title="Link to this heading">¶</a></h3>
+<p>Numerical expressions allow you to perform mathematical operations on metrics and values.</p>
+<p>The following operators are supported:</p>
+<ul class="simple">
+<li><p>Addition: <code class="docutils literal notranslate"><span class="pre">+</span></code></p></li>
+<li><p>Subtraction: <code class="docutils literal notranslate"><span class="pre">-</span></code></p></li>
+<li><p>Multiplication: <code class="docutils literal notranslate"><span class="pre">*</span></code></p></li>
+<li><p>Division: <code class="docutils literal notranslate"><span class="pre">/</span></code></p></li>
+<li><p>Exponentiation: <code class="docutils literal notranslate"><span class="pre">**</span></code> or <code class="docutils literal notranslate"><span class="pre">^</span></code></p></li>
+<li><p>Parentheses for grouping: <code class="docutils literal notranslate"><span class="pre">(expression)</span></code></p></li>
+<li><p>Function calls: <code class="docutils literal notranslate"><span class="pre">function_name(args...)</span></code></p></li>
+<li><p>Numeric literals (e.g., <code class="docutils literal notranslate"><span class="pre">123</span></code>, <code class="docutils literal notranslate"><span class="pre">45.67</span></code>, <code class="docutils literal notranslate"><span class="pre">1.23e4</span></code>)</p></li>
+<li><p>Aggregations: <code class="docutils literal notranslate"><span class="pre">aggregation</span> <span class="pre">of</span> <span class="pre">expression</span> <span class="pre">on</span> <span class="pre">window</span></code></p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">total_value_locked</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>
+</pre></div>
+</div>
+</section>
+<section id="boolean-expressions">
+<h3>Boolean Expressions<a class="headerlink" href="#boolean-expressions" title="Link to this heading">¶</a></h3>
+<p>Boolean expressions evaluate to either true or false and are used for conditions.</p>
+<p>Comparison operators:</p>
+<ul class="simple">
+<li><p>Equal: <code class="docutils literal notranslate"><span class="pre">=</span></code></p></li>
+<li><p>Less than: <code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></li>
+<li><p>Less than or equal: <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code></p></li>
+<li><p>Greater than: <code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></li>
+<li><p>Greater than or equal: <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code></p></li>
+</ul>
+<p>Logical operators:</p>
+<ul class="simple">
+<li><p>AND (<code class="docutils literal notranslate"><span class="pre">and</span></code> or <code class="docutils literal notranslate"><span class="pre">AND</span></code>)</p></li>
+<li><p>OR (<code class="docutils literal notranslate"><span class="pre">or</span></code> or <code class="docutils literal notranslate"><span class="pre">OR</span></code>)</p></li>
+<li><p>Parentheses for grouping: <code class="docutils literal notranslate"><span class="pre">(boolean_expression)</span></code></p></li>
+<li><p>Boolean literals: <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">&gt;</span> <span class="mi">1500</span><span class="p">)</span> <span class="n">AND</span> <span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">liquidity</span> <span class="o">&gt;</span> <span class="mi">1000000</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="aggregation-operations">
+<h2>Aggregation Operations<a class="headerlink" href="#aggregation-operations" title="Link to this heading">¶</a></h2>
+<p>Aggregation operations allow you to analyze metric values over time windows.</p>
+<p>Syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">operator</span><span class="o">&gt;</span> <span class="n">of</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="n">on</span> <span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">&lt;window&gt;</span></code> can be specified as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">between</span> <span class="pre">t1</span> <span class="pre">and</span> <span class="pre">t2</span></code> - A specific time range</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">between</span> <span class="pre">last_update</span> <span class="pre">and</span> <span class="pre">t</span></code> - From the last update to the current time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">over</span> <span class="pre">last</span> <span class="pre">n</span> <span class="pre">blocks</span></code> - Over the last n blocks</p></li>
+</ul>
+<p>Available aggregation operators:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">last_value</span></code> - Last observed value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code> - Minimum value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max</span></code> - Maximum value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mean</span></code> - Average value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sharpe_ratio</span></code> - Sharpe ratio calculation (risk-adjusted return)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sortino_ratio</span></code> - Sortino ratio calculation (downside risk-adjusted return)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calmar_ratio</span></code> - Calmar ratio calculation (drawdown-adjusted return)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_drawdown</span></code> - Maximum drawdown (largest peak-to-trough decline)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">volatility</span></code> - Volatility measurement (standard deviation of returns)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">return</span></code> - Return calculation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abs_return</span></code> - Absolute return</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ewma</span></code> - Exponentially weighted moving average</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sum</span></code> - Sum of values</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">max</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">between</span> <span class="n">last_update</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+</section>
+<section id="built-in-functions">
+<h2>Built-in Functions<a class="headerlink" href="#built-in-functions" title="Link to this heading">¶</a></h2>
+<p>The micro-language includes a variety of built-in mathematical functions to support complex calculations.</p>
+<p>Mathematical functions available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">min(a,</span> <span class="pre">b,</span> <span class="pre">...)</span></code> - Minimum of arguments</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max(a,</span> <span class="pre">b,</span> <span class="pre">...)</span></code> - Maximum of arguments</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abs(x)</span></code> - Absolute value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sqrt(x)</span></code> - Square root</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exp(x)</span></code> - Exponential function (e^x)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ln(x)</span></code> - Natural logarithm</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pow(x,</span> <span class="pre">y)</span></code> - Power function (x^y)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log10(x)</span></code> - Base-10 logarithm</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log(x,</span> <span class="pre">base)</span></code> - Logarithm with specified base</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">erf(x)</span></code> - Error function</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normal_cdf(x)</span></code> - Normal cumulative distribution function</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sqrt</span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-functions">
+<h2>Custom Functions<a class="headerlink" href="#custom-functions" title="Link to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Custom function definitions are temporarily disabled in the current version.</p>
+</div>
+<p>You can define your own functions to encapsulate complex logic and calculations.</p>
+<p>Define custom functions using the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">name</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">statements</span><span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Supported statements:</p>
+<ul class="simple">
+<li><p><strong>Assignment</strong>: <code class="docutils literal notranslate"><span class="pre">identifier</span> <span class="pre">=</span> <span class="pre">expression</span></code></p></li>
+<li><p><strong>Conditional</strong>: <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">condition</span> <span class="pre">{</span> <span class="pre">statements...</span> <span class="pre">}</span> <span class="pre">else</span> <span class="pre">{</span> <span class="pre">statements...</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>Return</strong>: <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">expression</span></code></p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">risk_adjusted_return</span><span class="p">(</span><span class="n">price</span><span class="p">,</span> <span class="n">tvl</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">volatility</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">volatility</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">price</span> <span class="o">/</span> <span class="n">volatility</span> <span class="o">+</span> <span class="n">ln</span><span class="p">(</span><span class="n">tvl</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">risk_adjusted_return</span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span><span class="p">,</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">total_value_locked</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</section>
+<section id="practical-examples">
+<h2>Practical Examples<a class="headerlink" href="#practical-examples" title="Link to this heading">¶</a></h2>
+<p>This section provides practical examples of micro-expressions for common use cases in configuration files.</p>
+<section id="basic-conditions">
+<h3>Basic Conditions<a class="headerlink" href="#basic-conditions" title="Link to this heading">¶</a></h3>
+<p>Simple price threshold:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">&gt;</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+<p>This condition is true when the spot price in the DEX pool exceeds 2000.</p>
+</section>
+<section id="time-based-analysis">
+<h3>Time-Based Analysis<a class="headerlink" href="#time-based-analysis" title="Link to this heading">¶</a></h3>
+<p>Analyzing metrics over time windows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">max</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">between</span> <span class="n">last_update</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+<p>This condition checks if the maximum spot price since the last update exceeds 2000.</p>
+<p>Volatility detection:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">volatility</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">100</span> <span class="n">blocks</span> <span class="o">&gt;</span> <span class="mf">0.05</span>
+</pre></div>
+</div>
+<p>This condition is true when price volatility over the last 100 blocks exceeds 5%.</p>
+</section>
+<section id="combined-conditions">
+<h3>Combined Conditions<a class="headerlink" href="#combined-conditions" title="Link to this heading">¶</a></h3>
+<p>Combining multiple conditions with logical operators:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">)</span> <span class="n">AND</span> <span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">liquidity</span> <span class="o">&gt;</span> <span class="mi">1000000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This condition requires both high price and sufficient liquidity.</p>
+<p>Market trend analysis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">&gt;</span> <span class="n">mean</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">200</span> <span class="n">blocks</span><span class="p">)</span> <span class="n">AND</span>
+<span class="p">(</span><span class="n">volatility</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">50</span> <span class="n">blocks</span> <span class="o">&lt;</span> <span class="mf">0.03</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This condition identifies an uptrend with low recent volatility.</p>
+</section>
+<section id="complex-calculations">
+<h3>Complex Calculations<a class="headerlink" href="#complex-calculations" title="Link to this heading">¶</a></h3>
+<p>Arithmetic operations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">total_value_locked</span> <span class="o">&gt;</span> <span class="mf">2e9</span>
+</pre></div>
+</div>
+<p>This expression combines price and TVL metrics in a calculation.</p>
+<p>Risk-adjusted metrics:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">risk_score</span><span class="p">(</span><span class="n">price</span><span class="p">,</span> <span class="n">vol</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">price</span> <span class="o">/</span> <span class="p">(</span><span class="n">vol</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">risk_score</span><span class="p">(</span><span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span><span class="p">,</span> <span class="n">volatility</span> <span class="n">of</span> <span class="n">dex_pool</span><span class="o">.</span><span class="n">dex_spot</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">100</span> <span class="n">blocks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span>
+</pre></div>
+</div>
+<p>This example defines and uses a custom risk scoring function.</p>
+</section>
+<section id="real-world-use-cases">
+<h3>Real-World Use Cases<a class="headerlink" href="#real-world-use-cases" title="Link to this heading">¶</a></h3>
+<p>Dynamic liquidity provision:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">condition</span><span class="p">:</span> <span class="n">volatility</span> <span class="n">of</span> <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">}</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">50</span> <span class="n">blocks</span> <span class="o">&lt;</span> <span class="mf">0.02</span>
+<span class="n">action</span><span class="p">:</span> <span class="n">mint_liquidity</span> <span class="k">with</span> <span class="n">narrow_range</span>
+</pre></div>
+</div>
+<p>This condition triggers liquidity provision only during low volatility periods.</p>
+<p>Stop-loss implementation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">condition</span><span class="p">:</span> <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">}</span> <span class="o">&lt;</span> <span class="mi">1800</span> <span class="n">OR</span>
+          <span class="p">(</span><span class="nb">max</span> <span class="n">of</span> <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">}</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">100</span> <span class="n">blocks</span> <span class="o">-</span>
+           <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">})</span> <span class="o">/</span> <span class="nb">max</span> <span class="n">of</span> <span class="n">common</span><span class="o">.</span><span class="n">market_spot</span><span class="p">:{</span><span class="s2">&quot;WETH/USDC&quot;</span><span class="p">}</span> <span class="n">over</span> <span class="n">last</span> <span class="mi">100</span> <span class="n">blocks</span> <span class="o">&gt;</span> <span class="mf">0.1</span>
+<span class="n">action</span><span class="p">:</span> <span class="n">swap_all_to_stable</span>
+</pre></div>
+</div>
+<p>This condition triggers a protective action when price falls below 1800 or drops more than 10% from recent maximum.</p>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p>This section helps you diagnose and fix common issues with micro-expressions.</p>
+<section id="common-errors">
+<h3>Common Errors<a class="headerlink" href="#common-errors" title="Link to this heading">¶</a></h3>
+<p><strong>Missing Market Price Error</strong></p>
+<p>If you encounter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Undefined</span> <span class="n">key</span> <span class="s1">&#39;common.market_price:{&quot;WETH/USD&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>This indicates that the required market price entry is missing from the evaluator dictionary. Ensure that:</p>
+<ol class="arabic simple">
+<li><p>The token pair is correctly specified (check for typos)</p></li>
+<li><p>The requested market price is available in your simulation</p></li>
+<li><p>You’re using the correct metric name (e.g., <cite>market_spot</cite> vs <cite>market_price</cite>)</p></li>
+</ol>
+<p><strong>Syntax Errors</strong></p>
+<p>For syntax errors like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="n">parsing</span> <span class="n">expression</span><span class="p">:</span> <span class="n">unexpected</span> <span class="n">token</span> <span class="n">at</span> <span class="n">position</span> <span class="mi">15</span>
+</pre></div>
+</div>
+<p>Check for:</p>
+<ol class="arabic simple">
+<li><p>Missing or mismatched parentheses</p></li>
+<li><p>Incorrect operator usage</p></li>
+<li><p>Typos in function names or metrics</p></li>
+<li><p>Missing quotes around string parameters</p></li>
+</ol>
+<p><strong>Time Window Errors</strong></p>
+<p>If time window aggregations aren’t working as expected, verify that:</p>
+<ol class="arabic simple">
+<li><p>The specified time window is valid for your simulation</p></li>
+<li><p>The metric has sufficient historical data for the requested window</p></li>
+<li><p>The window syntax is correct (e.g., <cite>between last_update and t</cite>)</p></li>
+</ol>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Start simple</strong>: Begin with basic expressions and gradually add complexity</p></li>
+<li><p><strong>Use parentheses</strong>: Explicitly group expressions to ensure correct evaluation order</p></li>
+<li><p><strong>Test incrementally</strong>: Validate each part of a complex expression separately</p></li>
+<li><p><strong>Check metric availability</strong>: Ensure all referenced metrics are available in your simulation</p></li>
+<li><p><strong>Consider edge cases</strong>: Account for potential division by zero or missing data</p></li>
+</ol>
+<p>For more help with specific protocols, refer to the protocol-specific documentation:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="protocols_uniswap_v3.html"><span class="doc">Uniswap V3</span></a> - Uniswap V3 metrics and examples</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

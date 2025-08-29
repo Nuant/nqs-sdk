@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+
+<span class="c1"># Maximum tick value for Uniswap V3 pools</span>
+<span class="n">MAX_TICK</span> <span class="o">=</span> <span class="mi">887272</span>
+
+
+<div class="viewcode-block" id="InvalidPriceError">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.InvalidPriceError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InvalidPriceError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when price value is invalid (not strictly positive and finite).&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="price_to_tick">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.price_to_tick">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">price_to_tick</span><span class="p">(</span><span class="n">price</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">decimals0</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">decimals1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lower</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a price to a tick value for Uniswap V3.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        price: The price to convert (must be strictly positive and finite)</span>
+<span class="sd">        decimals0: Number of decimals for token0</span>
+<span class="sd">        decimals1: Number of decimals for token1</span>
+<span class="sd">        tick_spacing: Spacing between valid ticks (default: 1)</span>
+<span class="sd">        lower: Whether to round down (True) or up (False) when between ticks</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The corresponding tick value</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        InvalidPriceError: When the price is not strictly positive and finite</span>
+<span class="sd">                          (e.g., negative, zero, infinity, or NaN)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Validate that price is strictly positive and finite</span>
+    <span class="k">if</span> <span class="n">price</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">price</span><span class="o">.</span><span class="n">is_finite</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">InvalidPriceError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Price must be strictly positive and finite, got: </span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compute tick as log base sqrt(1.0001) of sqrt_price</span>
+    <span class="n">ic</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="n">decimals1</span> <span class="o">-</span> <span class="n">decimals0</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">ln</span><span class="p">()</span> <span class="o">/</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;1.0001&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">ln</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">lower</span><span class="p">:</span>
+        <span class="n">tick</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">/</span> <span class="n">tick_spacing</span><span class="p">)</span> <span class="o">*</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="o">-</span><span class="n">MAX_TICK</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tick</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">/</span> <span class="n">tick_spacing</span><span class="p">)</span> <span class="o">*</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="n">MAX_TICK</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tick</span></div>
+
+
+
+<div class="viewcode-block" id="tick_to_price">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.tick_to_price">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">tick_to_price</span><span class="p">(</span><span class="n">tick</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">decimals0</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">decimals1</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decimal</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="mf">1.0001</span><span class="p">)</span> <span class="o">**</span> <span class="n">tick</span><span class="p">)</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">decimals1</span> <span class="o">-</span> <span class="n">decimals0</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="price_to_sqrtp">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.price_to_sqrtp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">price_to_sqrtp</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">*</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="o">**</span> <span class="mi">96</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_max_amounts">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.calculate_max_amounts">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_max_amounts</span><span class="p">(</span>
+    <span class="n">price_lower</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price_upper</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">amount0</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">amount1</span><span class="p">:</span> <span class="n">Decimal</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decimal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the maximum liquidity that can be minted for a Uniswap V3 position.</span>
+
+<span class="sd">    This function determines the maximum amount of liquidity that can be created</span>
+<span class="sd">    from the available token amounts (amount0 and amount1) for a concentrated</span>
+<span class="sd">    liquidity position with specified price bounds.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        price_lower (Decimal): Lower price bound of the position (must be positive)</span>
+<span class="sd">        price (Decimal): Current price of the pool (must be positive)</span>
+<span class="sd">        price_upper (Decimal): Upper price bound of the position (must be &gt; price_lower)</span>
+<span class="sd">        amount0 (Decimal): Available amount of token0 (must be &gt;= 0)</span>
+<span class="sd">        amount1 (Decimal): Available amount of token1 (must be &gt;= 0)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Decimal: Maximum liquidity that can be minted with the given token amounts</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If any of the following conditions are not met:</span>
+<span class="sd">            - amount0 &gt;= 0</span>
+<span class="sd">            - amount1 &gt;= 0</span>
+<span class="sd">            - price_lower &lt; price_upper</span>
+<span class="sd">            - calculated liquidity &gt;= 0</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        The calculation depends on where the current price falls relative to the position bounds:</span>
+
+<span class="sd">        - If price &lt;= price_lower: Only token0 is needed, liquidity is limited by amount0</span>
+<span class="sd">        - If price_lower &lt; price &lt; price_upper: Both tokens are needed, liquidity is limited</span>
+<span class="sd">          by whichever token provides less liquidity</span>
+<span class="sd">        - If price &gt;= price_upper: Only token1 is needed, liquidity is limited by amount1</span>
+
+<span class="sd">        This follows the standard Uniswap V3 concentrated liquidity formulas:</span>
+<span class="sd">        - L = Δx / (1/√P - 1/√P_upper) for token0</span>
+<span class="sd">        - L = Δy / (√P - √P_lower) for token1</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from decimal import Decimal</span>
+<span class="sd">        &gt;&gt;&gt; price_lower = Decimal(&#39;1.5&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; price = Decimal(&#39;2.0&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; price_upper = Decimal(&#39;2.5&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; amount0 = Decimal(&#39;100&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; amount1 = Decimal(&#39;200&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; liquidity = calculate_max_amounts(price_lower, price, price_upper, amount0, amount1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">amount0</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">amount1</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+    <span class="n">sqrt_price_lower</span> <span class="o">=</span> <span class="n">price_lower</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="n">sqrt_price</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="n">sqrt_price_upper</span> <span class="o">=</span> <span class="n">price_upper</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">sqrt_price_lower</span> <span class="o">&lt;</span> <span class="n">sqrt_price_upper</span>
+
+    <span class="k">if</span> <span class="n">sqrt_price</span> <span class="o">&lt;=</span> <span class="n">sqrt_price_lower</span><span class="p">:</span>
+        <span class="n">liquidity</span> <span class="o">=</span> <span class="n">amount0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price_lower</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price_upper</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">sqrt_price</span> <span class="o">&lt;</span> <span class="n">sqrt_price_upper</span><span class="p">:</span>
+        <span class="n">liquidity_0</span> <span class="o">=</span> <span class="n">amount0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price_upper</span><span class="p">)</span>
+        <span class="n">liquidity_1</span> <span class="o">=</span> <span class="n">amount1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt_price</span> <span class="o">-</span> <span class="n">sqrt_price_lower</span><span class="p">)</span>
+        <span class="n">liquidity</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">liquidity_0</span><span class="p">,</span> <span class="n">liquidity_1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">liquidity</span> <span class="o">=</span> <span class="n">amount1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt_price_upper</span> <span class="o">-</span> <span class="n">sqrt_price_lower</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">liquidity</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">liquidity</span></div>
+
+
+
+<div class="viewcode-block" id="token_amounts_from_liquidity">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.token_amounts_from_liquidity">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">token_amounts_from_liquidity</span><span class="p">(</span>
+    <span class="n">price_lower</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price_upper</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">liquidity_amount</span><span class="p">:</span> <span class="n">Decimal</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Decimal</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]:</span>
+    <span class="k">assert</span> <span class="n">liquidity_amount</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+    <span class="n">sqrt_price_lower</span> <span class="o">=</span> <span class="n">price_lower</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="n">sqrt_price</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="n">sqrt_price_upper</span> <span class="o">=</span> <span class="n">price_upper</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+
+    <span class="n">token0_amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">token1_amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sqrt_price</span> <span class="o">&lt;=</span> <span class="n">sqrt_price_lower</span><span class="p">:</span>
+        <span class="n">token0_amount</span> <span class="o">=</span> <span class="n">liquidity_amount</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price_lower</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price_upper</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">sqrt_price</span> <span class="o">&gt;=</span> <span class="n">sqrt_price_upper</span><span class="p">:</span>
+        <span class="n">token1_amount</span> <span class="o">=</span> <span class="n">liquidity_amount</span> <span class="o">*</span> <span class="p">(</span><span class="n">sqrt_price_upper</span> <span class="o">-</span> <span class="n">sqrt_price_lower</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">token0_amount</span> <span class="o">=</span> <span class="n">liquidity_amount</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt_price_upper</span><span class="p">)</span>
+        <span class="n">token1_amount</span> <span class="o">=</span> <span class="n">liquidity_amount</span> <span class="o">*</span> <span class="p">(</span><span class="n">sqrt_price</span> <span class="o">-</span> <span class="n">sqrt_price_lower</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">token0_amount</span><span class="p">,</span> <span class="n">token1_amount</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_optimal_rebalancing">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.calculate_optimal_rebalancing">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_optimal_rebalancing</span><span class="p">(</span>
+    <span class="n">price_lower</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price_upper</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">amount0</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">amount1</span><span class="p">:</span> <span class="n">Decimal</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Decimal</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]:</span>
+    <span class="n">sqrt_price_lower</span> <span class="o">=</span> <span class="n">price_lower</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="n">sqrt_price</span> <span class="o">=</span> <span class="n">price</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="n">sqrt_price_upper</span> <span class="o">=</span> <span class="n">price_upper</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+
+    <span class="n">x_unit</span> <span class="o">=</span> <span class="p">(</span><span class="n">sqrt_price_upper</span> <span class="o">-</span> <span class="n">sqrt_price</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt_price</span> <span class="o">*</span> <span class="n">sqrt_price_upper</span><span class="p">)</span>
+    <span class="n">y_unit</span> <span class="o">=</span> <span class="n">sqrt_price</span> <span class="o">-</span> <span class="n">sqrt_price_lower</span>
+
+    <span class="n">v_wallet</span> <span class="o">=</span> <span class="n">amount0</span> <span class="o">*</span> <span class="n">price</span> <span class="o">+</span> <span class="n">amount1</span>
+    <span class="n">v_unit</span> <span class="o">=</span> <span class="n">x_unit</span> <span class="o">*</span> <span class="n">price</span> <span class="o">+</span> <span class="n">y_unit</span>
+    <span class="n">n_units</span> <span class="o">=</span> <span class="n">v_wallet</span> <span class="o">/</span> <span class="n">v_unit</span>
+
+    <span class="n">x_pos</span> <span class="o">=</span> <span class="n">n_units</span> <span class="o">*</span> <span class="n">x_unit</span>
+    <span class="n">y_pos</span> <span class="o">=</span> <span class="n">n_units</span> <span class="o">*</span> <span class="n">y_unit</span>
+
+    <span class="k">return</span> <span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span></div>
+
+
+
+<div class="viewcode-block" id="get_tick_spacing">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.get_tick_spacing">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_tick_spacing</span><span class="p">(</span><span class="n">fee_tier</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the tick spacing for a given fee tier using string formatting with controlled precision.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># cf https://support.uniswap.org/hc/en-us/articles/20904283758349-What-are-fee-tiers</span>
+    <span class="n">fee_to_tick_spacing</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.01&quot;</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># 0.01%</span>
+        <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.05&quot;</span><span class="p">):</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># 0.05%</span>
+        <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.30&quot;</span><span class="p">):</span> <span class="mi">60</span><span class="p">,</span>  <span class="c1"># 0.3%</span>
+        <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;1.00&quot;</span><span class="p">):</span> <span class="mi">200</span><span class="p">,</span>  <span class="c1"># 1%</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">fee_tier</span> <span class="ow">in</span> <span class="n">fee_to_tick_spacing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fee_to_tick_spacing</span><span class="p">[</span><span class="n">fee_tier</span><span class="p">]</span>
+
+    <span class="n">valid_fees</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fee_to_tick_spacing</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unrecognized fee tier: </span><span class="si">{</span><span class="n">fee_tier</span><span class="si">}</span><span class="s2">. Valid fee tiers are: [</span><span class="si">{</span><span class="n">valid_fees</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

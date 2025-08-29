@@ -1,0 +1,7 @@
+nqs\_sdk.core.config module
+===========================
+
+.. automodule:: nqs_sdk.core.config
+   :members:
+   :show-inheritance:
+   :undoc-members:

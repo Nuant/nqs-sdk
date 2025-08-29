@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nqs_sdk.bindings.spots package &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nqs_sdk.bindings.spots.fixed_spot module" href="nqs_sdk.bindings.spots.fixed_spot.html" />
+    <link rel="prev" title="nqs_sdk.bindings.protocols.protocol_infos module" href="nqs_sdk.bindings.protocols.protocol_infos.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nqs_sdk.html">nqs_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="nqs_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.core.html">nqs_sdk.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.interfaces.html">nqs_sdk.interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.protocols.html">nqs_sdk.protocols package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.state.html">nqs_sdk.state package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.utils.html">nqs_sdk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#module-nqs_sdk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api_reference.html">API Reference</a><ul>
+  <li><a href="nqs_sdk.html">nqs_sdk package</a><ul>
+  <li><a href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a><ul>
+      <li>Previous: <a href="nqs_sdk.bindings.protocols.protocol_infos.html" title="previous chapter">nqs_sdk.bindings.protocols.protocol_infos module</a></li>
+      <li>Next: <a href="nqs_sdk.bindings.spots.fixed_spot.html" title="next chapter">nqs_sdk.bindings.spots.fixed_spot module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="nqs-sdk-bindings-spots-package">
+<h1>nqs_sdk.bindings.spots package<a class="headerlink" href="#nqs-sdk-bindings-spots-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.spots.fixed_spot.html">nqs_sdk.bindings.spots.fixed_spot module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.spots.fixed_spot.html#nqs_sdk.bindings.spots.fixed_spot.FixedSpotGenerator"><code class="docutils literal notranslate"><span class="pre">FixedSpotGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.fixed_spot.html#nqs_sdk.bindings.spots.fixed_spot.FixedSpotGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">FixedSpotGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.fixed_spot.html#nqs_sdk.bindings.spots.fixed_spot.FixedSpotGenerator.generate_spot_timestamps"><code class="docutils literal notranslate"><span class="pre">FixedSpotGenerator.generate_spot_timestamps()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.spots.ito_spot.html">nqs_sdk.bindings.spots.ito_spot module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.spots.ito_spot.html#nqs_sdk.bindings.spots.ito_spot.ItoSpotGenerator"><code class="docutils literal notranslate"><span class="pre">ItoSpotGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.ito_spot.html#nqs_sdk.bindings.spots.ito_spot.ItoSpotGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">ItoSpotGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.ito_spot.html#nqs_sdk.bindings.spots.ito_spot.ItoSpotGenerator.generate_spot_timestamps"><code class="docutils literal notranslate"><span class="pre">ItoSpotGenerator.generate_spot_timestamps()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.spots.ito_spot.html#nqs_sdk.bindings.spots.ito_spot.OUSpotGenerator"><code class="docutils literal notranslate"><span class="pre">OUSpotGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.ito_spot.html#nqs_sdk.bindings.spots.ito_spot.OUSpotGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">OUSpotGenerator.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.spots.spot_generator.html">nqs_sdk.bindings.spots.spot_generator module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.spots.spot_generator.html#nqs_sdk.bindings.spots.spot_generator.SpotGenerator"><code class="docutils literal notranslate"><span class="pre">SpotGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.spot_generator.html#nqs_sdk.bindings.spots.spot_generator.SpotGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">SpotGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.spot_generator.html#nqs_sdk.bindings.spots.spot_generator.SpotGenerator.names"><code class="docutils literal notranslate"><span class="pre">SpotGenerator.names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.spot_generator.html#nqs_sdk.bindings.spots.spot_generator.SpotGenerator.generate_spot_timestamps"><code class="docutils literal notranslate"><span class="pre">SpotGenerator.generate_spot_timestamps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.spot_generator.html#nqs_sdk.bindings.spots.spot_generator.SpotGenerator.generate_spot"><code class="docutils literal notranslate"><span class="pre">SpotGenerator.generate_spot()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.spots.wgn_spot.html">nqs_sdk.bindings.spots.wgn_spot module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.spots.wgn_spot.html#nqs_sdk.bindings.spots.wgn_spot.WGNSpotGenerator"><code class="docutils literal notranslate"><span class="pre">WGNSpotGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.wgn_spot.html#nqs_sdk.bindings.spots.wgn_spot.WGNSpotGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">WGNSpotGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.spots.wgn_spot.html#nqs_sdk.bindings.spots.wgn_spot.WGNSpotGenerator.generate_spot_timestamps"><code class="docutils literal notranslate"><span class="pre">WGNSpotGenerator.generate_spot_timestamps()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-nqs_sdk.bindings.spots">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nqs_sdk.bindings.spots" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

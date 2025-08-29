@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.coding_envs.coding_env &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.coding_envs.coding_env</h1><div class="highlight"><pre>
+<span></span><span class="c1"># mypy: disable-error-code=&quot;return-value,no-untyped-def,operator,var-annotated,assignment,union-attr,list-item&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">llm_sandbox</span><span class="w"> </span><span class="kn">import</span> <span class="n">SandboxSession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">RestrictedPython</span><span class="w"> </span><span class="kn">import</span> <span class="n">compile_restricted</span><span class="p">,</span> <span class="n">safe_globals</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetricName</span><span class="p">,</span> <span class="n">Metrics</span><span class="p">,</span> <span class="n">RefSharedState</span><span class="p">,</span> <span class="n">SealedParameters</span><span class="p">,</span> <span class="n">SimulationClock</span><span class="p">,</span> <span class="n">TxRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.env_builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimulatorEnvBuilder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.spots.spot_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpotGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.tx_generators.abstract_transaction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.observable_consumer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ObservableConsumer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.protocol_metafactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolMetaFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.tx_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">TxGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.utils.json_decimal_encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecimalEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.utils.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">local_logger</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.policy_caller</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolicyCaller</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.protocols.agent.agent_coding_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentProtocol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.protocols.coding_protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodingProtocol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.restriction_policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodingNodeTransformer</span><span class="p">,</span> <span class="n">implement_policy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">policy_caller_static_analysis</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">local_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="timeout_handler">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.timeout_handler">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">timeout_handler</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Policy execution timed out&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="n">sandboxing_execution</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">import pickle</span>
+<span class="s2">import os</span>
+
+<span class="s2">from nqs_sdk.coding_envs.protocols.coding_protocol import CodingProtocol</span>
+<span class="s2">from nqs_sdk.coding_envs.policy_caller import PolicyCaller</span>
+
+<span class="s2">agents_code = </span><span class="si">{agents}</span>
+<span class="s2">agents_obj = dict()</span>
+
+<span class="s2">if os.path.exists(&quot;agents.pkl&quot;):</span>
+<span class="s2">    for _, (_, agent_code) in agents_code.items():</span>
+<span class="s2">        exec(agent_code)</span>
+<span class="s2">    with open(&quot;agents.pkl&quot;, &quot;rb&quot;) as f:</span>
+<span class="s2">        agents_obj = pickle.load(f)</span>
+
+<span class="s2">with open(&quot;protocols.pkl&quot;, &quot;rb&quot;) as f:</span>
+<span class="s2">    protocols = pickle.load(f)</span>
+
+<span class="s2">for agent_name, (agent_class_name, agent_code) in agents_code.items():</span>
+<span class="s2">    # update current agent for all protocols</span>
+<span class="s2">    for protocol in protocols.values():</span>
+<span class="s2">        protocol.set_current_agent(agent_name)</span>
+
+<span class="s2">    if agent_name not in agents_obj:</span>
+<span class="s2">        exec(agent_code)</span>
+<span class="s2">        exec(&quot;result_agent = &quot; + agent_class_name + &quot;()&quot;)</span>
+<span class="s2">        agents_obj[agent_name] = result_agent</span>
+
+<span class="s2">    agents_obj[agent_name].policy(</span><span class="si">{block}</span><span class="s2">, protocols)</span>
+
+<span class="s2">with open(&quot;protocols.pkl&quot;, &quot;wb&quot;) as f:</span>
+<span class="s2">    pickle.dump(protocols, f)</span>
+
+<span class="s2">with open(&quot;agents.pkl&quot;, &quot;wb&quot;) as f:</span>
+<span class="s2">    pickle.dump(agents_obj, f)</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="CoderSimTxGenerator">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CoderSimTxGenerator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CoderSimTxGenerator</span><span class="p">(</span><span class="n">TxGenerator</span><span class="p">,</span> <span class="n">ObservableConsumer</span><span class="p">):</span>
+<div class="viewcode-block" id="CoderSimTxGenerator.__init__">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CoderSimTxGenerator.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="CoderSimTxGenerator.id">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CoderSimTxGenerator.id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;coder_sim_tx_generator&quot;</span></div>
+
+
+<div class="viewcode-block" id="CoderSimTxGenerator.initialize">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CoderSimTxGenerator.initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">SealedParameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="CoderSimTxGenerator.next">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CoderSimTxGenerator.next">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">next</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">clock</span><span class="p">:</span> <span class="n">SimulationClock</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">RefSharedState</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Metrics</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">TxRequest</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">txns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TxRequest</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># update wallet addr for all transactions</span>
+        <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">transactions</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">agent_addr</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">agent_name_to_addr</span><span class="p">(</span><span class="n">agent_name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">:</span>
+                <span class="n">tx_request</span> <span class="o">=</span> <span class="n">txn</span><span class="o">.</span><span class="n">to_tx_request</span><span class="p">(</span>
+                    <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">source</span><span class="o">=</span><span class="n">agent_name</span><span class="p">,</span>
+                    <span class="n">sender</span><span class="o">=</span><span class="n">agent_addr</span><span class="p">,</span>
+                    <span class="n">order</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>  <span class="c1"># -inf: before any other transactions</span>
+                <span class="p">)</span>
+                <span class="n">txns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tx_request</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">txns</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CoderSimTxGenerator.consume">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CoderSimTxGenerator.consume">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">consume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">SealedParameters</span><span class="p">,</span> <span class="n">clock</span><span class="p">:</span> <span class="n">SimulationClock</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">MetricName</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">metrics_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">metric_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="p">:</span>
+            <span class="n">metrics_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">str_to_metric</span><span class="p">(</span><span class="n">metric_str</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">metrics_names</span><span class="p">,</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CodingEnv">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CodingEnv</span><span class="p">:</span>
+<div class="viewcode-block" id="CodingEnv.__init__">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sandboxing_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;restricted_python&quot;</span><span class="p">,</span> <span class="s2">&quot;llm_sandbox&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sandbox_docker_image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">do_backtest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="n">common_args</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">allowed_libraries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">use_float_observables</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">common_args</span> <span class="o">=</span> <span class="n">common_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_backtest</span> <span class="o">=</span> <span class="n">do_backtest</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_float_observables</span> <span class="o">=</span> <span class="n">use_float_observables</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">numeraire</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gas_fee</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gas_fee_ccy</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">PolicyCaller</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CodingProtocol</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registered_protocol_factories</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProtocolMetaFactory</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spot_generators</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SpotGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sandboxing_method</span> <span class="o">=</span> <span class="n">sandboxing_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_libraries</span> <span class="o">=</span> <span class="n">allowed_libraries</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">sandboxing_method</span> <span class="o">==</span> <span class="s2">&quot;llm_sandbox&quot;</span> <span class="ow">and</span> <span class="n">sandbox_docker_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span> <span class="o">=</span> <span class="n">SandboxSession</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="n">execution_timeout</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">sandbox_docker_image</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span><span class="o">.</span><span class="n">execute_command</span><span class="p">(</span>
+                <span class="s2">&quot;/tmp/venv/bin/pip install pydantic pyquantlib nqs_sdk rl4defi --find-links /packages&quot;</span>
+            <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CodingEnv.register_protocol">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.register_protocol">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="n">CodingProtocol</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">protocol</span><span class="p">,</span> <span class="n">CodingProtocol</span><span class="p">),</span> <span class="s2">&quot;Protocol must be a CodingProtocol&quot;</span>
+        <span class="k">assert</span> <span class="n">protocol</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Protocol </span><span class="si">{</span><span class="n">protocol</span><span class="o">.</span><span class="n">id</span><span class="p">()</span><span class="si">}</span><span class="s2"> already registered&quot;</span>
+
+        <span class="c1"># register the protocol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">[</span><span class="n">protocol</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">protocol</span>
+
+        <span class="n">protocol_factory</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">get_protocol_factory</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">protocol_factory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">protocol_factory</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registered_protocol_factories</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">registered_protocol_factories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">protocol_factory</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CodingEnv.register_agent">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.register_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wallet</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">object</span><span class="p">:</span> <span class="n">PolicyCaller</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">agent_class_name</span> <span class="o">=</span> <span class="n">policy_caller_static_analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">libraries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_libraries</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse the agent code: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">agent_locals</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sandboxing_method</span> <span class="o">==</span> <span class="s2">&quot;restricted_python&quot;</span><span class="p">:</span>
+            <span class="n">compiled_object</span> <span class="o">=</span> <span class="n">compile_restricted</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="s2">&quot;&lt;inline&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;exec&quot;</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">CodingNodeTransformer</span><span class="p">)</span>
+            <span class="c1"># set up the globals</span>
+            <span class="n">implement_policy</span><span class="p">(</span>
+                <span class="n">safe_globals</span><span class="p">,</span>
+                <span class="p">{</span><span class="s2">&quot;PolicyCaller&quot;</span><span class="p">:</span> <span class="nb">globals</span><span class="p">()[</span><span class="s2">&quot;PolicyCaller&quot;</span><span class="p">],</span> <span class="s2">&quot;CodingProtocol&quot;</span><span class="p">:</span> <span class="nb">globals</span><span class="p">()[</span><span class="s2">&quot;CodingProtocol&quot;</span><span class="p">]},</span>
+                <span class="n">libraries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_libraries</span><span class="p">,</span>
+                <span class="n">allowed_write_classes</span><span class="o">=</span><span class="p">[</span><span class="n">agent_class_name</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span> <span class="s2">&quot;tuple&quot;</span><span class="p">,</span> <span class="s2">&quot;set&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">exec</span><span class="p">(</span><span class="n">compiled_object</span><span class="p">,</span> <span class="n">safe_globals</span><span class="p">,</span> <span class="n">agent_locals</span><span class="p">)</span>
+            <span class="n">exec</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;result_agent = </span><span class="si">{</span><span class="n">agent_class_name</span><span class="si">}</span><span class="s2">()&quot;</span><span class="p">,</span> <span class="n">safe_globals</span><span class="p">,</span> <span class="n">agent_locals</span><span class="p">)</span>
+            <span class="nb">object</span> <span class="o">=</span> <span class="n">agent_locals</span><span class="p">[</span><span class="s2">&quot;result_agent&quot;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">PolicyCaller</span><span class="p">),</span> <span class="s2">&quot;The compiled object must be a PolicyCaller&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sandboxing_method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">agent_class_name</span> <span class="o">=</span> <span class="nb">object</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">agent_source_code</span> <span class="o">=</span> <span class="nb">object</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">exec</span><span class="p">(</span><span class="n">agent_source_code</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="n">agent_locals</span><span class="p">)</span>
+            <span class="n">exec</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;result_agent = </span><span class="si">{</span><span class="n">agent_class_name</span><span class="si">}</span><span class="s2">()&quot;</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="n">agent_locals</span><span class="p">)</span>
+            <span class="nb">object</span> <span class="o">=</span> <span class="n">agent_locals</span><span class="p">[</span><span class="s2">&quot;result_agent&quot;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">PolicyCaller</span><span class="p">),</span> <span class="s2">&quot;The compiled object must be a PolicyCaller&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">wallet</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CodingEnv.register_spot_generator">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.register_spot_generator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_spot_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spot_generator</span><span class="p">:</span> <span class="n">SpotGenerator</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Spot generator must be a SpotGenerator&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spot_generators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CodingEnv.set_numeraire">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.set_numeraire">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_numeraire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numeraire</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numeraire</span> <span class="o">=</span> <span class="n">numeraire</span></div>
+
+
+<div class="viewcode-block" id="CodingEnv.set_gas_fee">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.set_gas_fee">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_gas_fee</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gas_fee</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gas_fee_ccy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gas_fee</span> <span class="o">=</span> <span class="n">gas_fee</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gas_fee_ccy</span> <span class="o">=</span> <span class="n">gas_fee_ccy</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_env</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">coder_sim_tx_generator</span><span class="p">:</span> <span class="n">CoderSimTxGenerator</span><span class="p">,</span> <span class="n">simulation_time</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SimulatorEnvBuilder</span><span class="p">,</span> <span class="n">AgentProtocol</span><span class="p">]:</span>
+        <span class="n">env_builder</span> <span class="o">=</span> <span class="n">SimulatorEnvBuilder</span><span class="p">(</span><span class="n">common_args</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">common_args</span><span class="p">,</span> <span class="n">do_backtest</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">do_backtest</span><span class="p">)</span>
+        <span class="n">env_builder</span><span class="o">.</span><span class="n">set_simulator_time</span><span class="p">(</span><span class="n">simulation_time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">simulation_time</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">simulation_time</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numeraire</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">env_builder</span><span class="o">.</span><span class="n">set_numeraire</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numeraire</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gas_fee</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">env_builder</span><span class="o">.</span><span class="n">set_gas_fee</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gas_fee</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gas_fee_ccy</span><span class="p">)</span>
+
+        <span class="c1"># register tx generator</span>
+        <span class="n">env_builder</span><span class="o">.</span><span class="n">register_tx_generator</span><span class="p">(</span><span class="n">coder_sim_tx_generator</span><span class="p">)</span>
+
+        <span class="c1"># register factories</span>
+        <span class="k">for</span> <span class="n">protocol_factory</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registered_protocol_factories</span><span class="p">:</span>
+            <span class="n">env_builder</span><span class="o">.</span><span class="n">register_factory</span><span class="p">(</span><span class="n">protocol_factory</span><span class="p">())</span>
+
+        <span class="c1"># register protocols</span>
+        <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">env_builder</span><span class="o">.</span><span class="n">register_protocol</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">protocol</span><span class="p">)</span>
+
+            <span class="c1"># register all tx generators</span>
+            <span class="k">for</span> <span class="n">tx_generator</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">get_tx_generators</span><span class="p">():</span>
+                <span class="n">env_builder</span><span class="o">.</span><span class="n">register_tx_generator</span><span class="p">(</span><span class="n">tx_generator</span><span class="p">)</span>
+
+        <span class="c1"># register spot generators</span>
+        <span class="k">for</span> <span class="n">spot_generator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">spot_generators</span><span class="p">:</span>
+            <span class="n">env_builder</span><span class="o">.</span><span class="n">register_spot_generator</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">)</span>
+
+        <span class="c1"># register agents</span>
+        <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="p">(</span><span class="n">wallet</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">env_builder</span><span class="o">.</span><span class="n">register_agent</span><span class="p">(</span><span class="n">agent_name</span><span class="p">,</span> <span class="n">wallet</span><span class="p">)</span>
+
+        <span class="c1"># Add the agent protocol</span>
+        <span class="n">tokens_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">env_builder</span><span class="o">.</span><span class="n">tokens_info</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="n">env_builder</span><span class="o">.</span><span class="n">common_args</span><span class="p">[</span><span class="s2">&quot;numeraire&quot;</span><span class="p">]]</span>
+        <span class="n">tokens_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tokens_list</span><span class="p">))</span>
+
+        <span class="n">agent_protocol</span> <span class="o">=</span> <span class="n">AgentProtocol</span><span class="p">(</span><span class="n">tokens_list</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">env_builder</span><span class="o">.</span><span class="n">build</span><span class="p">(),</span> <span class="n">agent_protocol</span>
+
+<div class="viewcode-block" id="CodingEnv.run_live">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.run_live">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_live</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="CodingEnv.run_simulation">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.run_simulation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simulation_time</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+        <span class="n">coder_sim_tx_generator</span> <span class="o">=</span> <span class="n">CoderSimTxGenerator</span><span class="p">()</span>
+        <span class="n">sim</span><span class="p">,</span> <span class="n">agent_protocol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_env</span><span class="p">(</span><span class="n">coder_sim_tx_generator</span><span class="p">,</span> <span class="n">simulation_time</span><span class="p">)</span>
+
+        <span class="c1"># set all agents in protocols and initialize observables</span>
+        <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">protocol</span><span class="o">.</span><span class="n">set_all_agents</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">get_observables_names</span><span class="p">())</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">observables</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">sim</span><span class="p">:</span>
+            <span class="n">block_number</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">block</span>
+            <span class="n">current_time</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">time</span>
+
+            <span class="k">for</span> <span class="n">observable</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">data</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">current_time</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_float_observables</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">observable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">observables</span><span class="p">:</span>
+                    <span class="n">observables</span><span class="p">[</span><span class="n">observable</span><span class="p">]</span> <span class="o">=</span> <span class="n">series</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">observables</span><span class="p">[</span><span class="n">observable</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">observables</span><span class="p">[</span><span class="n">observable</span><span class="p">],</span> <span class="n">series</span><span class="p">])</span>
+
+            <span class="c1"># update protocols</span>
+            <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="n">agent_protocol</span><span class="p">]:</span>
+                <span class="n">protocol</span><span class="o">.</span><span class="n">set_current_block</span><span class="p">(</span><span class="n">block_number</span><span class="p">)</span>
+                <span class="n">protocol</span><span class="o">.</span><span class="n">set_current_time</span><span class="p">(</span><span class="n">current_time</span><span class="p">)</span>
+                <span class="n">protocol</span><span class="o">.</span><span class="n">update_observables</span><span class="p">(</span><span class="n">observables</span><span class="p">)</span>
+
+            <span class="c1"># SandBoxing execution</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sandboxing_method</span> <span class="o">==</span> <span class="s2">&quot;llm_sandbox&quot;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Sandbox session must be set for llm_sandbox&quot;</span>
+
+                <span class="c1"># pickle the protocols</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;protocols.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span><span class="o">.</span><span class="n">copy_to_runtime</span><span class="p">(</span><span class="s2">&quot;protocols.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;/sandbox/protocols.pkl&quot;</span><span class="p">)</span>
+
+                <span class="c1"># run the sandboxing execution</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="n">sandboxing_execution</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">block_number</span><span class="p">,</span> <span class="n">agents</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">DecimalEncoder</span><span class="p">)),</span>
+                    <span class="n">libraries</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;pydantic&quot;</span><span class="p">,</span> <span class="s2">&quot;pyquantlib&quot;</span><span class="p">,</span> <span class="s2">&quot;nqs_sdk&quot;</span><span class="p">,</span> <span class="s2">&quot;rl4defi&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_libraries</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sandboxing execution failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Sandboxing execution failed&quot;</span><span class="p">)</span>
+
+                <span class="c1"># get the new agents and protocols out of the sandbox</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sandbox_session</span><span class="o">.</span><span class="n">copy_from_runtime</span><span class="p">(</span><span class="s2">&quot;/sandbox/protocols.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;protocols.pkl&quot;</span><span class="p">)</span>
+
+                <span class="c1"># get the new protocols out of the sandbox</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;protocols.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># update current agent for all protocols</span>
+                    <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="n">agent_protocol</span><span class="p">]:</span>
+                        <span class="n">protocol</span><span class="o">.</span><span class="n">set_current_agent</span><span class="p">(</span><span class="n">agent_name</span><span class="p">)</span>
+
+                    <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">timeout_handler</span><span class="p">)</span>
+                    <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">policy</span><span class="p">(</span><span class="n">block_number</span><span class="p">,</span> <span class="n">agent_protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">)</span>
+                    <span class="k">finally</span><span class="p">:</span>
+                        <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Cancel the alarm</span>
+
+            <span class="c1"># update transactions for the agent</span>
+            <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">transactions</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">txns</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">get_transactions</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">agent_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span>
+                        <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">txns</span><span class="p">)</span>
+                <span class="n">protocol</span><span class="o">.</span><span class="n">clear_transactions</span><span class="p">()</span>
+
+            <span class="c1"># order transactions by timestamp</span>
+            <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">txns</span> <span class="ow">in</span> <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">txns</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">timestamp</span><span class="p">)</span>
+
+            <span class="c1"># update the observables for the next step</span>
+            <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">observables</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="n">agent_protocol</span><span class="p">]:</span>
+                <span class="n">coder_sim_tx_generator</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">get_observables_names</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">observables</span></div>
+
+
+<div class="viewcode-block" id="CodingEnv.run">
+<a class="viewcode-back" href="../../../_autogen/nqs_sdk.coding_envs.coding_env.html#nqs_sdk.coding_envs.coding_env.CodingEnv.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simulation_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">simulation_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_simulation</span><span class="p">(</span><span class="n">simulation_time</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_live</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

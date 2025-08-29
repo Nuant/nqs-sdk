@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env module &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nqs_sdk.coding_envs.protocols.coding_protocol module" href="nqs_sdk.coding_envs.protocols.coding_protocol.html" />
+    <link rel="prev" title="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract module" href="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nqs_sdk.html">nqs_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="nqs_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.core.html">nqs_sdk.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.interfaces.html">nqs_sdk.interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.protocols.html">nqs_sdk.protocols package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.state.html">nqs_sdk.state package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.utils.html">nqs_sdk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#module-nqs_sdk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api_reference.html">API Reference</a><ul>
+  <li><a href="nqs_sdk.html">nqs_sdk package</a><ul>
+  <li><a href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a><ul>
+  <li><a href="nqs_sdk.coding_envs.protocols.html">nqs_sdk.coding_envs.protocols package</a><ul>
+  <li><a href="nqs_sdk.coding_envs.protocols.uniswap_v3.html">nqs_sdk.coding_envs.protocols.uniswap_v3 package</a><ul>
+      <li>Previous: <a href="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html" title="previous chapter">nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract module</a></li>
+      <li>Next: <a href="nqs_sdk.coding_envs.protocols.coding_protocol.html" title="next chapter">nqs_sdk.coding_envs.protocols.coding_protocol module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env">
+<span id="nqs-sdk-coding-envs-protocols-uniswap-v3-uniswap-v3-coding-env-module"></span><h1>nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env module<a class="headerlink" href="#module-nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.</span></span><span class="sig-name descname"><span class="pre">UniswapV3CodingProtocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol" title="nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol"><code class="xref py py-class docutils literal notranslate"><span class="pre">CodingProtocol</span></code></a>, <a class="reference internal" href="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol" title="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol"><code class="xref py py-class docutils literal notranslate"><span class="pre">UniswapV3Protocol</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.id" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the id of the protocol</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_protocol_factory">
+<span class="sig-name descname"><span class="pre">get_protocol_factory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.get_protocol_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_protocol_factory" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the protocol factory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="nqs_sdk.interfaces.protocol_metafactory.html#nqs_sdk.interfaces.protocol_metafactory.ProtocolMetaFactory" title="nqs_sdk.interfaces.protocol_metafactory.ProtocolMetaFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolMetaFactory</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_protocol_description">
+<span class="sig-name descname"><span class="pre">get_protocol_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.get_protocol_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_protocol_description" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the description of the protocol, the market description and the coding interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_tx_generators">
+<span class="sig-name descname"><span class="pre">get_tx_generators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.get_tx_generators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_tx_generators" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the list of all tx generators</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="nqs_sdk.interfaces.tx_generator.html#nqs_sdk.interfaces.tx_generator.TxGenerator" title="nqs_sdk.interfaces.tx_generator.TxGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TxGenerator</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_observables_names">
+<span class="sig-name descname"><span class="pre">get_observables_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.get_observables_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_observables_names" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the list of all observables names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.token0">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">token0</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.token0" title="Link to this definition">¶</a></dt>
+<dd><p>Get the name of the token0 of the pool.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.token1">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">token1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.token1" title="Link to this definition">¶</a></dt>
+<dd><p>Get the name of the token1 of the pool.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.fee_tier">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fee_tier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.fee_tier" title="Link to this definition">¶</a></dt>
+<dd><p>Get the fee tier of the pool.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.is_position_exists">
+<span class="sig-name descname"><span class="pre">is_position_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.is_position_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.is_position_exists" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the position exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>token_id</strong> (<em>str</em>) – Token ID of the position</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the position exists, False otherwise</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.dex_spot">
+<span class="sig-name descname"><span class="pre">dex_spot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.dex_spot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.dex_spot" title="Link to this definition">¶</a></dt>
+<dd><p>Get the price of token0 in units of token1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.
+If None, returns only the current price.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the series of spot prices (i.e. the price of token0 in units of token1)</dt><dd><p>(None if not available).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.liquidity">
+<span class="sig-name descname"><span class="pre">liquidity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.liquidity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.liquidity" title="Link to this definition">¶</a></dt>
+<dd><p>Get the liquidity parameter in the pool for the current tick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.
+If None, returns only the current liquidity.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the series of liquidity values (None if not available)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_volume_numeraire">
+<span class="sig-name descname"><span class="pre">total_volume_numeraire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.total_volume_numeraire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_volume_numeraire" title="Link to this definition">¶</a></dt>
+<dd><p>Get the total volume of swaps in the pool in units of the user numeraire.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.</p></li>
+<li><p><strong>None</strong> (<em>If</em>)</p></li>
+<li><p><strong>volume.</strong> (<em>returns only the current</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Series of total volume in numeraire (None if not available)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_volume">
+<span class="sig-name descname"><span class="pre">total_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.total_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_volume" title="Link to this definition">¶</a></dt>
+<dd><p>Get the total volume of swaps in the pool for the specified token.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>bool</em>) – False for token0, True for token1</p></li>
+<li><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.
+If None, returns only the current volume.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Series of total volume for the specified token (None if not available)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_holdings">
+<span class="sig-name descname"><span class="pre">total_holdings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.total_holdings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_holdings" title="Link to this definition">¶</a></dt>
+<dd><p>Get the total holdings of the specified token in the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>bool</em>) – False for token0, True for token1</p></li>
+<li><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.
+If None, returns only the current volume.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Series of total holdings for the specified token (None if not available)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_fees">
+<span class="sig-name descname"><span class="pre">total_fees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.total_fees"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_fees" title="Link to this definition">¶</a></dt>
+<dd><p>Get the total fees in the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – False for token0, True for token1. If None, returns fees in numeraire.</p></li>
+<li><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.
+If None, returns only the current fees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Series of total fees (in token units if token specified, otherwise in numeraire)</dt><dd><p>(None if not available).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_value_locked">
+<span class="sig-name descname"><span class="pre">total_value_locked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.total_value_locked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_value_locked" title="Link to this definition">¶</a></dt>
+<dd><p>Get the total value locked in the pool in units of the user numeraire.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.
+If None, returns only the current value locked.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Series of total value locked (None if not available)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_tick">
+<span class="sig-name descname"><span class="pre">get_tick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.get_tick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.get_tick" title="Link to this definition">¶</a></dt>
+<dd><p>Get the tick of the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lookback</strong> (<em>Optional</em><em>[</em><em>datetime.timedelta</em><em>]</em>) – Return all data included in the lookback period.</p></li>
+<li><p><strong>None</strong> (<em>If</em>)</p></li>
+<li><p><strong>tick.</strong> (<em>returns only the current</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Series of tick values (None if not available)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.swap">
+<span class="sig-name descname"><span class="pre">swap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.swap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.swap" title="Link to this definition">¶</a></dt>
+<dd><p>Swap or exchange tokens in the pool. At least one of the arguments should be provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> (<em>float</em>) – The amount of token to be swapped.</p></li>
+<li><p><strong>token</strong> (<em>bool</em>) – True for swapping token1 to token0, False for swapping token0 to token1.</p></li>
+<li><p><strong>price_limit</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The price limit for the swap. If None, the swap is done at the current price.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.mint">
+<span class="sig-name descname"><span class="pre">mint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price_lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_upper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_token0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_token1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.mint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.mint" title="Link to this definition">¶</a></dt>
+<dd><p>Uniswap V3 minting enables users to provide (add) liquidity within specific price ranges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>price_lower</strong> (<em>float</em>) – The lower price of the liquidity range.</p></li>
+<li><p><strong>price_upper</strong> (<em>float</em>) – The upper price of the liquidity range.</p></li>
+<li><p><strong>max_token0</strong> (<em>float</em>) – The maximum amount of token0 to be used.</p></li>
+<li><p><strong>max_token1</strong> (<em>float</em>) – The maximum amount of token1 to be used.</p></li>
+<li><p><strong>token_id</strong> (<em>str</em>) – A string identifier of the position.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.burn">
+<span class="sig-name descname"><span class="pre">burn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.burn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.burn" title="Link to this definition">¶</a></dt>
+<dd><p>Uniswap v3 burn is the burning of LP tokens, when users can effectively withdraw liquidity
+from specific price ranges within Uniswap V3 liquidity pools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount_ratio</strong> (<em>float</em>) – Amount of liquidity to be burned (between 0.0 and 1.0 where 1.0 represent all</p></li>
+<li><p><strong>position</strong><strong>)</strong><strong>.</strong> (<em>the liquidity</em><em> of </em><em>the</em>)</p></li>
+<li><p><strong>token_id</strong> (<em>str</em>) – The id of position to be burned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.active_liquidity">
+<span class="sig-name descname"><span class="pre">active_liquidity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.active_liquidity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.active_liquidity" title="Link to this definition">¶</a></dt>
+<dd><p>Get liquidity that is currently active in the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s active liquidity.
+If None, returns user’s total active liquidity.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Active liquidity amount at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.position_liquidity">
+<span class="sig-name descname"><span class="pre">position_liquidity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.position_liquidity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.position_liquidity" title="Link to this definition">¶</a></dt>
+<dd><p>Get total liquidity allocated in the pool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em>) – Position ID to get specific user position’s active liquidity.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Total liquidity amount for the pool or a specific user position</dt><dd><p>(None if not available)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Decimal]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.token_amount">
+<span class="sig-name descname"><span class="pre">token_amount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.token_amount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.token_amount" title="Link to this definition">¶</a></dt>
+<dd><p>Get actual token amount in the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>str</em>) – str to query amount for</p></li>
+<li><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s token amount.
+If None, returns user’s total token amount.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Amount of specified token at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.net_position">
+<span class="sig-name descname"><span class="pre">net_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.net_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.net_position" title="Link to this definition">¶</a></dt>
+<dd><p>Get the value of agent’s position in the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em>) – Position ID to query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Position value in units of numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.fees_collected">
+<span class="sig-name descname"><span class="pre">fees_collected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.fees_collected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.fees_collected" title="Link to this definition">¶</a></dt>
+<dd><p>Get collected fees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>str</em><em>, </em><em>optional</em>) – str to query fees for</p></li>
+<li><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s fees.
+If None, returns user’s total collected fees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Amount of collected fees in specified token or numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.fees_not_collected">
+<span class="sig-name descname"><span class="pre">fees_not_collected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.fees_not_collected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.fees_not_collected" title="Link to this definition">¶</a></dt>
+<dd><p>Get uncollected fees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>str</em><em>, </em><em>optional</em>) – str to query fees for</p></li>
+<li><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s fees.
+If None, returns user’s total uncollected fees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Amount of uncollected fees in specified token or numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.abs_impermanent_loss">
+<span class="sig-name descname"><span class="pre">abs_impermanent_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.abs_impermanent_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.abs_impermanent_loss" title="Link to this definition">¶</a></dt>
+<dd><p>Get absolute impermanent loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s IL.
+If None, returns IL for all user’s open positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Impermanent loss in units of numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.perc_impermanent_loss">
+<span class="sig-name descname"><span class="pre">perc_impermanent_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.perc_impermanent_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.perc_impermanent_loss" title="Link to this definition">¶</a></dt>
+<dd><p>Get impermanent loss as a percentage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s IL.
+If None, returns IL percentage for all user’s open positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Impermanent loss as a percentage</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.static_ptf_value">
+<span class="sig-name descname"><span class="pre">static_ptf_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.static_ptf_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.static_ptf_value" title="Link to this definition">¶</a></dt>
+<dd><p>Get value of the static portfolio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s value.
+If None, returns value for all user’s open positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Static portfolio value in numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.permanent_loss">
+<span class="sig-name descname"><span class="pre">permanent_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.permanent_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.permanent_loss" title="Link to this definition">¶</a></dt>
+<dd><p>Get realized/permanent loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s loss.
+If None, returns loss for all user’s open positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Permanent loss in units of numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.loss_versus_rebalancing">
+<span class="sig-name descname"><span class="pre">loss_versus_rebalancing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.loss_versus_rebalancing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.loss_versus_rebalancing" title="Link to this definition">¶</a></dt>
+<dd><p>Get loss compared to rebalancing strategy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s LVR.
+If None, returns LVR for all user’s open positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Loss versus rebalancing in units of numeraire at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_fees_relative_to_lvr">
+<span class="sig-name descname"><span class="pre">total_fees_relative_to_lvr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.total_fees_relative_to_lvr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.total_fees_relative_to_lvr" title="Link to this definition">¶</a></dt>
+<dd><p>Get total accumulated fees as percentage of LVR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em><em>, </em><em>optional</em>) – Position ID to get specific position’s relative fees.
+If None, returns relative fees for all user’s open positions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fees as percentage of loss versus rebalancing at the requested block number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.position_bounds">
+<span class="sig-name descname"><span class="pre">position_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/coding_envs/protocols/uniswap_v3/uniswap_v3_coding_env.html#UniswapV3CodingProtocol.position_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env.UniswapV3CodingProtocol.position_bounds" title="Link to this definition">¶</a></dt>
+<dd><p>Get price bounds of a position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<em>str</em>) – Position ID to query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lower and upper price bounds of the position</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[Decimal, Decimal]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

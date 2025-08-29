@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Core Concepts &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=8539da10"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build" href="build.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Core Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-components">Architecture Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulations">Simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#protocol-factory">Protocol Factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#agents">Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#agent-action">Agent Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-flow">Data Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generator">Generator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#historical-generator">Historical Generator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#random-generator">Random Generator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#observer">Observer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#protocol">Protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spots">Spots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transaction">Transaction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="getting_started.html" title="previous chapter">Getting Started</a></li>
+      <li>Next: <a href="build.html" title="next chapter">Build</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="core-concepts">
+<h1>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading">¶</a></h1>
+<p><strong>Nuant Quantitative System</strong> is a modular engine for simulating and testing DeFi protocols and strategies across historical and synthetic data. It orchestrates agents, transactions, and on-chain state to replicate real market behavior in a controlled environment. Built for researchers and developers, NQS enables rapid strategy iteration, protocol design, and performance evaluation.</p>
+<section id="architecture-components">
+<h2>Architecture Components<a class="headerlink" href="#architecture-components" title="Link to this heading">¶</a></h2>
+<p>The core engine is composed of several interconnected modules:</p>
+<ul class="simple">
+<li><p><strong>Protocols</strong>: Maintain internal state and process transactions (Uniswap, Compound, etc.)</p></li>
+<li><p><strong>Transactions</strong>: Contain instructions to be executed by smart contracts</p></li>
+<li><p><strong>States</strong>: Represent point-in-time snapshots of protocol state</p></li>
+<li><p><strong>Events</strong>: Output results from processed transactions</p></li>
+<li><p><strong>Wallets</strong>: Track positions and balances for agents</p></li>
+<li><p><strong>Observers</strong>: Collect metrics and simulation data</p></li>
+<li><p><strong>Oracles</strong>: Provide off-chain data like CEX prices</p></li>
+</ul>
+</section>
+<section id="simulations">
+<h2>Simulations<a class="headerlink" href="#simulations" title="Link to this heading">¶</a></h2>
+<p>Simulations orchestrate the execution of multi-protocol simulations. They coordinate between protocol factories, handle configuration loading, and execute the simulation from start to finish.</p>
+<p><strong>Key features</strong>:</p>
+<ul class="simple">
+<li><p>Multi-protocol coordination</p></li>
+<li><p>Agent behavior simulation</p></li>
+<li><p>Block progression and timing</p></li>
+<li><p>Result aggregation and analysis</p></li>
+</ul>
+</section>
+<section id="protocol-factory">
+<h2>Protocol Factory<a class="headerlink" href="#protocol-factory" title="Link to this heading">¶</a></h2>
+<p>Protocol Factory handle individual protocol integrations (e.g., Uniswap V3, Compound V2).</p>
+<p><strong>Key features</strong>:</p>
+<ul class="simple">
+<li><p>Protocol-specific configuration handling</p></li>
+<li><p>State management and persistence</p></li>
+<li><p>Transaction processing and validation</p></li>
+<li><p>Event emission and logging</p></li>
+</ul>
+</section>
+<section id="agents">
+<h2>Agents<a class="headerlink" href="#agents" title="Link to this heading">¶</a></h2>
+<p>An agent is an entity that can interact with various other entities of the simulation.
+The behaviour of the agent is defined by the user.
+The agent starts the simulation with a certain amount of tokens in his wallet and can perform two kind of actions:</p>
+<ul class="simple">
+<li><p><strong>timed actions</strong>: Timed actions are actions that are performed at a certain time of the simulation. The user can define the time at which the action is performed and the action itself. See action for the description of the action.</p></li>
+<li><p><strong>continuous actions</strong>: Continuous actions are actions that are performed continuously during the simulation. The user can define the frequency of the action and the action itself. See action for the description of the action.</p></li>
+</ul>
+</section>
+<section id="agent-action">
+<h2>Agent Action<a class="headerlink" href="#agent-action" title="Link to this heading">¶</a></h2>
+<p>An agent action is defined by a protocol, an action to perform on that protocol and the arguments of that action.
+A condition can be attached to the action.
+In that case the action can be executed only if the condition is satisfied.</p>
+</section>
+<section id="data-flow">
+<h2>Data Flow<a class="headerlink" href="#data-flow" title="Link to this heading">¶</a></h2>
+<p>Understanding how data flows through the simulation:</p>
+<ol class="arabic simple">
+<li><p><strong>Configuration Loading</strong>: Simulation parameters and protocol settings are loaded</p></li>
+<li><p><strong>Protocol Initialization</strong>: Each protocol factory sets up its initial state</p></li>
+<li><p><strong>Agent Creation</strong>: Market participants are instantiated with their strategies</p></li>
+<li><p><strong>Block Processing</strong>: For each simulation block:</p>
+<ul class="simple">
+<li><p>Agents generate transactions based on their strategies</p></li>
+<li><p>Miners collect and order transactions</p></li>
+<li><p>Protocols process transactions and update their state</p></li>
+<li><p>Events are emitted and collected by observers</p></li>
+<li><p>Wallets are updated with new positions</p></li>
+</ul>
+</li>
+<li><p><strong>Result Aggregation</strong>: Final metrics and analysis are compiled</p></li>
+</ol>
+</section>
+<section id="generator">
+<h2>Generator<a class="headerlink" href="#generator" title="Link to this heading">¶</a></h2>
+<p>Generators are introduced to manage the creation of the simulated or historical real-world objects needed by the simulation. These include:</p>
+<p>initial entities state, such as Tokens or Protocols.
+protocol transactions.
+There are two main classes of generators, random and historical which are used in simulation and backtesting mode respectively.</p>
+<section id="historical-generator">
+<h3>Historical Generator<a class="headerlink" href="#historical-generator" title="Link to this heading">¶</a></h3>
+<p>The historical generator loads data from the Nuant proprietary data service DataQuasar (DTQ). It is used during backtesting to load all the events emitted by the protocol between two given timestamps (or block numbers). The events data are used to create the historical transactions that are replayed during the backtest.</p>
+<p>The generator also fetches protocols state at a given timestamp (or block) in the past, which includes all the protocols internal variables and balances. This provides the initial state of the protocol during backtesting, but can also be used as a starting point for a forward-looking simulation.</p>
+</section>
+<section id="random-generator">
+<h3>Random Generator<a class="headerlink" href="#random-generator" title="Link to this heading">¶</a></h3>
+<p>The random generator is used for forward-looking simulations, where it generates random transactions across all protocols.
+It is made up of two main components:</p>
+<ul class="simple">
+<li><p>The random transaction generator.</p></li>
+<li><p>The random number generator.</p></li>
+</ul>
+</section>
+</section>
+<section id="observer">
+<h2>Observer<a class="headerlink" href="#observer" title="Link to this heading">¶</a></h2>
+<p>Observers are used to collect metrics from the different entities of the simulation.
+Any component of the architecture, needing to use the state or a metric produced by another member of the simulation, can do so by querying the corresponding observer.</p>
+<p>All observers provide their metrics through a dictionary attribute and need to implement a function collect_observables which gathers all observables generated at a given block.</p>
+</section>
+<section id="protocol">
+<h2>Protocol<a class="headerlink" href="#protocol" title="Link to this heading">¶</a></h2>
+<p>This module defines the logic of the protocols supported by the Nuant Core Engine.</p>
+<p>Although each protocol Nuant Core Engine is instantiated in a different class, all of them need to extend a common interface thus providing some basic, common functionalities, which are:</p>
+<ul class="simple">
+<li><p>the possibility to be initialised from a state object.</p></li>
+<li><p>a method returning the current state of the protocol.</p></li>
+<li><p>a function to process transactions sent to the protocol.</p></li>
+<li><p>a method to execute a list of transactions.</p></li>
+</ul>
+</section>
+<section id="spots">
+<h2>Spots<a class="headerlink" href="#spots" title="Link to this heading">¶</a></h2>
+<p>The spot oracle is responsible for orchestrating the generation of all processes and provide spot values to all entities of the simulation.</p>
+<p>An instance of SpotOracle is constructed from:</p>
+<ul class="simple">
+<li><p>a DeterministicSpotProcessArray representing the deterministic spot processes in the simulation</p></li>
+<li><p>a StochasticSpotProcessArray, containing all stochastic processes to simulate and their correlation matrix</p></li>
+<li><p>the numéraire used in the simulation</p></li>
+<li><p>the start and end timestamp</p></li>
+<li><p>an optional RandomGenerator, used to generate the random increments needed to evolve the stochastic processes</p></li>
+<li><p>a seed, used in the random number generation</p></li>
+</ul>
+</section>
+<section id="state">
+<h2>State<a class="headerlink" href="#state" title="Link to this heading">¶</a></h2>
+<p>States are a collection of dataclasses representing the snapshot of an entity of the simulation at a given block.
+An instance of the particular state class can be used to initialise the corresponding entity.</p>
+<p>Entities that currently implement a state class are</p>
+<ul class="simple">
+<li><p>tokens</p></li>
+<li><p>wallets</p></li>
+<li><p>protocols</p></li>
+</ul>
+</section>
+<section id="transaction">
+<h2>Transaction<a class="headerlink" href="#transaction" title="Link to this heading">¶</a></h2>
+<p>As in the blockchain, in the Nuant Core Engine each Agent willing to interact with protocols has to submit transactions.</p>
+<p>The Transaction class defines an interface that every protocol transaction needs to extend.
+These are the basic attributes that every transaction needs to provide:</p>
+<ul class="simple">
+<li><p>block_number: the block number at which the transaction is executed</p></li>
+<li><p>block_index: the block index at which the transaction is executed</p></li>
+<li><p>block_timestamp: the block timestamp corresponding to block_number</p></li>
+<li><p>sender_wallet: this is an optional attribute specifying the wallet submitting the transaction. The variable is optional as the Nuant Core Engine can accept (if possible) transactions without any information about the transaction sender, when this is not necessary to track any metrics or to perform any sanity check.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

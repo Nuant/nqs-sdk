@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">ROUND_DOWN</span><span class="p">,</span> <span class="n">Decimal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">TxRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_tick_spacing</span><span class="p">,</span>
+    <span class="n">price_to_tick</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Pool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.tx_generators.abstract_transaction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transaction</span>
+
+
+<div class="viewcode-block" id="RawMintTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawMintTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawMintTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="RawMintTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawMintTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span> <span class="o">=</span> <span class="n">tick_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span> <span class="o">=</span> <span class="n">tick_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span> <span class="o">=</span> <span class="n">token_id</span></div>
+
+
+<div class="viewcode-block" id="RawMintTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawMintTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;raw_mint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;tick_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span><span class="p">,</span>
+                <span class="s2">&quot;tick_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span><span class="p">,</span>
+                <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">][</span><span class="s2">&quot;token_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UserMintTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.UserMintTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserMintTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">amount0</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">amount1</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="UserMintTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.UserMintTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">amount0</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">amount1</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span> <span class="o">=</span> <span class="n">tick_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span> <span class="o">=</span> <span class="n">tick_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount0</span> <span class="o">=</span> <span class="n">amount0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount1</span> <span class="o">=</span> <span class="n">amount1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span> <span class="o">=</span> <span class="n">token_id</span></div>
+
+
+<div class="viewcode-block" id="UserMintTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.UserMintTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;tick_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span><span class="p">,</span>
+            <span class="s2">&quot;tick_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">args</span><span class="p">[</span><span class="s2">&quot;amount0_desired&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount0</span><span class="p">)</span>
+        <span class="n">args</span><span class="p">[</span><span class="s2">&quot;amount1_desired&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount1</span><span class="p">)</span>
+        <span class="n">args</span><span class="p">[</span><span class="s2">&quot;amount0_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># not yet used but available in Rust</span>
+        <span class="n">args</span><span class="p">[</span><span class="s2">&quot;amount1_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s2">&quot;token_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;mint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MintTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.MintTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MintTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">price_lower</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">price_upper</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">current_price</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">max_token0</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">max_token1</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="MintTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.MintTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">price_lower</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">price_upper</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">current_price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">max_token0</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">max_token1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span><span class="p">,</span>
+        <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_lower</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_lower</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_upper</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_upper</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">current_price</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_token0</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">max_token0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_token1</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">max_token1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span> <span class="o">=</span> <span class="n">token_id</span></div>
+
+
+<div class="viewcode-block" id="MintTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.MintTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">tick_spacing</span> <span class="o">=</span> <span class="n">get_tick_spacing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">fee_tier</span><span class="p">)</span>
+
+        <span class="n">tick_lower</span> <span class="o">=</span> <span class="n">price_to_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">tick_upper</span> <span class="o">=</span> <span class="n">price_to_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_upper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># FIXME done on Rust side ??</span>
+        <span class="n">token0_quantized</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">)</span>
+        <span class="n">token1_quantized</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">)</span>
+        <span class="n">max_token0</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_token0</span><span class="p">)</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">token0_quantized</span><span class="p">,</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_DOWN</span><span class="p">)</span>
+        <span class="n">max_token1</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_token1</span><span class="p">)</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">token1_quantized</span><span class="p">,</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_DOWN</span><span class="p">)</span>
+
+        <span class="n">tx</span> <span class="o">=</span> <span class="n">UserMintTransaction</span><span class="p">(</span><span class="n">tick_lower</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">,</span> <span class="n">amount0</span><span class="o">=</span><span class="n">max_token0</span><span class="p">,</span> <span class="n">amount1</span><span class="o">=</span><span class="n">max_token1</span><span class="p">,</span> <span class="n">token_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tx</span><span class="o">.</span><span class="n">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RawBurnTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawBurnTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawBurnTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="RawBurnTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawBurnTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span> <span class="o">=</span> <span class="n">tick_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span> <span class="o">=</span> <span class="n">tick_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">amount</span></div>
+
+
+<div class="viewcode-block" id="RawBurnTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawBurnTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;raw_burn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tick_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span><span class="p">,</span> <span class="s2">&quot;tick_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UserBurnTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.UserBurnTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserBurnTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">amount_ratio</span><span class="p">:</span> <span class="n">Decimal</span>
+
+<div class="viewcode-block" id="UserBurnTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.UserBurnTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount_ratio</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span> <span class="o">=</span> <span class="n">tick_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span> <span class="o">=</span> <span class="n">tick_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount_ratio</span> <span class="o">=</span> <span class="n">amount_ratio</span></div>
+
+
+<div class="viewcode-block" id="UserBurnTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.UserBurnTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;burn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;tick_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span><span class="p">,</span>
+                <span class="s2">&quot;tick_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span><span class="p">,</span>
+                <span class="s2">&quot;amount_ratio&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount_ratio</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BurnTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.BurnTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BurnTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">price_lower</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">price_upper</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">amount_ratio</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span>
+
+<div class="viewcode-block" id="BurnTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.BurnTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">price_lower</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">price_upper</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">amount_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_lower</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_lower</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_upper</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_upper</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount_ratio</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount_ratio</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span></div>
+
+
+<div class="viewcode-block" id="BurnTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.BurnTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="c1"># Use high-level PyUniswapV3Action::Burn with AmountRatio and tick bounds via UserBurnTransaction</span>
+        <span class="n">tick_spacing</span> <span class="o">=</span> <span class="n">get_tick_spacing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">fee_tier</span><span class="p">)</span>
+        <span class="n">tick_lower</span> <span class="o">=</span> <span class="n">price_to_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">tick_upper</span> <span class="o">=</span> <span class="n">price_to_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_upper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">tx</span> <span class="o">=</span> <span class="n">UserBurnTransaction</span><span class="p">(</span><span class="n">tick_lower</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount_ratio</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tx</span><span class="o">.</span><span class="n">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RawSwapTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawSwapTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawSwapTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">zero_for_one</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">sqrt_price_limit_x96</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="RawSwapTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawSwapTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zero_for_one</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">sqrt_price_limit_x96</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">zero_for_one</span> <span class="o">=</span> <span class="n">zero_for_one</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_price_limit_x96</span> <span class="o">=</span> <span class="n">sqrt_price_limit_x96</span></div>
+
+
+<div class="viewcode-block" id="RawSwapTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawSwapTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;raw_swap&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;amount_specified&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">&quot;zero_for_one&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">zero_for_one</span><span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_price_limit_x96</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">][</span><span class="s2">&quot;sqrt_price_limit_x96&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_price_limit_x96</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SwapTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.SwapTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SwapTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">price_limit</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span>
+    <span class="n">zero_for_one</span><span class="p">:</span> <span class="nb">bool</span>
+
+<div class="viewcode-block" id="SwapTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.SwapTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">zero_for_one</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span><span class="p">,</span>
+        <span class="n">price_limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_limit</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_limit</span><span class="p">)</span> <span class="k">if</span> <span class="n">price_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zero_for_one</span> <span class="o">=</span> <span class="n">zero_for_one</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span></div>
+
+
+<div class="viewcode-block" id="SwapTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.SwapTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="c1"># convert price_limit to x96 format</span>
+        <span class="n">sqrt_price_limit_x96</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">price_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sqrt_price_limit_x96</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_limit</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">96</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">zero_for_one</span><span class="p">:</span>
+            <span class="n">amount_specified</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">amount_specified</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">))</span>
+
+        <span class="n">tx</span> <span class="o">=</span> <span class="n">RawSwapTransaction</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">amount_specified</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zero_for_one</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">sqrt_price_limit_x96</span><span class="p">)</span> <span class="k">if</span> <span class="n">sqrt_price_limit_x96</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tx</span><span class="o">.</span><span class="n">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RawCollectTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawCollectTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawCollectTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">amount_0_requested</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">amount_1_requested</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="RawCollectTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawCollectTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">tick_lower</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount_0_requested</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount_1_requested</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span> <span class="o">=</span> <span class="n">tick_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span> <span class="o">=</span> <span class="n">tick_upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount_0_requested</span> <span class="o">=</span> <span class="n">amount_0_requested</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount_1_requested</span> <span class="o">=</span> <span class="n">amount_1_requested</span></div>
+
+
+<div class="viewcode-block" id="RawCollectTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.RawCollectTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;raw_collect&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;amount_0_requested&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount_0_requested</span><span class="p">,</span>
+                <span class="s2">&quot;amount_1_requested&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount_1_requested</span><span class="p">,</span>
+                <span class="s2">&quot;tick_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_lower</span><span class="p">,</span>
+                <span class="s2">&quot;tick_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_upper</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CollectTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.CollectTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CollectTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">price_lower</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">price_upper</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">amount_0</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">amount_1</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span>
+
+<div class="viewcode-block" id="CollectTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.CollectTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">price_lower</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">price_upper</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">amount_0</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">amount_1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_lower</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_lower</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_upper</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">price_upper</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount_0</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount_0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount_1</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount_1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span></div>
+
+
+<div class="viewcode-block" id="CollectTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.html#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions.CollectTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="n">tick_spacing</span> <span class="o">=</span> <span class="n">get_tick_spacing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">fee_tier</span><span class="p">)</span>
+
+        <span class="n">tick_lower</span> <span class="o">=</span> <span class="n">price_to_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">tick_upper</span> <span class="o">=</span> <span class="n">price_to_tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price_upper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">,</span> <span class="n">tick_spacing</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">amount0_scaled</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount_0</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals0</span><span class="p">))</span>
+        <span class="n">amount1_scaled</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount_1</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">decimals1</span><span class="p">))</span>
+
+        <span class="n">tx</span> <span class="o">=</span> <span class="n">RawCollectTransaction</span><span class="p">(</span><span class="n">tick_lower</span><span class="p">,</span> <span class="n">tick_upper</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">amount0_scaled</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">amount1_scaled</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">tx</span><span class="o">.</span><span class="n">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

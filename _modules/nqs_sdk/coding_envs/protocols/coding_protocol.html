@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.coding_envs.protocols.coding_protocol &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.coding_envs.protocols.coding_protocol</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.protocol_infos</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolInfos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.tx_generators.abstract_transaction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.protocol_metafactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolMetaFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.tx_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">TxGenerator</span>
+
+
+<div class="viewcode-block" id="CodingProtocol">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CodingProtocol</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="CodingProtocol.__init__">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="n">ProtocolInfos</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span> <span class="o">=</span> <span class="n">protocol</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_agents</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># variables representing the current state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_agent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_block</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.id">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.id">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the id of the protocol&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.get_protocol_factory">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.get_protocol_factory">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_protocol_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProtocolMetaFactory</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the protocol factory&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.get_protocol_description">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.get_protocol_description">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_protocol_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the description of the protocol, the market description and the coding interface&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.get_tx_generators">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.get_tx_generators">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_tx_generators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">TxGenerator</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the list of all tx generators&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.get_observables_names">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.get_observables_names">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_observables_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the list of all observables names&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_obs_timeserie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">()</span>
+
+        <span class="n">lookback_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span>
+        <span class="k">if</span> <span class="n">lookback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lookback_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">-</span> <span class="n">lookback</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">observable</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">lookback_time</span><span class="p">:]</span>
+
+<div class="viewcode-block" id="CodingProtocol.get_transactions">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.get_transactions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transactions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.clear_transactions">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.clear_transactions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_transactions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.register_transaction">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.register_transaction">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">agent_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.set_all_agents">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.set_all_agents">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_all_agents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_agents</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_agents</span> <span class="o">=</span> <span class="n">all_agents</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.set_current_agent">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.set_current_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_current_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_agent</span> <span class="o">=</span> <span class="n">agent</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.set_current_block">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.set_current_block">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_current_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_block</span> <span class="o">=</span> <span class="n">block</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.set_current_time">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.set_current_time">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_current_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span></div>
+
+
+<div class="viewcode-block" id="CodingProtocol.update_observables">
+<a class="viewcode-back" href="../../../../_autogen/nqs_sdk.coding_envs.protocols.coding_protocol.html#nqs_sdk.coding_envs.protocols.coding_protocol.CodingProtocol.update_observables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_observables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span> <span class="o">=</span> <span class="n">observables</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

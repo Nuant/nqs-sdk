@@ -1,0 +1,26 @@
+Build
+*****
+
+There are two ways to use NQS SDK, each with its own advantages and use cases:
+
+**Configuration-based approach**
+    .. include:: build_with_config.rst
+       :start-after: Configuration-based approach
+       :end-before: _configuration_approach_end
+
+Learn more in :doc:`build_with_config`.
+
+**API based approach**
+
+    .. include:: build_with_api.rst
+       :start-after: API based approach
+       :end-before: _api_approach_end
+
+Learn more in :doc:`build_with_api`.
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   build_with_config
+   build_with_api

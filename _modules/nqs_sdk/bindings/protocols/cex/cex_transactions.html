@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.bindings.protocols.cex.cex_transactions &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.bindings.protocols.cex.cex_transactions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">TxRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.tx_generators.abstract_transaction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transaction</span>
+
+
+<div class="viewcode-block" id="RebalanceTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RebalanceTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">token0</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">token1</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">weight0</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">weight1</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">execution_price</span><span class="p">:</span> <span class="n">Decimal</span>
+
+<div class="viewcode-block" id="RebalanceTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">token0</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">token1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">weight0</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">weight1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">current_price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">token0</span> <span class="o">=</span> <span class="n">token0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token1</span> <span class="o">=</span> <span class="n">token1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight0</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">weight0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight1</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">weight1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">current_price</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RebalanceTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;cex&quot;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="OpenMarginPositionTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenMarginPositionTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">collateral</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">collateral_amount</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="OpenMarginPositionTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">direction</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">collateral</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">collateral_amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">execution_price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collateral</span> <span class="o">=</span> <span class="n">collateral</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collateral_amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">collateral_amount</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">execution_price</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span> <span class="o">=</span> <span class="n">token_id</span></div>
+
+
+<div class="viewcode-block" id="OpenMarginPositionTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;cex&quot;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CheckMarginPositionTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckMarginPositionTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">current_prices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span>
+    <span class="n">maintenance_fees</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]</span>
+
+<div class="viewcode-block" id="CheckMarginPositionTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_prices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">],</span> <span class="n">maintenance_fees</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_prices</span> <span class="o">=</span> <span class="p">[</span><span class="n">Decimal</span><span class="p">(</span><span class="n">price</span><span class="p">)</span> <span class="k">for</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">current_prices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maintenance_fees</span> <span class="o">=</span> <span class="p">{</span><span class="n">token</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">fee</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">fee</span> <span class="ow">in</span> <span class="n">maintenance_fees</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+<div class="viewcode-block" id="CheckMarginPositionTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;cex&quot;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CloseMarginPositionTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CloseMarginPositionTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">execution_price</span><span class="p">:</span> <span class="n">Decimal</span>
+
+<div class="viewcode-block" id="CloseMarginPositionTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">execution_price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">price_history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span> <span class="o">=</span> <span class="n">token_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">execution_price</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">Decimal</span><span class="p">(</span><span class="n">price</span><span class="p">)</span> <span class="k">for</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">price_history</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CloseMarginPositionTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;cex&quot;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AddMarginCollateralTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AddMarginCollateralTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="n">Decimal</span>
+
+<div class="viewcode-block" id="AddMarginCollateralTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_id</span> <span class="o">=</span> <span class="n">token_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AddMarginCollateralTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;cex&quot;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ExchangeTransaction">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExchangeTransaction</span><span class="p">(</span><span class="n">Transaction</span><span class="p">):</span>
+    <span class="n">token0</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">token1</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">execution_price</span><span class="p">:</span> <span class="n">Decimal</span>
+
+<div class="viewcode-block" id="ExchangeTransaction.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">token0</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">execution_price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">token0</span> <span class="o">=</span> <span class="n">token0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token1</span> <span class="o">=</span> <span class="n">token1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">execution_price</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExchangeTransaction.to_tx_request">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.to_tx_request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tx_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TxRequest</span><span class="o">.</span><span class="n">new_with_order</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;cex&quot;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">sender</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

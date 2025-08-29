@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Config file schema &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=8539da10"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Micro-Language Expression Guide" href="micro_language.html" />
+    <link rel="prev" title="Uniswap V3" href="protocols_uniswap_v3.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="_autogen/nqs_sdk.html">nqs_sdk package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Config file schema</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overall-structure">Overall Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-configuration">Common Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#common-configuration-parameters">Common Configuration Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#uniswapv3-protocol-configuration">UniswapV3 Protocol Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pool-configuration">Pool Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#uniswapv3-actions">UniswapV3 Actions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-actions">Python Actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#raw-actions">Raw Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#spot-configuration">Spot Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#spot-process-types">Spot Process Types</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conditions-and-expressions">Conditions and Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comprehensive-json-schemas">Comprehensive JSON schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api_reference.html">API Reference</a><ul>
+      <li>Previous: <a href="protocols_uniswap_v3.html" title="previous chapter">Uniswap V3</a></li>
+      <li>Next: <a href="micro_language.html" title="next chapter">Micro-Language Expression Guide</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="config-file-schema">
+<h1>Config file schema<a class="headerlink" href="#config-file-schema" title="Link to this heading">¶</a></h1>
+<p>This document describes the grammar of the configuration files used in the simulator, with a focus on the UniswapV3 protocol.</p>
+<p>The complete JSON schemas can be downloaded in the <a class="reference internal" href="#comprehensive-json-schemas"><span class="std std-ref">Comprehensive JSON schemas</span></a> section below.</p>
+<section id="overall-structure">
+<h2>Overall Structure<a class="headerlink" href="#overall-structure" title="Link to this heading">¶</a></h2>
+<p>Configuration files follow a JSON schema and can be in YAML or JSON format. The top-level structure includes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span>
+<span class="nt">common</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Common configuration settings</span>
+
+<span class="c1"># Environment (one of the following)</span>
+<span class="nt">simulation_environment</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Simulation environment settings</span>
+
+<span class="c1"># OR</span>
+
+<span class="nt">backtest_environment</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Backtest environment settings</span>
+
+<span class="c1"># Optional sections</span>
+<span class="nt">agents</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># List of agents</span>
+
+<span class="nt">spot</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Spot market configuration</span>
+</pre></div>
+</div>
+</section>
+<section id="common-configuration">
+<h2>Common Configuration<a class="headerlink" href="#common-configuration" title="Link to this heading">¶</a></h2>
+<p>The <cite>common</cite> section contains essential configuration parameters for the simulation. There are two alternative configurations:</p>
+<ol class="arabic simple">
+<li><p>Time-based configuration (using timestamps):</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Required parameters</span>
+<span class="w">  </span><span class="nt">numeraire</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;USDC&quot;</span><span class="w">  </span><span class="c1"># Reference token for value calculations</span>
+<span class="w">  </span><span class="nt">timestamp_start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1609459200</span><span class="w">  </span><span class="c1"># Start time (Unix timestamp)</span>
+<span class="w">  </span><span class="nt">timestamp_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1612137600</span><span class="w">  </span><span class="c1"># End time (Unix timestamp)</span>
+
+<span class="w">  </span><span class="c1"># Optional parameters</span>
+<span class="w">  </span><span class="nt">arbitrage_block_frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">  </span><span class="c1"># Frequency of arbitrage opportunities (0 = disabled)</span>
+<span class="w">  </span><span class="nt">block_step_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">  </span><span class="c1"># Blocks between metrics collection (0 = disabled)</span>
+<span class="w">  </span><span class="nt">collect_all_observables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to collect all observables</span>
+<span class="w">  </span><span class="nt">gas_fee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.001</span><span class="w">  </span><span class="c1"># Gas fee amount</span>
+<span class="w">  </span><span class="nt">gas_fee_ccy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ETH&quot;</span><span class="w">  </span><span class="c1"># Gas fee currency</span>
+<span class="w">  </span><span class="nt">mandatory_tokens</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;USDC&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ETH&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;WBTC&quot;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># Essential tokens for the simulation</span>
+<span class="w">  </span><span class="nt">plot_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to generate plots</span>
+<span class="w">  </span><span class="nt">save_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to save metrics</span>
+<span class="w">  </span><span class="nt">use_arbitrageur</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to use the arbitrageur</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Block-based configuration (using block numbers):</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Required parameters</span>
+<span class="w">  </span><span class="nt">numeraire</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;USDC&quot;</span><span class="w">  </span><span class="c1"># Reference token for value calculations</span>
+<span class="w">  </span><span class="nt">block_number_start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12000000</span><span class="w">  </span><span class="c1"># Start block number</span>
+<span class="w">  </span><span class="nt">block_number_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12100000</span><span class="w">  </span><span class="c1"># End block number</span>
+
+<span class="w">  </span><span class="c1"># Optional parameters</span>
+<span class="w">  </span><span class="nt">arbitrage_block_frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">  </span><span class="c1"># Frequency of arbitrage opportunities (0 = disabled)</span>
+<span class="w">  </span><span class="nt">block_step_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">  </span><span class="c1"># Blocks between metrics collection (0 = disabled)</span>
+<span class="w">  </span><span class="nt">collect_all_observables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to collect all observables</span>
+<span class="w">  </span><span class="nt">gas_fee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.001</span><span class="w">  </span><span class="c1"># Gas fee amount</span>
+<span class="w">  </span><span class="nt">gas_fee_ccy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ETH&quot;</span><span class="w">  </span><span class="c1"># Gas fee currency</span>
+<span class="w">  </span><span class="nt">mandatory_tokens</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;USDC&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ETH&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;WBTC&quot;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># Essential tokens for the simulation</span>
+<span class="w">  </span><span class="nt">plot_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to generate plots</span>
+<span class="w">  </span><span class="nt">save_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to save metrics</span>
+<span class="w">  </span><span class="nt">use_arbitrageur</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to use the arbitrageur</span>
+</pre></div>
+</div>
+<section id="common-configuration-parameters">
+<h3>Common Configuration Parameters<a class="headerlink" href="#common-configuration-parameters" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>numeraire</strong>: Reference token used for value calculations and comparisons</p></li>
+<li><p><strong>timestamp_start/block_number_start</strong>: Starting point of the simulation (time or block)</p></li>
+<li><p><strong>timestamp_end/block_number_end</strong>: Ending point of the simulation (time or block)</p></li>
+<li><p><strong>arbitrage_block_frequency</strong>: How often arbitrage opportunities occur (0 disables arbitrage simulation)</p></li>
+<li><p><strong>block_step_metrics</strong>: Number of blocks between metrics collection (0 disables output)</p></li>
+<li><p><strong>collect_all_observables</strong>: If true, exports all available observables; if false, only exports selected ones</p></li>
+<li><p><strong>gas_fee</strong>: Amount of gas fee for transactions</p></li>
+<li><p><strong>gas_fee_ccy</strong>: Currency used for gas fees (usually ETH)</p></li>
+<li><p><strong>mandatory_tokens</strong>: List of essential tokens required for the simulation</p></li>
+<li><p><strong>plot_output</strong>: Whether to generate visual plots of output data</p></li>
+<li><p><strong>save_metrics</strong>: Whether to save trading metrics and data</p></li>
+<li><p><strong>use_arbitrageur</strong>: Whether to enable the arbitrageur in the simulation</p></li>
+</ul>
+</section>
+</section>
+<section id="uniswapv3-protocol-configuration">
+<h2>UniswapV3 Protocol Configuration<a class="headerlink" href="#uniswapv3-protocol-configuration" title="Link to this heading">¶</a></h2>
+<p>The UniswapV3 protocol can be configured in the initial state of the simulation environment.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">simulation_environment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">initial_state</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">uniswap_v3</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># UniswapV3 protocol configuration</span>
+<span class="w">        </span><span class="nt">pools</span><span class="p">:</span>
+<span class="w">          </span><span class="c1"># Pool configurations</span>
+</pre></div>
+</div>
+<section id="pool-configuration">
+<h3>Pool Configuration<a class="headerlink" href="#pool-configuration" title="Link to this heading">¶</a></h3>
+<p>Pools can be configured in two ways:</p>
+<ol class="arabic simple">
+<li><p>Custom state:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pools</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">custom</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pool_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span>
+<span class="w">      </span><span class="nt">token0</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span>
+<span class="w">      </span><span class="nt">token1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span>
+<span class="w">      </span><span class="nt">fee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3000</span><span class="w">  </span><span class="c1"># Fee in hundredths of a bip (e.g., 3000 = 0.3%)</span>
+<span class="w">      </span><span class="nt">sqrt_price_x96</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="w">  </span><span class="c1"># Initial price</span>
+<span class="w">      </span><span class="nt">tick</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w">  </span><span class="c1"># Current tick</span>
+<span class="w">      </span><span class="nt">liquidity</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w">  </span><span class="c1"># Initial liquidity</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Historical state:</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pools</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">historical</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pool_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span>
+<span class="w">      </span><span class="nt">block_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12345678</span><span class="w">  </span><span class="c1"># Ethereum block number</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="uniswapv3-actions">
+<h2>UniswapV3 Actions<a class="headerlink" href="#uniswapv3-actions" title="Link to this heading">¶</a></h2>
+<p>Actions are used to interact with the UniswapV3 protocol. There are two types of actions:</p>
+<ol class="arabic simple">
+<li><p>Python actions (higher-level, more user-friendly)</p></li>
+<li><p>Raw actions (lower-level, more direct mapping to contract functions)</p></li>
+</ol>
+<section id="python-actions">
+<h3>Python Actions<a class="headerlink" href="#python-actions" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>mint</strong> - Add liquidity to a position</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mint_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mint&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Either tick_lower and tick_upper</span>
+<span class="w">    </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">456</span>
+
+<span class="w">    </span><span class="c1"># OR price_lower and price_upper</span>
+<span class="w">    </span><span class="nt">price_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000.0</span>
+<span class="w">    </span><span class="nt">price_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000.0</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+<span class="w">    </span><span class="nt">token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;position1&quot;</span><span class="w">  </span><span class="c1"># Label for the position</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>burn</strong> - Remove liquidity from a position</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;burn_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;burn&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Either tick_lower and tick_upper</span>
+<span class="w">    </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">456</span>
+
+<span class="w">    </span><span class="c1"># OR price_lower and price_upper</span>
+<span class="w">    </span><span class="nt">price_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000.0</span>
+<span class="w">    </span><span class="nt">price_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000.0</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>swap</strong> - Swap tokens</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;swap_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;swap&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Specify at least one of the following</span>
+<span class="w">    </span><span class="nt">amount0_in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100.0</span><span class="w">  </span><span class="c1"># Amount of token0 to swap in</span>
+<span class="w">    </span><span class="nt">amount1_in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100.0</span><span class="w">  </span><span class="c1"># Amount of token1 to swap in</span>
+<span class="w">    </span><span class="nt">amount0_out</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100.0</span><span class="w">  </span><span class="c1"># Amount of token0 to receive</span>
+<span class="w">    </span><span class="nt">amount1_out</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100.0</span><span class="w">  </span><span class="c1"># Amount of token1 to receive</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+<span class="w">    </span><span class="nt">price_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500.0</span><span class="w">  </span><span class="c1"># Price limit for the swap</span>
+<span class="w">    </span><span class="nt">sqrt_price_limit_x96</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="w">  </span><span class="c1"># Square root price limit</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>collect</strong> - Collect fees from a position</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;collect_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;collect&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Either tick_lower and tick_upper</span>
+<span class="w">    </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">456</span>
+
+<span class="w">    </span><span class="c1"># OR price_lower and price_upper</span>
+<span class="w">    </span><span class="nt">price_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000.0</span>
+<span class="w">    </span><span class="nt">price_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000.0</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+</pre></div>
+</div>
+</section>
+<section id="raw-actions">
+<h3>Raw Actions<a class="headerlink" href="#raw-actions" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>raw_mint</strong> - Add liquidity to a position (low-level)</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_mint_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_mint&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000000000000000000&quot;</span><span class="w">  </span><span class="c1"># Amount of liquidity to add</span>
+<span class="w">    </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">456</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+<span class="w">    </span><span class="nt">token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;position1&quot;</span><span class="w">  </span><span class="c1"># Label for the position</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>raw_burn</strong> - Remove liquidity from a position (low-level)</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_burn_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_burn&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000000000000000000&quot;</span><span class="w">  </span><span class="c1"># Amount of liquidity to remove</span>
+<span class="w">    </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">456</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+<span class="w">    </span><span class="nt">collect</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Whether to automatically collect fees</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>raw_swap</strong> - Swap tokens (low-level)</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_swap_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_swap&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">amount_specified</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000000000000000000&quot;</span><span class="w">  </span><span class="c1"># Amount to swap</span>
+<span class="w">    </span><span class="nt">zero_for_one</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Direction of swap (true = token0 to token1)</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+<span class="w">    </span><span class="nt">sqrt_price_limit_x96</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="w">  </span><span class="c1"># Square root price limit</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>raw_collect</strong> - Collect fees from a position (low-level)</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_collect_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;raw_collect&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">amount_0_requested</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000000000000000000&quot;</span><span class="w">  </span><span class="c1"># Amount of token0 to collect</span>
+<span class="w">    </span><span class="nt">amount_1_requested</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1000000000000000000&quot;</span><span class="w">  </span><span class="c1"># Amount of token1 to collect</span>
+<span class="w">    </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">456</span>
+
+<span class="w">    </span><span class="c1"># Optional parameters</span>
+<span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x...&quot;</span><span class="w">  </span><span class="c1"># Sender address</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="spot-configuration">
+<h2>Spot Configuration<a class="headerlink" href="#spot-configuration" title="Link to this heading">¶</a></h2>
+<p>The <cite>spot</cite> section configures spot price processes for token pairs. These processes can be used to simulate price movements in the market.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">correlation</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Optional correlation matrix between spot processes</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">spot_list</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># List of spot processes</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;WETH/USDC&quot;</span>
+<span class="w">      </span><span class="c1"># Process type (one of the following)</span>
+<span class="w">      </span><span class="nt">wgn</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># White Gaussian Noise parameters</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500.0</span><span class="w">  </span><span class="c1"># Initial price</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span><span class="w">   </span><span class="c1"># Volatility</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;WBTC/USDC&quot;</span>
+<span class="w">      </span><span class="c1"># Geometric Brownian Motion</span>
+<span class="w">      </span><span class="nt">gbm</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30000.0</span><span class="w">  </span><span class="c1"># Initial price</span>
+<span class="w">        </span><span class="nt">mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.05</span><span class="w">     </span><span class="c1"># Drift</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.03</span><span class="w">    </span><span class="c1"># Volatility</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DAI/USDC&quot;</span>
+<span class="w">      </span><span class="c1"># Ornstein-Uhlenbeck process (mean-reverting)</span>
+<span class="w">      </span><span class="nt">ou</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">      </span><span class="c1"># Initial price</span>
+<span class="w">        </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">    </span><span class="c1"># Mean value</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.005</span><span class="w">   </span><span class="c1"># Volatility</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LINK/USDC&quot;</span>
+<span class="w">      </span><span class="c1"># Custom price path</span>
+<span class="w">      </span><span class="nt">custom</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">timestamps</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1609459200</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1609545600</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1609632000</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">11.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10.8</span><span class="p p-Indicator">]</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UNI/USDC&quot;</span>
+<span class="w">      </span><span class="c1"># Historical price data</span>
+<span class="w">      </span><span class="nt">historical</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">process_start_timestamp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1609459200</span><span class="w">  </span><span class="c1"># Optional start time</span>
+</pre></div>
+</div>
+<section id="spot-process-types">
+<h3>Spot Process Types<a class="headerlink" href="#spot-process-types" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>White Gaussian Noise (WGN)</strong>: Random market fluctuations
+- <cite>s0</cite>: Initial price
+- <cite>vol</cite>: Volatility</p></li>
+<li><p><strong>Geometric Brownian Motion (GBM)</strong>: Common model for asset price dynamics
+- <cite>s0</cite>: Initial price
+- <cite>mu</cite>: Drift parameter
+- <cite>vol</cite>: Volatility</p></li>
+<li><p><strong>Ornstein-Uhlenbeck (OU)</strong>: Mean-reverting process
+- <cite>s0</cite>: Initial price
+- <cite>mean</cite>: Long-term mean value
+- <cite>vol</cite>: Volatility</p></li>
+<li><p><strong>Custom</strong>: User-defined price path
+- <cite>timestamps</cite>: Array of timestamps
+- <cite>path</cite>: Array of price values corresponding to timestamps</p></li>
+<li><p><strong>Historical</strong>: Uses historical price data
+- <cite>process_start_timestamp</cite>: Optional timestamp to start the historical process</p></li>
+</ol>
+</section>
+</section>
+<section id="conditions-and-expressions">
+<h2>Conditions and Expressions<a class="headerlink" href="#conditions-and-expressions" title="Link to this heading">¶</a></h2>
+<p>Actions in the configuration file can include conditions that determine when they are triggered. These conditions are written using a micro-language that can reference protocol metrics.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example_action&quot;</span>
+<span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uniswap_v3&quot;</span>
+<span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dex_pool.dex_spot</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">1500</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">max</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">dex_pool.liquidity</span><span class="nv"> </span><span class="s">between</span><span class="nv"> </span><span class="s">last_update</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">t</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">1000000&quot;</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Action arguments</span>
+</pre></div>
+</div>
+<p>The condition is a string containing a micro-language expression that evaluates to a boolean value. The expression can use:</p>
+<ol class="arabic simple">
+<li><p><strong>Protocol metrics</strong>: Values reported by protocols (see <a class="reference internal" href="protocols_uniswap_v3.html"><span class="doc">Uniswap V3</span></a>)
+- Example: <cite>dex_pool.dex_spot</cite> (spot price in a Uniswap V3 pool)
+- Example: <cite>dex_pool.liquidity</cite> (liquidity in a Uniswap V3 pool)</p></li>
+<li><p><strong>Comparison operators</strong>: <cite>=</cite>, <cite>&lt;</cite>, <cite>&lt;=</cite>, <cite>&gt;</cite>, <cite>&gt;=</cite>
+- Example: <cite>dex_pool.dex_spot &gt; 1500</cite></p></li>
+<li><p><strong>Logical operators</strong>: <cite>and</cite>, <cite>or</cite>
+- Example: <cite>(dex_pool.dex_spot &gt; 1500) and (dex_pool.liquidity &gt; 1000000)</cite></p></li>
+<li><p><strong>Aggregation operations</strong>: <cite>min</cite>, <cite>max</cite>, <cite>mean</cite>, etc. over time windows
+- Example: <cite>max of dex_pool.dex_spot between last_update and t</cite></p></li>
+<li><p><strong>Mathematical functions</strong>: <cite>min()</cite>, <cite>max()</cite>, <cite>abs()</cite>, <cite>sqrt()</cite>, etc.
+- Example: <cite>sqrt(dex_pool.dex_spot) &gt; 30</cite></p></li>
+</ol>
+<p>For more details on the micro-language syntax and available functions, see <a class="reference internal" href="micro_language.html"><span class="doc">Micro-Language Expression Guide</span></a>.</p>
+<p>For a list of available UniswapV3 metrics that can be used in conditions, see <a class="reference internal" href="protocols_uniswap_v3.html"><span class="doc">Uniswap V3</span></a>.</p>
+</section>
+<section id="comprehensive-json-schemas">
+<span id="id1"></span><h2>Comprehensive JSON schemas<a class="headerlink" href="#comprehensive-json-schemas" title="Link to this heading">¶</a></h2>
+<p>Below links contain comprehensive JSON schema files that define the complete configuration structure. These schema files provide detailed validation rules, allowed values, and dependencies between different configuration sections.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="_static/_schemas/config_file_schema.json">config_file_schema.json</a></p></li>
+<li><p><a class="reference external" href="_static/_schemas/uniswap_v3_py_action_schema.json">uniswap_v3_py_action_schema.json</a></p></li>
+<li><p><a class="reference external" href="_static/_schemas/uniswap_v3_raw_action_schema.json">uniswap_v3_raw_action_schema.json</a></p></li>
+</ul>
+<p>These configuration files use several data types:</p>
+<ul class="simple">
+<li><p><strong>Amount</strong>: A decimal number (can be specified as a string or a number)</p></li>
+<li><p><strong>EthAddr</strong>: An Ethereum address as a string</p></li>
+<li><p><strong>SimInt24</strong>: A 24-bit signed integer (can be specified as an integer or a string)</p></li>
+<li><p><strong>SimUint128</strong>: A 128-bit unsigned integer (can be specified as a number or a string)</p></li>
+<li><p><strong>SimInt256</strong>: A 256-bit signed integer (can be specified as an integer or a string)</p></li>
+<li><p><strong>SimUint160</strong>: A 160-bit unsigned integer (can be specified as a number or a string)</p></li>
+<li><p><strong>ArcStr</strong>: A string identifier</p></li>
+<li><p><strong>RawCondition</strong>: A string containing a micro-language expression that evaluates to a boolean</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

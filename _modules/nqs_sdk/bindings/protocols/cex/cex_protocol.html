@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.bindings.protocols.cex.cex_protocol &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.bindings.protocols.cex.cex_protocol</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetricName</span><span class="p">,</span> <span class="n">MutSharedState</span><span class="p">,</span> <span class="n">SealedParameters</span><span class="p">,</span> <span class="n">SimulationClock</span><span class="p">,</span> <span class="n">TxRequest</span><span class="p">,</span> <span class="n">Wallet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.cex.cex_transactions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AddMarginCollateralTransaction</span><span class="p">,</span>
+    <span class="n">CheckMarginPositionTransaction</span><span class="p">,</span>
+    <span class="n">CloseMarginPositionTransaction</span><span class="p">,</span>
+    <span class="n">ExchangeTransaction</span><span class="p">,</span>
+    <span class="n">OpenMarginPositionTransaction</span><span class="p">,</span>
+    <span class="n">RebalanceTransaction</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.observable_consumer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ObservableConsumer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cex_market</span><span class="w"> </span><span class="kn">import</span> <span class="n">CEXMarkets</span>
+
+
+<div class="viewcode-block" id="compute_cex_target_amounts">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.compute_cex_target_amounts">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_cex_target_amounts</span><span class="p">(</span>
+    <span class="n">token0_balance</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+    <span class="n">token1_balance</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+    <span class="n">weight_0</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+    <span class="n">weight_1</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+    <span class="n">execution_price</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+    <span class="n">fee</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Decimal</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]:</span>
+    <span class="n">total_value_in_token0</span> <span class="o">=</span> <span class="n">token0_balance</span> <span class="o">+</span> <span class="p">(</span><span class="n">token1_balance</span> <span class="o">/</span> <span class="n">execution_price</span><span class="p">)</span>
+
+    <span class="n">target_token0</span> <span class="o">=</span> <span class="n">total_value_in_token0</span> <span class="o">*</span> <span class="n">weight_0</span>
+    <span class="n">target_token1</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_value_in_token0</span> <span class="o">*</span> <span class="n">weight_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">execution_price</span>
+
+    <span class="c1"># Calculate differences between current and target</span>
+    <span class="n">token0_diff</span> <span class="o">=</span> <span class="n">target_token0</span> <span class="o">-</span> <span class="n">token0_balance</span>
+    <span class="n">token1_diff</span> <span class="o">=</span> <span class="n">target_token1</span> <span class="o">-</span> <span class="n">token1_balance</span>
+
+    <span class="k">if</span> <span class="n">fee</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fee_amount0</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">token0_diff</span><span class="p">)</span> <span class="o">*</span> <span class="n">fee</span> <span class="o">/</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;100.0&quot;</span><span class="p">)</span>
+        <span class="n">fee_amount1</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">token1_diff</span><span class="p">)</span> <span class="o">*</span> <span class="n">fee</span> <span class="o">/</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;100.0&quot;</span><span class="p">)</span>
+        <span class="n">target_token0</span> <span class="o">-=</span> <span class="n">fee_amount0</span> <span class="k">if</span> <span class="n">token0_diff</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">target_token1</span> <span class="o">-=</span> <span class="n">fee_amount1</span> <span class="k">if</span> <span class="n">token1_diff</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">target_token0</span><span class="p">,</span> <span class="n">target_token1</span></div>
+
+
+
+<div class="viewcode-block" id="MarginPosition">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MarginPosition</span><span class="p">:</span>
+    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">margin_token</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># True if long, False if short</span>
+    <span class="n">margin_amount</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">collateral_token</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">collateral_amount</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">opening_price</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">opening_timestamp</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">opening_fee</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">liquidation_price</span><span class="p">:</span> <span class="n">Decimal</span>
+    <span class="n">maintenance_margin_ratio</span><span class="p">:</span> <span class="n">Decimal</span></div>
+
+
+
+<div class="viewcode-block" id="CEX">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CEX</span><span class="p">(</span><span class="n">Protocol</span><span class="p">,</span> <span class="n">ObservableConsumer</span><span class="p">):</span>
+<div class="viewcode-block" id="CEX.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">markets</span><span class="p">:</span> <span class="n">CEXMarkets</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markets</span> <span class="o">=</span> <span class="n">markets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span> <span class="o">=</span> <span class="p">{(</span><span class="n">pair</span><span class="o">.</span><span class="n">token0</span><span class="p">,</span> <span class="n">pair</span><span class="o">.</span><span class="n">token1</span><span class="p">):</span> <span class="n">pair</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">markets</span><span class="o">.</span><span class="n">pairs</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MarginPosition</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="CEX.id">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;cex&quot;</span></div>
+
+
+<div class="viewcode-block" id="CEX.initialize">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">SealedParameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="CEX.consume">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.consume">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">consume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">SealedParameters</span><span class="p">,</span> <span class="n">clock</span><span class="p">:</span> <span class="n">SimulationClock</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">MetricName</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="n">metrics_str</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">metrics_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;common.market_spot:</span><span class="se">{{</span><span class="s1">pair=&quot;</span><span class="si">{</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&quot;</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">metrics</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics_str</span><span class="p">:</span>
+            <span class="n">metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">str_to_metric</span><span class="p">(</span><span class="n">metric</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">metrics</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CEX.build_tx_payload">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.build_tx_payload">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_tx_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TxRequest</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CEX.execute_tx">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.execute_tx">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clock</span><span class="p">:</span> <span class="n">SimulationClock</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">MutSharedState</span><span class="p">,</span> <span class="n">tx</span><span class="p">:</span> <span class="n">TxRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">transaction</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">payload</span>
+
+        <span class="n">wallet</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_wallet</span><span class="p">(</span><span class="n">tx</span><span class="o">.</span><span class="n">sender</span><span class="p">)</span>
+        <span class="n">holdings</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">wallet</span><span class="o">.</span><span class="n">get_balance_of_float</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wallet</span><span class="o">.</span><span class="n">holdings</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transaction</span><span class="p">,</span> <span class="n">RebalanceTransaction</span><span class="p">):</span>
+            <span class="n">token0</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token0</span>
+            <span class="n">token1</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token1</span>
+            <span class="n">weight0</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">weight0</span>
+            <span class="n">weight1</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">weight1</span>
+            <span class="n">execution_price</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">execution_price</span>  <span class="c1"># price of token0 in terms of token1</span>
+
+            <span class="k">assert</span> <span class="p">(</span><span class="n">token0</span><span class="p">,</span> <span class="n">token1</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Pair </span><span class="si">{</span><span class="n">token0</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">token1</span><span class="si">}</span><span class="s2"> is not available.&quot;</span>
+            <span class="n">fee</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">[(</span><span class="n">token0</span><span class="p">,</span> <span class="n">token1</span><span class="p">)]</span><span class="o">.</span><span class="n">opening_fee</span>
+
+            <span class="c1"># normalize weights</span>
+            <span class="n">weight0</span> <span class="o">=</span> <span class="n">weight0</span> <span class="o">/</span> <span class="p">(</span><span class="n">weight0</span> <span class="o">+</span> <span class="n">weight1</span><span class="p">)</span>
+            <span class="n">weight1</span> <span class="o">=</span> <span class="n">weight1</span> <span class="o">/</span> <span class="p">(</span><span class="n">weight0</span> <span class="o">+</span> <span class="n">weight1</span><span class="p">)</span>
+
+            <span class="c1"># Use self.fee instead of transaction.fee which doesn&#39;t exist in CEXRebalanceTransaction</span>
+            <span class="n">token0_balance</span> <span class="o">=</span> <span class="n">holdings</span><span class="p">[</span><span class="n">token0</span><span class="p">]</span>
+            <span class="n">token1_balance</span> <span class="o">=</span> <span class="n">holdings</span><span class="p">[</span><span class="n">token1</span><span class="p">]</span>
+
+            <span class="n">target_token0</span><span class="p">,</span> <span class="n">target_token1</span> <span class="o">=</span> <span class="n">compute_cex_target_amounts</span><span class="p">(</span>
+                <span class="n">token0_balance</span><span class="p">,</span> <span class="n">token1_balance</span><span class="p">,</span> <span class="n">weight0</span><span class="p">,</span> <span class="n">weight1</span><span class="p">,</span> <span class="n">execution_price</span><span class="p">,</span> <span class="n">fee</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Update holdings with new balanced amounts</span>
+            <span class="n">holdings</span><span class="p">[</span><span class="n">token0</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_token0</span>
+            <span class="n">holdings</span><span class="p">[</span><span class="n">token1</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_token1</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transaction</span><span class="p">,</span> <span class="n">OpenMarginPositionTransaction</span><span class="p">):</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token</span>
+            <span class="n">amount</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">amount</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">direction</span>
+            <span class="n">collateral</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">collateral</span>
+            <span class="n">collateral_amount</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">collateral_amount</span>
+            <span class="n">execution_price</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">execution_price</span>
+            <span class="n">token_id</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token_id</span>
+
+            <span class="c1"># check if collateral is allowed</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">collateral</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Pair </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">collateral</span><span class="si">}</span><span class="s2"> is not available.&quot;</span>
+            <span class="k">assert</span> <span class="n">token_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Token </span><span class="si">{</span><span class="n">token_id</span><span class="si">}</span><span class="s2"> already has a margin position&quot;</span>
+
+            <span class="n">opening_fee</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">[(</span><span class="n">token</span><span class="p">,</span> <span class="n">collateral</span><span class="p">)]</span><span class="o">.</span><span class="n">opening_fee</span>
+
+            <span class="n">allowed_leverage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">[(</span><span class="n">token</span><span class="p">,</span> <span class="n">collateral</span><span class="p">)]</span><span class="o">.</span><span class="n">max_leverage</span>
+            <span class="k">assert</span> <span class="n">allowed_leverage</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Margin is not allowed for the pair </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">collateral</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+            <span class="n">maintenance_margin_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">[(</span><span class="n">token</span><span class="p">,</span> <span class="n">collateral</span><span class="p">)]</span><span class="o">.</span><span class="n">maintenance_margin_ratio</span>
+
+            <span class="c1"># compute the leverage of the position</span>
+            <span class="c1"># leverage = total_position_value / collateral_amount</span>
+            <span class="n">position_value</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">*</span> <span class="n">execution_price</span>
+            <span class="n">leverage</span> <span class="o">=</span> <span class="n">position_value</span> <span class="o">/</span> <span class="n">collateral_amount</span>
+            <span class="k">assert</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">leverage</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">allowed_leverage</span><span class="p">,</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Leverage </span><span class="si">{</span><span class="n">leverage</span><span class="si">}</span><span class="s2"> is not allowed for the pair </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">collateral</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># compute the liquidation price</span>
+            <span class="k">if</span> <span class="n">direction</span><span class="p">:</span>  <span class="c1"># long position</span>
+                <span class="n">liquidation_price</span> <span class="o">=</span> <span class="n">execution_price</span> <span class="o">*</span> <span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">leverage</span> <span class="o">+</span> <span class="n">maintenance_margin_ratio</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># short position</span>
+                <span class="n">liquidation_price</span> <span class="o">=</span> <span class="n">execution_price</span> <span class="o">+</span> <span class="n">execution_price</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">leverage</span> <span class="o">+</span> <span class="n">maintenance_margin_ratio</span>
+                <span class="p">)</span>
+
+            <span class="c1"># compute the opening fee</span>
+            <span class="n">fees</span> <span class="o">=</span> <span class="n">position_value</span> <span class="o">*</span> <span class="n">opening_fee</span>
+
+            <span class="c1"># check if the collateral is available in the wallet and take it</span>
+            <span class="k">assert</span> <span class="n">collateral_amount</span> <span class="o">+</span> <span class="n">fees</span> <span class="o">&lt;=</span> <span class="n">holdings</span><span class="p">[</span><span class="n">collateral</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Not enough </span><span class="si">{</span><span class="n">collateral</span><span class="si">}</span><span class="s2"> available in the wallet.&quot;</span>
+            <span class="n">holdings</span><span class="p">[</span><span class="n">collateral</span><span class="p">]</span> <span class="o">-=</span> <span class="n">collateral_amount</span> <span class="o">+</span> <span class="n">fees</span>
+
+            <span class="c1"># create a margin position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">[</span><span class="n">token_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">MarginPosition</span><span class="p">(</span>
+                <span class="n">token_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">,</span>
+                <span class="n">margin_token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+                <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+                <span class="n">margin_amount</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span>
+                <span class="n">collateral_token</span><span class="o">=</span><span class="n">collateral</span><span class="p">,</span>
+                <span class="n">collateral_amount</span><span class="o">=</span><span class="n">collateral_amount</span><span class="p">,</span>
+                <span class="n">opening_price</span><span class="o">=</span><span class="n">execution_price</span><span class="p">,</span>
+                <span class="n">opening_timestamp</span><span class="o">=</span><span class="n">clock</span><span class="o">.</span><span class="n">current_time</span><span class="p">(),</span>
+                <span class="n">opening_fee</span><span class="o">=</span><span class="n">opening_fee</span><span class="p">,</span>
+                <span class="n">liquidation_price</span><span class="o">=</span><span class="n">liquidation_price</span><span class="p">,</span>
+                <span class="n">maintenance_margin_ratio</span><span class="o">=</span><span class="n">maintenance_margin_ratio</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transaction</span><span class="p">,</span> <span class="n">AddMarginCollateralTransaction</span><span class="p">):</span>
+            <span class="n">token_id</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token_id</span>
+            <span class="n">amount</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">amount</span>
+
+            <span class="k">assert</span> <span class="n">token_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Token </span><span class="si">{</span><span class="n">token_id</span><span class="si">}</span><span class="s2"> does not have a margin position&quot;</span>
+
+            <span class="n">margin_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">[</span><span class="n">token_id</span><span class="p">]</span>
+
+            <span class="c1"># check if the collateral is available in the wallet and take it</span>
+            <span class="k">assert</span> <span class="n">amount</span> <span class="o">&lt;=</span> <span class="n">holdings</span><span class="p">[</span><span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_token</span><span class="p">],</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Not enough </span><span class="si">{</span><span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_token</span><span class="si">}</span><span class="s2"> available in the wallet.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">holdings</span><span class="p">[</span><span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_token</span><span class="p">]</span> <span class="o">-=</span> <span class="n">amount</span>
+
+            <span class="c1"># update the margin position</span>
+            <span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_amount</span> <span class="o">+=</span> <span class="n">amount</span>
+
+            <span class="n">position_value</span> <span class="o">=</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">margin_amount</span> <span class="o">*</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">opening_price</span>
+            <span class="n">leverage</span> <span class="o">=</span> <span class="n">position_value</span> <span class="o">/</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_amount</span>
+
+            <span class="k">if</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>  <span class="c1"># long position</span>
+                <span class="n">margin_position</span><span class="o">.</span><span class="n">liquidation_price</span> <span class="o">=</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">opening_price</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">leverage</span> <span class="o">+</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">maintenance_margin_ratio</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># short position</span>
+                <span class="n">margin_position</span><span class="o">.</span><span class="n">liquidation_price</span> <span class="o">=</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">opening_price</span> <span class="o">+</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">opening_price</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">leverage</span> <span class="o">+</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">maintenance_margin_ratio</span>
+                <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transaction</span><span class="p">,</span> <span class="n">CheckMarginPositionTransaction</span><span class="p">):</span>
+            <span class="c1"># spot_prices = transaction.current_prices</span>
+            <span class="c1"># maintenance_fees = transaction.maintenance_fees</span>
+            <span class="k">pass</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transaction</span><span class="p">,</span> <span class="n">CloseMarginPositionTransaction</span><span class="p">):</span>
+            <span class="n">token_id</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token_id</span>
+            <span class="n">execution_price</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">execution_price</span>
+
+            <span class="k">assert</span> <span class="n">token_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Token </span><span class="si">{</span><span class="n">token_id</span><span class="si">}</span><span class="s2"> does not have a margin position&quot;</span>
+
+            <span class="n">pnl</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">execution_price</span> <span class="o">-</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">opening_price</span><span class="p">)</span> <span class="o">*</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">margin_amount</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>  <span class="c1"># short position</span>
+                <span class="n">pnl</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+            <span class="c1"># update the holdings</span>
+            <span class="n">holdings</span><span class="p">[</span><span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_token</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pnl</span> <span class="o">+</span> <span class="n">margin_position</span><span class="o">.</span><span class="n">collateral_amount</span>
+
+            <span class="c1"># delete position</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_positions</span><span class="p">[</span><span class="n">token_id</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transaction</span><span class="p">,</span> <span class="n">ExchangeTransaction</span><span class="p">):</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">direction</span>
+            <span class="n">token0</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token0</span> <span class="k">if</span> <span class="n">direction</span> <span class="k">else</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token1</span>
+            <span class="n">token1</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token1</span> <span class="k">if</span> <span class="n">direction</span> <span class="k">else</span> <span class="n">transaction</span><span class="o">.</span><span class="n">token0</span>
+            <span class="n">amount</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">amount</span>
+            <span class="n">execution_price</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">execution_price</span>
+
+            <span class="k">assert</span> <span class="p">(</span><span class="n">token0</span><span class="p">,</span> <span class="n">token1</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_pairs</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Pair </span><span class="si">{</span><span class="n">token0</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">token1</span><span class="si">}</span><span class="s2"> is not available.&quot;</span>
+
+            <span class="c1"># check if the token0 is available in the wallet and take it</span>
+            <span class="k">assert</span> <span class="n">amount</span> <span class="o">&lt;=</span> <span class="n">holdings</span><span class="p">[</span><span class="n">token1</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Not enough </span><span class="si">{</span><span class="n">token0</span><span class="si">}</span><span class="s2"> available in the wallet.&quot;</span>
+
+            <span class="n">holdings</span><span class="p">[</span><span class="n">token1</span><span class="p">]</span> <span class="o">-=</span> <span class="n">amount</span>
+            <span class="n">holdings</span><span class="p">[</span><span class="n">token0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">amount</span> <span class="o">/</span> <span class="n">execution_price</span>
+
+        <span class="c1"># update the wallet</span>
+        <span class="n">new_wallet</span> <span class="o">=</span> <span class="n">Wallet</span><span class="p">(</span>
+            <span class="n">holdings</span><span class="o">=</span><span class="n">holdings</span><span class="p">,</span>
+            <span class="n">tokens_metadata</span><span class="o">=</span><span class="n">wallet</span><span class="o">.</span><span class="n">tokens_metadata</span><span class="p">,</span>
+            <span class="n">erc721_tokens</span><span class="o">=</span><span class="n">wallet</span><span class="o">.</span><span class="n">get_erc721_tokens</span><span class="p">(),</span>
+            <span class="n">agent_name</span><span class="o">=</span><span class="n">wallet</span><span class="o">.</span><span class="n">agent_name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">insert_wallet</span><span class="p">(</span><span class="n">tx</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span> <span class="n">new_wallet</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

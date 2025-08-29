@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.bindings.protocols.cex.cex_factory &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.bindings.protocols.cex.cex_factory</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Metrics</span><span class="p">,</span> <span class="n">MutBuilderSharedState</span><span class="p">,</span> <span class="n">MutSharedState</span><span class="p">,</span> <span class="n">SimulationClock</span><span class="p">,</span> <span class="n">TxRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.protocol_infos</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolInfos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.protocol_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.protocol_metafactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolMetaFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.tx_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">TxGenerator</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cex_market</span><span class="w"> </span><span class="kn">import</span> <span class="n">CEXMarkets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cex_protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">CEX</span>
+
+
+<div class="viewcode-block" id="CEXMarginCheckTxGenerator">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CEXMarginCheckTxGenerator</span><span class="p">(</span><span class="n">TxGenerator</span><span class="p">):</span>
+<div class="viewcode-block" id="CEXMarginCheckTxGenerator.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">markets</span><span class="p">:</span> <span class="n">CEXMarkets</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_price</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markets</span> <span class="o">=</span> <span class="n">markets</span></div>
+
+
+<div class="viewcode-block" id="CEXMarginCheckTxGenerator.id">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator.id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;cex_margin_check&quot;</span></div>
+
+
+<div class="viewcode-block" id="CEXMarginCheckTxGenerator.next">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator.next">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">next</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">clock</span><span class="p">:</span> <span class="n">SimulationClock</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">MutSharedState</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Metrics</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">TxRequest</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="c1"># generate a transaction with the current price at each block</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;parameters = states.get_parameters()</span>
+<span class="sd">        #metric_spots</span>
+<span class="sd">        current_price = metrics.get(</span>
+<span class="sd">        previous_price = self.previous_price</span>
+<span class="sd">        self.previous_price = current_price</span>
+<span class="sd">        check_tx = CheckMarginPositionTransaction(previous_price)</span>
+<span class="sd">        return [check_tx.to_tx_request(protocol=&quot;cex&quot;, source=&quot;cex&quot;, sender=agent_id)], 1&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[],</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CEXDefaultFactory">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CEXDefaultFactory</span><span class="p">(</span><span class="n">ProtocolFactory</span><span class="p">):</span>
+<div class="viewcode-block" id="CEXDefaultFactory.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">markets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CEXMarkets</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;cex&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markets</span> <span class="o">=</span> <span class="n">markets</span></div>
+
+
+<div class="viewcode-block" id="CEXDefaultFactory.id">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory.id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="CEXDefaultFactory.build">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory.build">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">clock</span><span class="p">:</span> <span class="n">SimulationClock</span><span class="p">,</span>
+        <span class="n">builder_state</span><span class="p">:</span> <span class="n">MutBuilderSharedState</span><span class="p">,</span>
+        <span class="n">common_config</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">backtest</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Protocol</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">TxGenerator</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">CEX</span><span class="p">(</span><span class="n">markets</span><span class="p">)</span> <span class="k">for</span> <span class="n">markets</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">markets</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="p">[</span>
+            <span class="n">CEXMarginCheckTxGenerator</span><span class="p">(</span><span class="n">markets</span><span class="p">)</span> <span class="k">for</span> <span class="n">markets</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">markets</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CEXFactory">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CEXFactory</span><span class="p">(</span><span class="n">ProtocolMetaFactory</span><span class="p">):</span>
+<div class="viewcode-block" id="CEXFactory.__init__">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;cex&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CEXMarkets</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="CEXFactory.register_protocol">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.register_protocol">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protocol</span><span class="p">:</span> <span class="n">ProtocolInfos</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">protocol</span><span class="p">,</span> <span class="n">CEXMarkets</span><span class="p">),</span> <span class="s2">&quot;Protocol must be an instance of UniswapV3Pool&quot;</span>
+        <span class="k">assert</span> <span class="n">protocol</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">,</span> <span class="s2">&quot;Protocol already registered&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">[</span><span class="n">protocol</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">protocol</span></div>
+
+
+<div class="viewcode-block" id="CEXFactory.id">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="CEXFactory.get_config">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.get_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;cex&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="CEXFactory.get_factories">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.get_factories">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_factories</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">CEXDefaultFactory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">protocols</span><span class="p">)]</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

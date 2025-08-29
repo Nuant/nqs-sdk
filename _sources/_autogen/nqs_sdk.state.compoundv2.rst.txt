@@ -1,0 +1,7 @@
+nqs\_sdk.state.compoundv2 module
+================================
+
+.. automodule:: nqs_sdk.state.compoundv2
+   :members:
+   :show-inheritance:
+   :undoc-members:

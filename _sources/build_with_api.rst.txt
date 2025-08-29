@@ -1,0 +1,340 @@
+API based approach
+==================
+
+The API-based approach gives you programmatic control over every aspect of the simulation. This approach is:
+
+* **Flexible**: Full control over simulation logic and execution flow
+* **Extensible**: Easily integrate custom components and algorithms
+* **Interactive**: Dynamically adjust simulation parameters during execution
+* **Powerful**: Access to low-level functionality for advanced use cases
+
+This approach is recommended for:
+
+* Developers who need maximum flexibility and control
+* Complex strategies that require custom logic or state management
+* When you need to integrate with external systems or data sources
+* For research and development of new trading algorithms
+
+.. _api_approach_end:
+
+The NQS SDK provides a powerful API for running simulations programmatically. This approach gives you full control over the simulation environment, protocols, agents, and market conditions.
+
+Getting Started with the API
+----------------------------
+
+To use the API-based approach, you'll need to:
+
+1. Create a simulation environment
+2. Register protocols, agents, and spot generators
+3. Configure simulation parameters
+4. Run the simulation
+5. Analyze the results
+
+Here's a basic example that demonstrates these steps:
+
+.. code-block:: python
+
+    from nqs_sdk.coding_envs.coding_env import CodingEnv
+    from nqs_sdk.coding_envs.policy_caller import PolicyCaller
+    from nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool import UniswapV3Pool
+    from nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env import UniswapV3CodingProtocol
+    from nqs_sdk.bindings.protocols.uniswap_v3.spots.historical_uniswap_pool import HistoricalSpotGenerator
+
+    # 1. Create a simulation environment
+    env = CodingEnv(do_backtest=True)
+
+    # 2. Register protocols, spot generators, and agents
+    # Create a Uniswap V3 pool
+    uniswap_pool = UniswapV3Pool.from_params(token0="USDT", token1="USDC", fee_tier=0.01, block_number=18725000)
+    uniswap_v3_coding_env = UniswapV3CodingProtocol(uniswap_pool)
+    
+    # Register the protocol
+    env.register_protocol(uniswap_v3_coding_env)
+    
+    # Create and register a spot generator
+    spot_generator = HistoricalSpotGenerator([uniswap_v3_coding_env.protocol])
+    env.register_spot_generator(spot_generator)
+    
+    # 3. Configure simulation parameters
+    env.set_simulation_time(18725000, 18726000, 1)  # start_block, end_block, step_size
+    env.set_numeraire("USDC")
+    env.set_gas_fee(10000000, "USDC")
+    
+    # Create and register an agent
+    class MyStrategy(PolicyCaller):
+        def policy(self, block: int, protocols: dict) -> None:
+            # Implement your strategy here
+            pass
+    
+    env.register_agent("agent_1", {"USDC": 1500, "USDT": 1000}, MyStrategy())
+    
+    # 4. Run the simulation
+    observables = env.run()
+    
+    # 5. Analyze the results
+    print(f"Simulation completed with {len(observables)} observables")
+
+Core Components
+---------------
+
+The API-based approach involves several key components:
+
+CodingEnv
+^^^^^^^^^
+
+The ``CodingEnv`` class is the main entry point for API-based simulations. It provides methods for registering protocols, agents, and spot generators, as well as configuring simulation parameters.
+
+.. code-block:: python
+
+    env = CodingEnv(do_backtest=True)  # Set do_backtest=True for backtest mode; the default mode is for simulation.
+
+Key methods:
+
+- ``register_protocol(protocol)`` - Register a protocol with the environment
+- ``register_agent(agent_name, wallet, strategy)`` - Register an agent with the environment
+- ``register_spot_generator(spot_generator)`` - Register a spot generator with the environment
+- ``set_simulation_time(init_time, end_time, step_size)`` - Set the simulation time parameters
+- ``set_numeraire(numeraire)`` - Set the base currency for calculations
+- ``set_gas_fee(gas_fee, gas_fee_ccy)`` - Set the gas fee for transactions
+- ``run()`` - Run the simulation and return the observables
+
+PolicyCaller
+^^^^^^^^^^^^
+
+The ``PolicyCaller`` class is the base class for implementing DeFi strategies. You must subclass it and implement the ``policy`` method, which will be called at each simulation step.
+
+.. code-block:: python
+
+    class MyStrategy(PolicyCaller):
+        def __init__(self):
+            # Initialize your strategy
+            self.position_id = "my_position"
+            self.has_position = False
+        
+        def policy(self, block: int, protocols: dict) -> None:
+            # This method is called at each simulation step
+            # Implement your logic here
+            for protocol in protocols.values():
+                # Example: Get the current spot price
+                current_spot = protocol.dex_spot()[-1]
+                
+                # Example: Create a position if we don't have one
+                if not self.has_position:
+                    protocol.mint(
+                        lower_bound=0.99,
+                        upper_bound=1.01,
+                        amount0=100,
+                        amount1=100,
+                        position_id=self.position_id
+                    )
+                    self.has_position = True
+
+Protocols
+^^^^^^^^^
+
+Protocols represent the DeFi protocols you want to simulate. The NQS SDK provides implementations for various protocols, such as Uniswap V3.
+
+.. code-block:: python
+
+    # Create a Uniswap V3 pool
+    uniswap_pool = UniswapV3Pool.from_params(
+        token0="USDT", 
+        token1="USDC", 
+        fee_tier=0.01, 
+        block_number=18725000
+    )
+    
+    # Or load a pool from a specific address
+    uniswap_pool = UniswapV3Pool.from_address(
+        "0x3416cf6c708da44db2624d63ea0aaef7113527c6",  # Pool address
+        18725000  # Block number
+    )
+    
+    # Create a coding environment for the protocol
+    uniswap_v3_coding_env = UniswapV3CodingProtocol(uniswap_pool)
+
+Spot Generators
+^^^^^^^^^^^^^^^
+
+Spot generators provide price data for the simulation. You can use historical data or custom price models.
+
+.. code-block:: python
+
+    # Use historical data
+    spot_generator = HistoricalSpotGenerator([uniswap_v3_coding_env.protocol])
+    
+    # Register the spot generator
+    env.register_spot_generator(spot_generator)
+
+Practical Examples
+------------------
+
+Here are two comprehensive examples demonstrating how to use the API for different use cases.
+
+Example 1: Spot Tracking Strategy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example demonstrates a strategy that tracks the spot price and adjusts liquidity positions accordingly.
+
+.. code-block:: python
+
+    from nqs_sdk.bindings.protocols.uniswap_v3.spots.historical_uniswap_pool import HistoricalSpotGenerator
+    from nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool import UniswapV3Pool
+    from nqs_sdk.coding_envs.coding_env import CodingEnv
+    from nqs_sdk.coding_envs.policy_caller import PolicyCaller
+    from nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env import UniswapV3CodingProtocol
+
+    class SpotTrackingStrategy(PolicyCaller):
+        def __init__(self):
+            self.position_id = "tracking_position"
+            self.has_position = False
+            self.target_range_pct = 0.001  # +/- 0.1%
+            
+        def policy(self, block: int, protocols: dict) -> None:
+            for protocol in protocols.values():
+                # Get the current spot price
+                current_spot = protocol.dex_spot()[-1]
+                
+                if not self.has_position:
+                    # Create a new position around the current spot price
+                    lower_bound = float(current_spot) * (1 - self.target_range_pct)
+                    upper_bound = float(current_spot) * (1 + self.target_range_pct)
+                    
+                    protocol.mint(
+                        lower_bound,
+                        upper_bound,
+                        protocol.get_wallet_holdings("USDC") - 1,
+                        protocol.get_wallet_holdings("USDT") - 1,
+                        self.position_id,
+                    )
+                    self.has_position = True
+                    
+                else:
+                    # Check if the spot price is outside our position bounds
+                    position_lower, position_upper = protocol.position_bounds(self.position_id)
+                    
+                    if current_spot <= position_lower or current_spot >= position_upper:
+                        # Burn the current position
+                        protocol.burn(1.0, self.position_id)
+                        
+                        # Create a new position around the current spot price
+                        lower_bound = float(current_spot) * (1 - self.target_range_pct)
+                        upper_bound = float(current_spot) * (1 + self.target_range_pct)
+                        
+                        protocol.mint(
+                            lower_bound,
+                            upper_bound,
+                            protocol.get_wallet_holdings("USDC") + protocol.token_amount("USDC", self.position_id) - 1,
+                            protocol.get_wallet_holdings("USDT") + protocol.token_amount("USDT", self.position_id) - 1,
+                            self.position_id,
+                        )
+
+    def main():
+        # Create a Uniswap V3 pool
+        uniswap_pool = UniswapV3Pool.from_params(token0="USDT", token1="USDC", fee_tier=0.01, block_number=18725000)
+        uniswap_v3_coding_env = UniswapV3CodingProtocol(uniswap_pool)
+        
+        # Create a spot generator
+        spot_generator = HistoricalSpotGenerator([uniswap_v3_coding_env.protocol])
+        
+        # Create and configure the simulation environment
+        env = CodingEnv(do_backtest=True)
+        env.register_protocol(uniswap_v3_coding_env)
+        env.register_spot_generator(spot_generator)
+        env.set_simulation_time(18725000, 18726010, 1)
+        env.set_numeraire("USDC")
+        env.set_gas_fee(10000000, "USDC")
+        
+        # Register an agent with the strategy
+        env.register_agent("agent_1", {"USDC": 1500, "USDT": 1000}, SpotTrackingStrategy())
+        
+        # Run the simulation
+        observables = env.run()
+        print(f"Simulation completed with {len(observables)} observables")
+
+Example 2: Lower-Level API with Transaction Handling
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example demonstrates how to use the lower-level API for more control over transaction handling.
+
+.. code-block:: python
+
+    from nqs_sdk.bindings.env_builder import SimulatorEnvBuilder
+    from nqs_sdk.bindings.protocols.uniswap_v3.spots.historical_uniswap_pool import HistoricalSpotGenerator
+    from nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical import UniswapV3HistoricalTxGenerator
+    from nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_factory import UniswapV3Factory
+    from nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool import UniswapV3Pool
+    from nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions import RawSwapTransaction
+    from nqs_sdk.interfaces.observable_consumer import ObservableConsumer
+    from nqs_sdk.interfaces.tx_generator import TxGenerator
+
+    class AgentTransaction(TxGenerator, ObservableConsumer):
+        def __init__(self, agent_name, required_metrics):
+            super().__init__()
+            self.txns = []
+            self.agent_name = agent_name
+            self.required_metrics = required_metrics
+            
+        # Implement required methods...
+        
+        def append_tx(self, tx, uniswap_pool):
+            self.txns.append((tx, uniswap_pool))
+
+    def main():
+        # Create a Uniswap V3 pool
+        uniswap_pool = UniswapV3Pool.from_address("0x3416cf6c708da44db2624d63ea0aaef7113527c6", 18725000)
+        
+        # Create and configure the simulation environment
+        env_builder = SimulatorEnvBuilder()
+        uniswap_factory = UniswapV3Factory()
+        env_builder.register_factory(uniswap_factory)
+        
+        # Register the protocol and transaction generator
+        env_builder.register_protocol(uniswap_pool)
+        tx_generator = UniswapV3HistoricalTxGenerator(uniswap_pool)
+        env_builder.register_tx_generator(tx_generator)
+        
+        # Create and register a spot generator
+        spot_generator = HistoricalSpotGenerator([uniswap_pool])
+        env_builder.register_spot_generator(spot_generator)
+        
+        # Configure simulation parameters
+        env_builder.set_simulator_time(18725000, 18725010, 1)
+        env_builder.set_numeraire("USDC")
+        env_builder.set_gas_fee(10, "USDC")
+        
+        # Register an agent
+        agent_name = "swapper_agent"
+        env_builder.register_agent(agent_name, {"USDT": 10000, "USDC": 10000})
+        
+        # Create a custom transaction handler for the agent
+        agent_handler = AgentTransaction(agent_name, [
+            f'{agent_name}.all.wallet_holdings:{{token="USDT"}}',
+            f'{agent_name}.all.wallet_holdings:{{token="USDC"}}',
+            f"{uniswap_pool.name}.dex_spot"
+        ])
+        env_builder.register_tx_generator(agent_handler)
+        
+        # Build and run the simulation
+        simulation = env_builder.build()
+        for out in simulation:
+            # Process simulation output
+            block = out.block
+            dex_spot = out.observables.get(f"{uniswap_pool.name}.dex_spot")
+            
+            # Example: Create a swap transaction when the price is below 1
+            if dex_spot <= 1:
+                raw_swap_tx = RawSwapTransaction(amount=100000000, zero_for_one=True, sqrt_price_limit_x96=None)
+                agent_handler.append_tx(raw_swap_tx, uniswap_pool)
+
+Conclusion
+----------
+
+The API-based approach provides maximum flexibility and control over your simulations. It allows you to:
+
+1. Create custom DeFi strategies by implementing the ``PolicyCaller`` interface
+2. Configure simulation parameters programmatically
+3. Access detailed observables during and after the simulation
+4. Implement complex logic for transaction handling
+
+For simpler use cases, consider using the configuration-based approach described in :doc:`build_with_config`.

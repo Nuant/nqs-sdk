@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UniswapV3Protocol</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uniswap V3 Protocol&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">token0</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the token0 of the pool.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">token1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the token1 of the pool.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fee_tier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the fee tier of the pool.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="UniswapV3Protocol.is_position_exists">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.is_position_exists">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_position_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the position exists.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token_id (str): Token ID of the position</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the position exists, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.dex_spot">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.dex_spot">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dex_spot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the price of token0 in units of token1.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">                If None, returns only the current price.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: the series of spot prices (i.e. the price of token0 in units of token1)</span>
+<span class="sd">                (None if not available).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.liquidity">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.liquidity">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">liquidity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the liquidity parameter in the pool for the current tick.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">                If None, returns only the current liquidity.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: the series of liquidity values (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.total_volume_numeraire">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.total_volume_numeraire">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_volume_numeraire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the total volume of swaps in the pool in units of the user numeraire.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">            If None, returns only the current volume.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: Series of total volume in numeraire (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.total_volume">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.total_volume">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the total volume of swaps in the pool for the specified token.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token (bool): False for token0, True for token1</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">                If None, returns only the current volume.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: Series of total volume for the specified token (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.total_holdings">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.total_holdings">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_holdings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the total holdings of the specified token in the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token (bool): False for token0, True for token1</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">                If None, returns only the current volume.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: Series of total holdings for the specified token (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.total_fees">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.total_fees">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_fees</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the total fees in the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token (Optional[bool]): False for token0, True for token1. If None, returns fees in numeraire.</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">                If None, returns only the current fees.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: Series of total fees (in token units if token specified, otherwise in numeraire)</span>
+<span class="sd">                (None if not available).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.total_value_locked">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.total_value_locked">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_value_locked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the total value locked in the pool in units of the user numeraire.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">                If None, returns only the current value locked.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: Series of total value locked (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.get_tick">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.get_tick">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the tick of the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lookback (Optional[datetime.timedelta]): Return all data included in the lookback period.</span>
+<span class="sd">            If None, returns only the current tick.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.Series: Series of tick values (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.swap">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.swap">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">swap</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">token</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">price_limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">wallet</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Swap or exchange tokens in the pool. At least one of the arguments should be provided.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            amount (float): The amount of token to be swapped.</span>
+<span class="sd">            token (bool): True for swapping token1 to token0, False for swapping token0 to token1.</span>
+<span class="sd">            price_limit (Optional[float]): The price limit for the swap. If None, the swap is done at the current price.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.mint">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.mint">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mint</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">price_lower</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">price_upper</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">max_token0</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">max_token1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Decimal</span><span class="p">,</span>
+        <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Uniswap V3 minting enables users to provide (add) liquidity within specific price ranges.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            price_lower (float): The lower price of the liquidity range.</span>
+<span class="sd">            price_upper (float): The upper price of the liquidity range.</span>
+<span class="sd">            max_token0 (float): The maximum amount of token0 to be used.</span>
+<span class="sd">            max_token1 (float): The maximum amount of token1 to be used.</span>
+<span class="sd">            token_id (str): A string identifier of the position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.burn">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.burn">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">burn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Uniswap v3 burn is the burning of LP tokens, when users can effectively withdraw liquidity</span>
+<span class="sd">        from specific price ranges within Uniswap V3 liquidity pools.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            amount_ratio (float): Amount of liquidity to be burned (between 0.0 and 1.0 where 1.0 represent all</span>
+<span class="sd">            the liquidity of the position).</span>
+<span class="sd">            token_id (str): The id of position to be burned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.active_liquidity">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.active_liquidity">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_liquidity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get liquidity that is currently active in the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s active liquidity.</span>
+<span class="sd">                If None, returns user&#39;s total active liquidity.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Active liquidity amount at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.position_liquidity">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.position_liquidity">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">position_liquidity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get total liquidity allocated in the pool</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str): Position ID to get specific user position&#39;s active liquidity.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Decimal]: Total liquidity amount for the pool or a specific user position</span>
+<span class="sd">                (None if not available)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.token_amount">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.token_amount">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">token_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get actual token amount in the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token (str): str to query amount for</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s token amount.</span>
+<span class="sd">                If None, returns user&#39;s total token amount.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Amount of specified token at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.net_position">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.net_position">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">net_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of agent&#39;s position in the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str): Position ID to query</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Position value in units of numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.fees_collected">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.fees_collected">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fees_collected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get collected fees.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token (str, optional): str to query fees for</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s fees.</span>
+<span class="sd">                If None, returns user&#39;s total collected fees.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Amount of collected fees in specified token or numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.fees_not_collected">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.fees_not_collected">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fees_not_collected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get uncollected fees.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token (str, optional): str to query fees for</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s fees.</span>
+<span class="sd">                If None, returns user&#39;s total uncollected fees.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Amount of uncollected fees in specified token or numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.abs_impermanent_loss">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.abs_impermanent_loss">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abs_impermanent_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get absolute impermanent loss.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s IL.</span>
+<span class="sd">                If None, returns IL for all user&#39;s open positions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Impermanent loss in units of numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.perc_impermanent_loss">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.perc_impermanent_loss">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">perc_impermanent_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get impermanent loss as a percentage.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s IL.</span>
+<span class="sd">                If None, returns IL percentage for all user&#39;s open positions.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Impermanent loss as a percentage</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.static_ptf_value">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.static_ptf_value">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">static_ptf_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get value of the static portfolio.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s value.</span>
+<span class="sd">                If None, returns value for all user&#39;s open positions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Static portfolio value in numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.permanent_loss">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.permanent_loss">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">permanent_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get realized/permanent loss.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s loss.</span>
+<span class="sd">                If None, returns loss for all user&#39;s open positions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Permanent loss in units of numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.loss_versus_rebalancing">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.loss_versus_rebalancing">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss_versus_rebalancing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get loss compared to rebalancing strategy.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s LVR.</span>
+<span class="sd">                If None, returns LVR for all user&#39;s open positions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Loss versus rebalancing in units of numeraire at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.total_fees_relative_to_lvr">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.total_fees_relative_to_lvr">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_fees_relative_to_lvr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get total accumulated fees as percentage of LVR.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str, optional): Position ID to get specific position&#39;s relative fees.</span>
+<span class="sd">                If None, returns relative fees for all user&#39;s open positions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Decimal: Fees as percentage of loss versus rebalancing at the requested block number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3Protocol.position_bounds">
+<a class="viewcode-back" href="../../../../../_autogen/nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.html#nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_abstract.UniswapV3Protocol.position_bounds">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">position_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get price bounds of a position.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            position (str): Position ID to query</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[Decimal, Decimal]: Lower and upper price bounds of the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

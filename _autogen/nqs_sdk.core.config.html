@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nqs_sdk.core.config module &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nqs_sdk.core.simulation module" href="nqs_sdk.core.simulation.html" />
+    <link rel="prev" title="nqs_sdk.core package" href="nqs_sdk.core.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nqs_sdk.html">nqs_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="nqs_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="nqs_sdk.core.html">nqs_sdk.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.interfaces.html">nqs_sdk.interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.protocols.html">nqs_sdk.protocols package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.state.html">nqs_sdk.state package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.utils.html">nqs_sdk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#module-nqs_sdk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api_reference.html">API Reference</a><ul>
+  <li><a href="nqs_sdk.html">nqs_sdk package</a><ul>
+  <li><a href="nqs_sdk.core.html">nqs_sdk.core package</a><ul>
+      <li>Previous: <a href="nqs_sdk.core.html" title="previous chapter">nqs_sdk.core package</a></li>
+      <li>Next: <a href="nqs_sdk.core.simulation.html" title="next chapter">nqs_sdk.core.simulation module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-nqs_sdk.core.config">
+<span id="nqs-sdk-core-config-module"></span><h1>nqs_sdk.core.config module<a class="headerlink" href="#module-nqs_sdk.core.config" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="nqs_sdk.core.config.ConfigLoader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.core.config.</span></span><span class="sig-name descname"><span class="pre">ConfigLoader</span></span><a class="reference internal" href="../_modules/nqs_sdk/core/config.html#ConfigLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.config.ConfigLoader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utility class for loading and processing simulation configuration files</p>
+<p>This class provides static methods for handling different configuration formats
+(JSON, YAML) and sources (files, strings, dictionaries). It includes validation
+and format detection capabilities to ensure robust configuration loading</p>
+<p>The loader supports both file-based and string-based configurations, with
+automatic format detection based on content or file extensions</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.config.ConfigLoader.load">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/core/config.html#ConfigLoader.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.config.ConfigLoader.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load configuration from various sources and return standardized format</p>
+<p>This method handles multiple input types and automatically detects the
+configuration format, returning a tuple of (content, format_type)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>]</span>) – Configuration source, can be:
+- dict: Configuration dictionary (converted to JSON)
+- str: JSON string, YAML string, or file path
+- Path: Path object pointing to configuration file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>content_string: String representation of the configuration</p></li>
+<li><p>format_type: Either “json” or “yaml”</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of (content_string, format_type) where</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If file path doesn’t exist</p></li>
+<li><p><strong>ValueError</strong> – If string appears to be malformed JSON or unsupported format</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">content</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">load</span><span class="p">({</span><span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">content</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">content</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;{&quot;simulation&quot;: {&quot;blocks&quot;: 1000}}&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.config.ConfigLoader.merge_configs">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/core/config.html#ConfigLoader.merge_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.config.ConfigLoader.merge_configs" title="Link to this definition">¶</a></dt>
+<dd><p>Recursively merge two configuration dictionaries</p>
+<p>Performs a deep merge where nested dictionaries are merged recursively,
+and non-dictionary values in update_config override those in base_config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – Base configuration dictionary</p></li>
+<li><p><strong>update_config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – Configuration updates to apply</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New dictionary containing the merged configuration</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">base</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;simulation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">update</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;simulation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;timestep&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merged</span> <span class="o">=</span> <span class="n">ConfigLoader</span><span class="o">.</span><span class="n">merge_configs</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Result: {&quot;simulation&quot;: {&quot;blocks&quot;: 1000, &quot;timestep&quot;: 12},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#          &quot;agents&quot;: [], &quot;protocols&quot;: {}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

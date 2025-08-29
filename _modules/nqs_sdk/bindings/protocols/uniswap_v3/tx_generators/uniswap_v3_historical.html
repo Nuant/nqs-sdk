@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../../../../../../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlockNumberOrTimestamp</span><span class="p">,</span> <span class="n">quantlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Pool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RawBurnTransaction</span><span class="p">,</span>
+    <span class="n">RawCollectTransaction</span><span class="p">,</span>
+    <span class="n">RawMintTransaction</span><span class="p">,</span>
+    <span class="n">RawSwapTransaction</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.tx_generators.abstract_transaction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.tx_generators.historical_tx_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">HistoricalTxGenerator</span>
+
+
+<span class="n">DATA_SOURCE</span> <span class="o">=</span> <span class="n">quantlib</span><span class="o">.</span><span class="n">QuantlibDataProvider</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;QUANTLIB_CONFIG&quot;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="UniswapV3HistoricalTxGenerator">
+<a class="viewcode-back" href="../../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.html#nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.UniswapV3HistoricalTxGenerator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UniswapV3HistoricalTxGenerator</span><span class="p">(</span><span class="n">HistoricalTxGenerator</span><span class="p">):</span>
+<div class="viewcode-block" id="UniswapV3HistoricalTxGenerator.__init__">
+<a class="viewcode-back" href="../../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.html#nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.UniswapV3HistoricalTxGenerator.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span> <span class="n">UniswapV3Pool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3HistoricalTxGenerator.get_transactions">
+<a class="viewcode-back" href="../../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.html#nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.UniswapV3HistoricalTxGenerator.get_transactions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_block</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_block</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]:</span>
+        <span class="n">txns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_block</span><span class="p">,</span> <span class="n">end_block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span>
+                <span class="n">txns</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">block</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">txns</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3HistoricalTxGenerator.cache_transactions">
+<a class="viewcode-back" href="../../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.html#nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.UniswapV3HistoricalTxGenerator.cache_transactions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cache_transactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_block</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_block</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">formatted_begin</span> <span class="o">=</span> <span class="n">BlockNumberOrTimestamp</span><span class="o">.</span><span class="n">block_number</span><span class="p">(</span><span class="n">start_block</span><span class="p">)</span>
+        <span class="n">formatted_end</span> <span class="o">=</span> <span class="n">BlockNumberOrTimestamp</span><span class="o">.</span><span class="n">block_number</span><span class="p">(</span><span class="n">end_block</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">DATA_SOURCE</span><span class="o">.</span><span class="n">uniswap_v3_pool_calls</span><span class="p">(</span><span class="n">contract</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="n">formatted_begin</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">formatted_end</span><span class="p">)</span>
+        <span class="n">data_calls</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">move_as_dict</span><span class="p">()</span>
+        <span class="n">call_names</span> <span class="o">=</span> <span class="n">data_calls</span><span class="p">[</span><span class="s2">&quot;call_name&quot;</span><span class="p">]</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="n">data_calls</span><span class="p">[</span><span class="s2">&quot;block_number&quot;</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">data_calls</span><span class="p">[</span><span class="s2">&quot;trace_index&quot;</span><span class="p">]</span>
+        <span class="n">data_vec</span> <span class="o">=</span> <span class="n">data_calls</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
+        <span class="n">orders</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">call_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">call_names</span><span class="p">):</span>
+            <span class="n">call_block</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">call_block</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">orders</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># JSON map</span>
+
+            <span class="k">if</span> <span class="n">call_name</span> <span class="o">==</span> <span class="s2">&quot;Swap&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">RawSwapTransaction</span><span class="p">(</span>
+                        <span class="n">amount</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;amountSpecified&quot;</span><span class="p">],</span>
+                        <span class="n">zero_for_one</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;zeroForOne&quot;</span><span class="p">],</span>
+                        <span class="n">sqrt_price_limit_x96</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sqrtPriceLimitX96&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">orders</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">call_name</span> <span class="o">==</span> <span class="s2">&quot;Mint&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">RawMintTransaction</span><span class="p">(</span>
+                        <span class="n">amount</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">],</span> <span class="n">tick_lower</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tickLower&quot;</span><span class="p">],</span> <span class="n">tick_upper</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tickUpper&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">orders</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">call_name</span> <span class="o">==</span> <span class="s2">&quot;Burn&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">RawBurnTransaction</span><span class="p">(</span>
+                        <span class="n">amount</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">],</span> <span class="n">tick_lower</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tickLower&quot;</span><span class="p">],</span> <span class="n">tick_upper</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tickUpper&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">orders</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">call_name</span> <span class="o">==</span> <span class="s2">&quot;Collect&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">RawCollectTransaction</span><span class="p">(</span>
+                        <span class="n">amount_0_requested</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;amount0Requested&quot;</span><span class="p">],</span>
+                        <span class="n">amount_1_requested</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;amount1Requested&quot;</span><span class="p">],</span>
+                        <span class="n">tick_lower</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tickLower&quot;</span><span class="p">],</span>
+                        <span class="n">tick_upper</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tickUpper&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">orders</span><span class="p">[</span><span class="n">call_block</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_block</span><span class="p">,</span> <span class="n">end_block</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">block</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">orders</span><span class="p">[</span><span class="n">block</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">transactions</span><span class="p">[</span><span class="n">block</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+                <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UniswapV3HistoricalTxGenerator.get_next_block">
+<a class="viewcode-back" href="../../../../../../_autogen/nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.html#nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical.UniswapV3HistoricalTxGenerator.get_next_block">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_next_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_block</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">protocol_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">name</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

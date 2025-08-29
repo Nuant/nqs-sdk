@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nqs_sdk.bindings.protocols.cex package &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nqs_sdk.bindings.protocols.cex.cex_factory module" href="nqs_sdk.bindings.protocols.cex.cex_factory.html" />
+    <link rel="prev" title="nqs_sdk.bindings.protocols package" href="nqs_sdk.bindings.protocols.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nqs_sdk.html">nqs_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="nqs_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.core.html">nqs_sdk.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.interfaces.html">nqs_sdk.interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.protocols.html">nqs_sdk.protocols package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.state.html">nqs_sdk.state package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.utils.html">nqs_sdk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#module-nqs_sdk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api_reference.html">API Reference</a><ul>
+  <li><a href="nqs_sdk.html">nqs_sdk package</a><ul>
+  <li><a href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a><ul>
+  <li><a href="nqs_sdk.bindings.protocols.html">nqs_sdk.bindings.protocols package</a><ul>
+      <li>Previous: <a href="nqs_sdk.bindings.protocols.html" title="previous chapter">nqs_sdk.bindings.protocols package</a></li>
+      <li>Next: <a href="nqs_sdk.bindings.protocols.cex.cex_factory.html" title="next chapter">nqs_sdk.bindings.protocols.cex.cex_factory module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="nqs-sdk-bindings-protocols-cex-package">
+<h1>nqs_sdk.bindings.protocols.cex package<a class="headerlink" href="#nqs-sdk-bindings-protocols-cex-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html">nqs_sdk.bindings.protocols.cex.cex_factory module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator"><code class="docutils literal notranslate"><span class="pre">CEXMarginCheckTxGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">CEXMarginCheckTxGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator.id"><code class="docutils literal notranslate"><span class="pre">CEXMarginCheckTxGenerator.id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXMarginCheckTxGenerator.next"><code class="docutils literal notranslate"><span class="pre">CEXMarginCheckTxGenerator.next()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory"><code class="docutils literal notranslate"><span class="pre">CEXDefaultFactory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory.__init__"><code class="docutils literal notranslate"><span class="pre">CEXDefaultFactory.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory.id"><code class="docutils literal notranslate"><span class="pre">CEXDefaultFactory.id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXDefaultFactory.build"><code class="docutils literal notranslate"><span class="pre">CEXDefaultFactory.build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory"><code class="docutils literal notranslate"><span class="pre">CEXFactory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.__init__"><code class="docutils literal notranslate"><span class="pre">CEXFactory.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.register_protocol"><code class="docutils literal notranslate"><span class="pre">CEXFactory.register_protocol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.id"><code class="docutils literal notranslate"><span class="pre">CEXFactory.id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.get_config"><code class="docutils literal notranslate"><span class="pre">CEXFactory.get_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_factory.html#nqs_sdk.bindings.protocols.cex.cex_factory.CEXFactory.get_factories"><code class="docutils literal notranslate"><span class="pre">CEXFactory.get_factories()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html">nqs_sdk.bindings.protocols.cex.cex_market module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair"><code class="docutils literal notranslate"><span class="pre">CEXPair</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.__init__"><code class="docutils literal notranslate"><span class="pre">CEXPair.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.decimals1"><code class="docutils literal notranslate"><span class="pre">CEXPair.decimals1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.decimals0"><code class="docutils literal notranslate"><span class="pre">CEXPair.decimals0</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.token0"><code class="docutils literal notranslate"><span class="pre">CEXPair.token0</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.token1"><code class="docutils literal notranslate"><span class="pre">CEXPair.token1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.opening_fee"><code class="docutils literal notranslate"><span class="pre">CEXPair.opening_fee</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.max_leverage"><code class="docutils literal notranslate"><span class="pre">CEXPair.max_leverage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXPair.maintenance_margin_ratio"><code class="docutils literal notranslate"><span class="pre">CEXPair.maintenance_margin_ratio</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXMarkets"><code class="docutils literal notranslate"><span class="pre">CEXMarkets</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXMarkets.__init__"><code class="docutils literal notranslate"><span class="pre">CEXMarkets.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXMarkets.pairs"><code class="docutils literal notranslate"><span class="pre">CEXMarkets.pairs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXMarkets.name"><code class="docutils literal notranslate"><span class="pre">CEXMarkets.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXMarkets.factory_id"><code class="docutils literal notranslate"><span class="pre">CEXMarkets.factory_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_market.html#nqs_sdk.bindings.protocols.cex.cex_market.CEXMarkets.get_token_infos"><code class="docutils literal notranslate"><span class="pre">CEXMarkets.get_token_infos()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html">nqs_sdk.bindings.protocols.cex.cex_protocol module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.compute_cex_target_amounts"><code class="docutils literal notranslate"><span class="pre">compute_cex_target_amounts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition"><code class="docutils literal notranslate"><span class="pre">MarginPosition</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.token_id"><code class="docutils literal notranslate"><span class="pre">MarginPosition.token_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.margin_token"><code class="docutils literal notranslate"><span class="pre">MarginPosition.margin_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.direction"><code class="docutils literal notranslate"><span class="pre">MarginPosition.direction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.margin_amount"><code class="docutils literal notranslate"><span class="pre">MarginPosition.margin_amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.collateral_token"><code class="docutils literal notranslate"><span class="pre">MarginPosition.collateral_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.collateral_amount"><code class="docutils literal notranslate"><span class="pre">MarginPosition.collateral_amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.opening_price"><code class="docutils literal notranslate"><span class="pre">MarginPosition.opening_price</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.opening_timestamp"><code class="docutils literal notranslate"><span class="pre">MarginPosition.opening_timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.opening_fee"><code class="docutils literal notranslate"><span class="pre">MarginPosition.opening_fee</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.liquidation_price"><code class="docutils literal notranslate"><span class="pre">MarginPosition.liquidation_price</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.maintenance_margin_ratio"><code class="docutils literal notranslate"><span class="pre">MarginPosition.maintenance_margin_ratio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.MarginPosition.__init__"><code class="docutils literal notranslate"><span class="pre">MarginPosition.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX"><code class="docutils literal notranslate"><span class="pre">CEX</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.__init__"><code class="docutils literal notranslate"><span class="pre">CEX.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.id"><code class="docutils literal notranslate"><span class="pre">CEX.id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.initialize"><code class="docutils literal notranslate"><span class="pre">CEX.initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.consume"><code class="docutils literal notranslate"><span class="pre">CEX.consume()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.build_tx_payload"><code class="docutils literal notranslate"><span class="pre">CEX.build_tx_payload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_protocol.html#nqs_sdk.bindings.protocols.cex.cex_protocol.CEX.execute_tx"><code class="docutils literal notranslate"><span class="pre">CEX.execute_tx()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html">nqs_sdk.bindings.protocols.cex.cex_transactions module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.__init__"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.token0"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.token0</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.token1"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.token1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.weight0"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.weight0</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.weight1"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.weight1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.execution_price"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.execution_price</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.RebalanceTransaction.to_tx_request"><code class="docutils literal notranslate"><span class="pre">RebalanceTransaction.to_tx_request()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.__init__"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.token"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.direction"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.direction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.amount"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.collateral"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.collateral</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.collateral_amount"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.collateral_amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.token_id"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.token_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.OpenMarginPositionTransaction.to_tx_request"><code class="docutils literal notranslate"><span class="pre">OpenMarginPositionTransaction.to_tx_request()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction"><code class="docutils literal notranslate"><span class="pre">CheckMarginPositionTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction.__init__"><code class="docutils literal notranslate"><span class="pre">CheckMarginPositionTransaction.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction.current_prices"><code class="docutils literal notranslate"><span class="pre">CheckMarginPositionTransaction.current_prices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction.maintenance_fees"><code class="docutils literal notranslate"><span class="pre">CheckMarginPositionTransaction.maintenance_fees</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CheckMarginPositionTransaction.to_tx_request"><code class="docutils literal notranslate"><span class="pre">CheckMarginPositionTransaction.to_tx_request()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction"><code class="docutils literal notranslate"><span class="pre">CloseMarginPositionTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction.__init__"><code class="docutils literal notranslate"><span class="pre">CloseMarginPositionTransaction.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction.token_id"><code class="docutils literal notranslate"><span class="pre">CloseMarginPositionTransaction.token_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction.execution_price"><code class="docutils literal notranslate"><span class="pre">CloseMarginPositionTransaction.execution_price</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.CloseMarginPositionTransaction.to_tx_request"><code class="docutils literal notranslate"><span class="pre">CloseMarginPositionTransaction.to_tx_request()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction"><code class="docutils literal notranslate"><span class="pre">AddMarginCollateralTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction.__init__"><code class="docutils literal notranslate"><span class="pre">AddMarginCollateralTransaction.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction.token_id"><code class="docutils literal notranslate"><span class="pre">AddMarginCollateralTransaction.token_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction.amount"><code class="docutils literal notranslate"><span class="pre">AddMarginCollateralTransaction.amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.AddMarginCollateralTransaction.to_tx_request"><code class="docutils literal notranslate"><span class="pre">AddMarginCollateralTransaction.to_tx_request()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.__init__"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.token0"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.token0</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.token1"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.token1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.direction"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.direction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.amount"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.execution_price"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.execution_price</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.bindings.protocols.cex.cex_transactions.html#nqs_sdk.bindings.protocols.cex.cex_transactions.ExchangeTransaction.to_tx_request"><code class="docutils literal notranslate"><span class="pre">ExchangeTransaction.to_tx_request()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-nqs_sdk.bindings.protocols.cex">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nqs_sdk.bindings.protocols.cex" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

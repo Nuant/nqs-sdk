@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Build &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=8539da10"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration-based approach" href="build_with_config.html" />
+    <link rel="prev" title="Core Concepts" href="core_concepts.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_with_config.html">Configuration-based approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_with_api.html">API based approach</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="core_concepts.html" title="previous chapter">Core Concepts</a></li>
+      <li>Next: <a href="build_with_config.html" title="next chapter">Configuration-based approach</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="build">
+<h1>Build<a class="headerlink" href="#build" title="Link to this heading">¶</a></h1>
+<p>There are two ways to use NQS SDK, each with its own advantages and use cases:</p>
+<dl>
+<dt><strong>Configuration-based approach</strong></dt><dd><p>The configuration-based approach allows you to define your simulation using YAML or JSON configuration files. This approach is:</p>
+<ul class="simple">
+<li><p><strong>Declarative</strong>: Define what you want to simulate rather than how to simulate it</p></li>
+<li><p><strong>Structured</strong>: Clear organization of simulation parameters, market conditions, and agent strategies</p></li>
+<li><p><strong>Reusable</strong>: Easily share, version, and modify configurations without changing code</p></li>
+<li><p><strong>Accessible</strong>: Ideal for users who prefer configuration over programming</p></li>
+</ul>
+<p>This approach is recommended for:</p>
+<ul class="simple">
+<li><p>Users who want to quickly set up and run simulations without writing much code</p></li>
+<li><p>Scenarios where you need to run many variations of similar simulations</p></li>
+<li><p>When you want to clearly separate simulation parameters from execution logic</p></li>
+<li><p>For reproducible research where configuration can be shared and versioned</p></li>
+</ul>
+</dd>
+</dl>
+<p>Learn more in <a class="reference internal" href="build_with_config.html"><span class="doc">Configuration-based approach</span></a>.</p>
+<p><strong>API based approach</strong></p>
+<blockquote>
+<div><p>The API-based approach gives you programmatic control over every aspect of the simulation. This approach is:</p>
+<ul class="simple">
+<li><p><strong>Flexible</strong>: Full control over simulation logic and execution flow</p></li>
+<li><p><strong>Extensible</strong>: Easily integrate custom components and algorithms</p></li>
+<li><p><strong>Interactive</strong>: Dynamically adjust simulation parameters during execution</p></li>
+<li><p><strong>Powerful</strong>: Access to low-level functionality for advanced use cases</p></li>
+</ul>
+<p>This approach is recommended for:</p>
+<ul class="simple">
+<li><p>Developers who need maximum flexibility and control</p></li>
+<li><p>Complex strategies that require custom logic or state management</p></li>
+<li><p>When you need to integrate with external systems or data sources</p></li>
+<li><p>For research and development of new trading algorithms</p></li>
+</ul>
+</div></blockquote>
+<p>Learn more in <a class="reference internal" href="build_with_api.html"><span class="doc">API based approach</span></a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

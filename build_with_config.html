@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Configuration-based approach &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=8539da10"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API based approach" href="build_with_api.html" />
+    <link rel="prev" title="Build" href="build.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="build.html">Build</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuration-based approach</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-file-structure">Configuration File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#working-with-configurations">Working with Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-a-configuration">Running A Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#practical-examples">Practical Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-1-basic-liquidity-management">Example 1: Basic Liquidity Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-2-dynamic-market-making">Example 2: Dynamic Market Making</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="build_with_api.html">API based approach</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="build.html">Build</a><ul>
+      <li>Previous: <a href="build.html" title="previous chapter">Build</a></li>
+      <li>Next: <a href="build_with_api.html" title="next chapter">API based approach</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="configuration-based-approach">
+<h1>Configuration-based approach<a class="headerlink" href="#configuration-based-approach" title="Link to this heading">¶</a></h1>
+<p>The configuration-based approach allows you to define your simulation using YAML or JSON configuration files. This approach is:</p>
+<ul class="simple">
+<li><p><strong>Declarative</strong>: Define what you want to simulate rather than how to simulate it</p></li>
+<li><p><strong>Structured</strong>: Clear organization of simulation parameters, market conditions, and agent strategies</p></li>
+<li><p><strong>Reusable</strong>: Easily share, version, and modify configurations without changing code</p></li>
+<li><p><strong>Accessible</strong>: Ideal for users who prefer configuration over programming</p></li>
+</ul>
+<p>This approach is recommended for:</p>
+<ul class="simple">
+<li><p>Users who want to quickly set up and run simulations without writing much code</p></li>
+<li><p>Scenarios where you need to run many variations of similar simulations</p></li>
+<li><p>When you want to clearly separate simulation parameters from execution logic</p></li>
+<li><p>For reproducible research where configuration can be shared and versioned</p></li>
+</ul>
+<p id="configuration-approach-end">Let’s start with a comprehensive configuration file that demonstrates all the key features of the NQS SDK.
+This example shows how to set up a complex simulation with multiple protocols, agents, and market conditions.</p>
+<p>For detailed configuration syntax, see <a class="reference internal" href="config_file_grammar.html"><span class="doc">Config file schema</span></a>.</p>
+<section id="configuration-file-structure">
+<h2>Configuration File Structure<a class="headerlink" href="#configuration-file-structure" title="Link to this heading">¶</a></h2>
+<p>Here’s a complete configuration file with inline comments explaining each section:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span><span class="w">                     </span><span class="c1"># Configuration format version</span>
+
+<span class="c1"># Global simulation parameters</span>
+<span class="nt">common</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">block_number_start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725000</span><span class="w">     </span><span class="c1"># Starting Ethereum block number</span>
+<span class="w">  </span><span class="nt">block_number_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18726000</span><span class="w">       </span><span class="c1"># Ending block (1000 blocks total)</span>
+<span class="w">  </span><span class="nt">block_step_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">          </span><span class="c1"># Collect metrics every 100 blocks</span>
+<span class="w">  </span><span class="nt">arbitrage_block_frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">     </span><span class="c1"># Check arbitrage opportunities every 5 blocks</span>
+<span class="w">  </span><span class="nt">plot_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">               </span><span class="c1"># Disable chart generation</span>
+<span class="w">  </span><span class="nt">save_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">              </span><span class="c1"># Don&#39;t save metrics to file</span>
+<span class="w">  </span><span class="nt">numeraire</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC</span><span class="w">                  </span><span class="c1"># Base currency for calculations</span>
+<span class="w">  </span><span class="nt">gas_fee_ccy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ETH</span><span class="w">                 </span><span class="c1"># Currency for gas fees</span>
+<span class="w">  </span><span class="nt">gas_fee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0000000001</span><span class="w">            </span><span class="c1"># Gas cost per transaction (very low for testing)</span>
+
+<span class="c1"># Price simulation models for different token pairs</span>
+<span class="nt">spot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">spot_list</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC/DAI</span><span class="w">               </span><span class="c1"># Stable coin pair</span>
+<span class="w">      </span><span class="nt">WGN</span><span class="p">:</span><span class="w">                         </span><span class="c1"># White Gaussian Noise model (for stable assets)</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.001</span><span class="w">                  </span><span class="c1"># Starting price: $1.001</span>
+<span class="w">        </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.</span><span class="w">                   </span><span class="c1"># Mean revert to $1.00</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0008</span><span class="w">                </span><span class="c1"># Low volatility (0.08%)</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC/USDT</span><span class="w">              </span><span class="c1"># Another stable pair</span>
+<span class="w">      </span><span class="nt">WGN</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.001</span>
+<span class="w">        </span><span class="nt">mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0008</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WETH/DAI</span><span class="w">               </span><span class="c1"># Volatile asset pair</span>
+<span class="w">      </span><span class="nt">GBM</span><span class="p">:</span><span class="w">                         </span><span class="c1"># Geometric Brownian Motion (for volatile assets)</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000.</span><span class="w">                  </span><span class="c1"># Starting price: $2000</span>
+<span class="w">        </span><span class="nt">mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w">                    </span><span class="c1"># 10% annual drift</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.</span><span class="w">                    </span><span class="c1"># Zero volatility for this example</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WETH/WBTC</span><span class="w">              </span><span class="c1"># Cross-asset pair</span>
+<span class="w">      </span><span class="nt">GBM</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w">                    </span><span class="c1"># WETH/WBTC ratio</span>
+<span class="w">        </span><span class="nt">mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3</span><span class="w">                    </span><span class="c1"># 30% annual drift</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wstETH/WETH</span><span class="w">            </span><span class="c1"># Liquid staking pair</span>
+<span class="w">      </span><span class="nt">GBM</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">        </span><span class="nt">mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.</span>
+<span class="w">  </span><span class="c1"># Correlation matrix between the 5 price pairs above</span>
+<span class="w">  </span><span class="nt">correlation</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">[</span>
+<span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">1.</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">],</span><span class="w">    </span><span class="c1"># USDC/DAI correlations</span>
+<span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">],</span><span class="w">    </span><span class="c1"># USDC/USDT correlations</span>
+<span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">],</span><span class="w">    </span><span class="c1"># WETH/DAI correlations</span>
+<span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">],</span><span class="w">    </span><span class="c1"># WETH/WBTC correlations</span>
+<span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.</span><span class="p p-Indicator">],</span><span class="w">    </span><span class="c1"># wstETH/WETH correlations</span>
+<span class="w">    </span><span class="p p-Indicator">]</span>
+
+<span class="c1"># Historical data and protocol setup</span>
+<span class="nt">backtest_environment</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Real Ethereum token contract addresses</span>
+<span class="w">  </span><span class="nt">token_addresses</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">DAI</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x6b175474e89094c44da98b954eedeac495271d0f&quot;</span><span class="w">      </span><span class="c1"># DAI stablecoin</span>
+<span class="w">    </span><span class="nt">USDC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&quot;</span><span class="w">     </span><span class="c1"># USD Coin</span>
+<span class="w">    </span><span class="nt">USDT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0xdac17f958d2ee523a2206206994597c13d831ec7&quot;</span><span class="w">     </span><span class="c1"># Tether</span>
+<span class="w">    </span><span class="nt">WETH</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2&quot;</span><span class="w">     </span><span class="c1"># Wrapped Ether</span>
+<span class="w">    </span><span class="nt">WBTC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599&quot;</span><span class="w">     </span><span class="c1"># Wrapped Bitcoin</span>
+<span class="w">  </span><span class="c1"># Protocols and pools to include in simulation</span>
+<span class="w">  </span><span class="nt">protocols_to_replay</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uniswap_v3</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">pools</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pool_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_usdc_usdt</span><span class="w">                        </span><span class="c1"># USDC/USDT pool</span>
+<span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0x3416cf6c708da44db2624d63ea0aaef7113527c6&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pool_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_wbtc_eth</span><span class="w">                         </span><span class="c1"># WBTC/WETH pool</span>
+<span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0xCBCdF9626bC03E24f779434178A73a0B4bad62eD&quot;</span>
+
+<span class="c1"># simulation_environment:  # Can be used instead of backtest_environment for simulation-specific settings</span>
+
+<span class="c1"># DeFi agents and their strategies</span>
+<span class="nt">agents</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent_1</span><span class="w">                  </span><span class="c1"># First trading agent</span>
+<span class="w">    </span><span class="nt">wallet</span><span class="p">:</span><span class="w">                        </span><span class="c1"># Initial portfolio</span>
+<span class="w">      </span><span class="nt">USDT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span><span class="w">                 </span><span class="c1"># $100k USDT</span>
+<span class="w">      </span><span class="nt">USDC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span><span class="w">                 </span><span class="c1"># $100k USDC</span>
+<span class="w">      </span><span class="nt">DAI</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span><span class="w">                  </span><span class="c1"># $100k DAI</span>
+<span class="w">      </span><span class="nt">ETH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">                     </span><span class="c1"># 100 ETH (~$200k at $2000/ETH)</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">continuous_events</span><span class="p">:</span><span class="w">           </span><span class="c1"># Repeating actions during simulation</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">event1</span>
+<span class="w">          </span><span class="nt">block_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725000</span><span class="w">   </span><span class="c1"># Start at this block</span>
+<span class="w">          </span><span class="nt">frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">           </span><span class="c1"># Execute every 100 blocks</span>
+<span class="w">          </span><span class="nt">actions</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action1</span>
+<span class="w">              </span><span class="c1"># Complex condition: execute when ETH &lt; $2000.2 OR DAI/ETH &lt; 1/2000.6</span>
+<span class="w">              </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">common.market_spot:{&quot;WETH/USDC&quot;} &lt; 2000.2 OR common.market_spot:{&quot;DAI/WETH&quot;} &lt; 1 / 2000.6</span>
+<span class="w">              </span><span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_usdc_usdt</span><span class="w">     </span><span class="c1"># Target the USDC/USDT pool</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mint</span><span class="w">                       </span><span class="c1"># Provide liquidity</span>
+<span class="w">              </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.</span><span class="w">                    </span><span class="c1"># Amount to provide</span>
+<span class="w">                </span><span class="nt">price_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">               </span><span class="c1"># Lower price bound</span>
+<span class="w">                </span><span class="nt">price_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.5</span><span class="w">               </span><span class="c1"># Upper price bound</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action2</span>
+<span class="w">                                               </span><span class="l l-Scalar l-Scalar-Plain"># Always execute (no condition)</span>
+<span class="w">              </span><span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_wbtc_eth</span><span class="w">      </span><span class="c1"># Target WBTC/ETH pool</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swap</span><span class="w">                       </span><span class="c1"># Perform a swap</span>
+<span class="w">              </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">amount1_in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.</span><span class="w">                 </span><span class="c1"># Swap 1 unit of token</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-configurations">
+<h2>Working with Configurations<a class="headerlink" href="#working-with-configurations" title="Link to this heading">¶</a></h2>
+<p>Configurations can be provided in multiple formats:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># From a YAML file</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">protocols</span><span class="p">,</span> <span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+
+<span class="c1"># From a JSON file</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">protocols</span><span class="p">,</span> <span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># From a dictionary</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;simulation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span>
+    <span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">}</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">protocols</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># From a YAML string</span>
+<span class="n">yaml_config</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">simulation:</span>
+<span class="s2">  blocks: 1000</span>
+<span class="s2">agents: []</span>
+<span class="s2">protocols: </span><span class="si">{}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">protocols</span><span class="p">,</span> <span class="n">yaml_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="running-a-configuration">
+<h2>Running A Configuration<a class="headerlink" href="#running-a-configuration" title="Link to this heading">¶</a></h2>
+<p>To use a configuration in your simulation, simply save it as a YAML file and load it as shown in the <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a> guide.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simulation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="c1"># Initialize simulation with protocols and configuration</span>
+<span class="n">uniswap_v3</span> <span class="o">=</span> <span class="n">UniswapV3Factory</span><span class="p">()</span> <span class="c1"># factory for all UniswapV3 instances</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">([</span><span class="n">uniswap_v3</span><span class="p">],</span> <span class="s2">&quot;your_config.yml&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run the simulation</span>
+<span class="n">all_observables_str</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> <span class="c1"># this intermediate step will be fixed soon</span>
+<span class="n">all_observables</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">all_observables_str</span><span class="p">)</span>
+
+<span class="c1"># Access results</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulation completed with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_observables</span><span class="p">)</span><span class="si">}</span><span class="s2"> observables&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This configuration demonstrates advanced features like conditional trading, multi-token portfolios, and realistic market simulation with correlation between assets.</p>
+</section>
+<section id="practical-examples">
+<h2>Practical Examples<a class="headerlink" href="#practical-examples" title="Link to this heading">¶</a></h2>
+<p>Here are four comprehensive examples demonstrating realistic end-to-end operations with Uniswap V3. Each example shows a different strategy and use case.</p>
+<section id="example-1-basic-liquidity-management">
+<h3>Example 1: Basic Liquidity Management<a class="headerlink" href="#example-1-basic-liquidity-management" title="Link to this heading">¶</a></h3>
+<p><strong>Use Case</strong>: This strategy is perfect for stablecoin pairs where you want to earn fees with minimal impermanent loss. The tight tick range around $1.00 maximizes fee collection for stable assets.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+
+<span class="c1"># Simulation parameters - short 3-block simulation for demonstration</span>
+<span class="nt">common</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">block_number_start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725000</span><span class="w">        </span><span class="c1"># Start at a specific historical block</span>
+<span class="w">  </span><span class="nt">block_number_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725002</span><span class="w">          </span><span class="c1"># Run for just 3 blocks</span>
+<span class="w">  </span><span class="nt">block_step_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">               </span><span class="c1"># Collect metrics every block</span>
+<span class="w">  </span><span class="nt">numeraire</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC</span><span class="w">                     </span><span class="c1"># Use USDC as base currency</span>
+<span class="w">  </span><span class="nt">gas_fee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">                         </span><span class="c1"># Gas cost per transaction</span>
+<span class="w">  </span><span class="nt">gas_fee_ccy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC</span><span class="w">                   </span><span class="c1"># Pay gas in USDC</span>
+<span class="w">  </span><span class="nt">arbitrage_block_frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">      </span><span class="c1"># Low arbitrage frequency</span>
+
+<span class="c1"># Price model for USDC/USDT (stable pair)</span>
+<span class="nt">spot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">spot_list</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC/USDT</span>
+<span class="w">      </span><span class="nt">custom</span><span class="p">:</span><span class="w">                         </span><span class="c1"># Custom price path</span>
+<span class="w">        </span><span class="nt">timestamps</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1701838079</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1701838091</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1701838103</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span><span class="w">         </span><span class="c1"># Stable $1.00 price</span>
+
+<span class="c1"># Protocol and pool setup</span>
+<span class="nt">simulation_environment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tokens_info</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">USDC</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">decimals</span><span class="p">:</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">}</span><span class="w">               </span><span class="c1"># USDC has 6 decimal places</span>
+<span class="w">    </span><span class="nt">USDT</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">decimals</span><span class="p">:</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">}</span><span class="w">               </span><span class="c1"># USDT has 6 decimal places</span>
+<span class="w">  </span><span class="nt">protocols_to_simulate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uniswap_v3</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">initial_state</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">custom_state</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">pools</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pool_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_usdc_usdt_001</span>
+<span class="w">              </span><span class="nt">symbol_token0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC</span>
+<span class="w">              </span><span class="nt">symbol_token1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDT</span>
+<span class="w">              </span><span class="nt">fee_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span><span class="w">          </span><span class="c1"># 0.01% fee tier (1 basis point)</span>
+<span class="w">              </span><span class="nt">initial_balance</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000000</span><span class="w">     </span><span class="c1"># 100M initial pool liquidity</span>
+<span class="w">                </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">token0</span>
+
+<span class="c1"># Trading agent strategy</span>
+<span class="nt">agents</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">liquidity_provider</span>
+<span class="w">    </span><span class="nt">wallet</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">USDC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span><span class="w">                     </span><span class="c1"># Start with $10k USDC</span>
+<span class="w">      </span><span class="nt">USDT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span><span class="w">                     </span><span class="c1"># Start with $10k USDT</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">timed_events</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># Block 1: Create liquidity position</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_position</span>
+<span class="w">          </span><span class="nt">block_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725001</span>
+<span class="w">          </span><span class="nt">actions</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mint_liquidity</span>
+<span class="w">              </span><span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_usdc_usdt_001</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">raw_mint</span><span class="w">            </span><span class="c1"># Low-level mint operation</span>
+<span class="w">              </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-101</span><span class="w">        </span><span class="c1"># Lower price bound (around $0.99)</span>
+<span class="w">                </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span><span class="w">         </span><span class="c1"># Upper price bound (around $1.01)</span>
+<span class="w">                </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1985301236174</span><span class="w">   </span><span class="c1"># Precise liquidity amount</span>
+<span class="w">                </span><span class="nt">token_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stable_position</span>
+
+<span class="w">        </span><span class="c1"># Block 2: Close position</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">close_position</span>
+<span class="w">          </span><span class="nt">block_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725002</span>
+<span class="w">          </span><span class="nt">actions</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">burn_liquidity</span>
+<span class="w">              </span><span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">univ3_usdc_usdt_001</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">raw_burn</span><span class="w">            </span><span class="c1"># Remove liquidity</span>
+<span class="w">              </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">tick_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-101</span>
+<span class="w">                </span><span class="nt">tick_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">                </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1985301236174</span><span class="w">   </span><span class="c1"># Remove all liquidity</span>
+<span class="w">                </span><span class="nt">collect</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">           </span><span class="c1"># Automatically collect fees + principal</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2-dynamic-market-making">
+<h3>Example 2: Dynamic Market Making<a class="headerlink" href="#example-2-dynamic-market-making" title="Link to this heading">¶</a></h3>
+<p><strong>Use Case</strong>: Demonstrates the simulator’s power with minimal configuration. Shows realistic price volatility effects on liquidity positions, perfect for understanding impermanent loss vs fee collection dynamics in volatile markets.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+
+<span class="c1"># Simulation parameters - 1000 blocks with high volatility price action</span>
+<span class="nt">common</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">block_number_start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725000</span><span class="w">      </span><span class="c1"># Historical Ethereum block number</span>
+<span class="w">  </span><span class="nt">block_number_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18726000</span><span class="w">        </span><span class="c1"># 1000 blocks simulation (~3-4 hours)</span>
+<span class="w">  </span><span class="nt">block_step_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w">            </span><span class="c1"># Collect metrics every 50 blocks</span>
+<span class="w">  </span><span class="nt">numeraire</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC</span><span class="w">                   </span><span class="c1"># Use USDC as base currency for calculations</span>
+<span class="w">  </span><span class="nt">plot_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                 </span><span class="c1"># Generate performance charts</span>
+<span class="w">  </span><span class="nt">save_metrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">               </span><span class="c1"># Don&#39;t save detailed metrics to file</span>
+<span class="w">  </span><span class="nt">arbitrage_block_frequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">      </span><span class="c1"># Check arbitrage opportunities every 5 blocks</span>
+
+<span class="c1"># Price model for ETH/USDC (volatile pair)</span>
+<span class="nt">spot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">spot_list</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WETH/USDC</span>
+<span class="w">      </span><span class="nt">gbm</span><span class="p">:</span><span class="w">                          </span><span class="c1"># Geometric Brownian Motion model</span>
+<span class="w">        </span><span class="nt">s0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span><span class="w">                    </span><span class="c1"># Starting price: $2000 per ETH</span>
+<span class="w">        </span><span class="nt">mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.</span><span class="w">                      </span><span class="c1"># No drift (neutral market expectation)</span>
+<span class="w">        </span><span class="nt">vol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.4</span><span class="w">                    </span><span class="c1"># 40% annual volatility (high volatility)</span>
+<span class="w">  </span><span class="nt">correlation</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1</span><span class="p p-Indicator">]]</span><span class="w">                </span><span class="c1"># Single asset, perfect self-correlation</span>
+
+<span class="c1"># Protocol and pool setup</span>
+<span class="nt">simulation_environment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">protocols_to_simulate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uniswap_v3</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">initial_state</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">custom_state</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">pools</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pool_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uniswapv3_eth_usdc</span>
+<span class="w">              </span><span class="nt">symbol_token0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ETH</span><span class="w">    </span><span class="c1"># First token in the pair</span>
+<span class="w">              </span><span class="nt">symbol_token1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USDC</span><span class="w">   </span><span class="c1"># Second token in the pair</span>
+<span class="w">              </span><span class="nt">fee_tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0005</span><span class="w">      </span><span class="c1"># 0.05% fee tier (5 basis points)</span>
+<span class="w">              </span><span class="nt">initial_balance</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">amount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000000</span><span class="w">    </span><span class="c1"># 10M USDC initial pool liquidity</span>
+<span class="w">                </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">token1</span><span class="w">        </span><span class="c1"># Specify liquidity amount in USDC</span>
+
+<span class="c1"># Market maker agent strategy</span>
+<span class="nt">agents</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">market_maker</span>
+<span class="w">    </span><span class="nt">wallet</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">USDC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50000</span><span class="w">                   </span><span class="c1"># Start with $50k USDC</span>
+<span class="w">      </span><span class="nt">ETH</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span><span class="w">                       </span><span class="c1"># Start with 25 ETH (~$50k at $2000)</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">timed_events</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># Create liquidity position at simulation start</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">initial_position</span>
+<span class="w">          </span><span class="nt">block_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18725001</span><span class="w">    </span><span class="c1"># Execute on block 1</span>
+<span class="w">          </span><span class="nt">actions</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">action_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_position</span>
+<span class="w">              </span><span class="nt">protocol_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uniswapv3_eth_usdc</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mint</span><span class="w">            </span><span class="c1"># Provide liquidity</span>
+<span class="w">              </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">amount1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20000</span><span class="w">      </span><span class="c1"># Use $20k USDC for liquidity</span>
+<span class="w">                </span><span class="nt">price_lower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1800</span><span class="w">   </span><span class="c1"># Lower price bound ($1800)</span>
+<span class="w">                </span><span class="nt">price_upper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2200</span><span class="w">   </span><span class="c1"># Upper price bound ($2200)</span>
+<span class="w">                </span><span class="nt">token_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mm_position</span><span class="w">  </span><span class="c1"># Position identifier</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

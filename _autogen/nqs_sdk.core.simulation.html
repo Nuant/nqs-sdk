@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nqs_sdk.core.simulation module &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nqs_sdk.interfaces package" href="nqs_sdk.interfaces.html" />
+    <link rel="prev" title="nqs_sdk.core.config module" href="nqs_sdk.core.config.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nqs_sdk.html">nqs_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="nqs_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="nqs_sdk.core.html">nqs_sdk.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.interfaces.html">nqs_sdk.interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.protocols.html">nqs_sdk.protocols package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.state.html">nqs_sdk.state package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.utils.html">nqs_sdk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#module-nqs_sdk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api_reference.html">API Reference</a><ul>
+  <li><a href="nqs_sdk.html">nqs_sdk package</a><ul>
+  <li><a href="nqs_sdk.core.html">nqs_sdk.core package</a><ul>
+      <li>Previous: <a href="nqs_sdk.core.config.html" title="previous chapter">nqs_sdk.core.config module</a></li>
+      <li>Next: <a href="nqs_sdk.interfaces.html" title="next chapter">nqs_sdk.interfaces package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-nqs_sdk.core.simulation">
+<span id="nqs-sdk-core-simulation-module"></span><h1>nqs_sdk.core.simulation module<a class="headerlink" href="#module-nqs_sdk.core.simulation" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.core.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/core/simulation.html#Simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main orchestrator for running simulations.</p>
+<p>This class serves as the primary interface for users to configure, build, and execute
+simulations involving multiple DeFi protocols. It handles the coordination between
+protocol factories, configuration loading, and simulation execution.</p>
+<p>Protocols and configuration are provided during initialization, and the simulation
+can be run multiple times with different parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.protocols">
+<span class="sig-name descname"><span class="pre">protocols</span></span><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.protocols" title="Link to this definition">¶</a></dt>
+<dd><p>List of protocol factories or protocol factory adapters that define the DeFi protocols to simulate</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration data (file path, dict, or YAML/JSON content)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.simulator">
+<span class="sig-name descname"><span class="pre">simulator</span></span><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.simulator" title="Link to this definition">¶</a></dt>
+<dd><p>Internal rust-based simulator instance (built lazily)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/core/simulation.html#Simulation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a new simulation with specified protocols and configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>protocols</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="nqs_sdk.interfaces.protocol_factory.html#nqs_sdk.interfaces.protocol_factory.ProtocolFactory" title="nqs_sdk.interfaces.protocol_factory.ProtocolFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolFactory</span></code></a>, <a class="reference internal" href="nqs_sdk.html#nqs_sdk.ProtocolFactoryAdapter" title="nqs_sdk.ProtocolFactoryAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolFactoryAdapter</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="nqs_sdk.interfaces.protocol_factory.html#nqs_sdk.interfaces.protocol_factory.ProtocolFactory" title="nqs_sdk.interfaces.protocol_factory.ProtocolFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolFactory</span></code></a> | <a class="reference internal" href="nqs_sdk.html#nqs_sdk.ProtocolFactoryAdapter" title="nqs_sdk.ProtocolFactoryAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProtocolFactoryAdapter</span></code></a>]]</span>) – Single ProtocolFactory or ProtocolFactoryAdapter,
+or list of ProtocolFactorys or ProtocolFactoryAdapters defining
+the protocols to include in the simulation</p></li>
+<li><p><strong>config</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>]</span>) – Configuration for the simulation. Can be:
+- Path to a YAML/JSON configuration file
+- Dictionary containing configuration parameters
+- String containing YAML/JSON configuration content</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Factory</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk_extension.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">CompoundV2Factory</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniswap</span> <span class="o">=</span> <span class="n">UniswapV3Factory</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compound</span> <span class="o">=</span> <span class="n">CompoundV2Factory</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">([</span><span class="n">uniswap</span><span class="p">,</span> <span class="n">compound</span><span class="p">],</span> <span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.get_protocol">
+<span class="sig-name descname"><span class="pre">get_protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protocol_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/core/simulation.html#Simulation.get_protocol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.get_protocol" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve a protocol instance by its identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>protocol_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Unique identifier for the protocol (e.g., “uniswap_v3”)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The protocol instance corresponding to the given ID</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If simulation hasn’t been built yet</p></li>
+<li><p><strong>KeyError</strong> – If protocol_id doesn’t exist in the simulation</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">uniswap_protocol</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_protocol</span><span class="p">(</span><span class="s2">&quot;uniswap_v3&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">current_price</span> <span class="o">=</span> <span class="n">uniswap_protocol</span><span class="o">.</span><span class="n">get_current_price</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nqs_sdk.core.simulation.Simulation.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/core/simulation.html#Simulation.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.core.simulation.Simulation.run" title="Link to this definition">¶</a></dt>
+<dd><p>Execute the simulation and return results.</p>
+<p>This method runs the entire simulation from start to end block/timestamp,
+processing all transactions and collecting metrics along the way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Object containing all simulation data including:</dt><dd><ul class="simple">
+<li><p>Protocol states at each block</p></li>
+<li><p>Agent portfolio values over time</p></li>
+<li><p>Transaction logs and fees</p></li>
+<li><p>Observable metrics and KPIs</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>SimulationResults</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If simulation hasn’t been built yet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">portfolio_value</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get_agent_metric</span><span class="p">(</span><span class="s2">&quot;alice&quot;</span><span class="p">,</span> <span class="s2">&quot;total_holding&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

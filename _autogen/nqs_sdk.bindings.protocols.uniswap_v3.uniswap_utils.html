@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils module &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=8c38d6ca" />
+    <script src="../_static/documentation_options.js?v=8539da10"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_arbitrager module" href="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_arbitrager.html" />
+    <link rel="prev" title="nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.univswap_v3_random module" href="nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.univswap_v3_random.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nqs_sdk.html">nqs_sdk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="nqs_sdk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.coding_envs.html">nqs_sdk.coding_envs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.core.html">nqs_sdk.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.interfaces.html">nqs_sdk.interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.protocols.html">nqs_sdk.protocols package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.state.html">nqs_sdk.state package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nqs_sdk.utils.html">nqs_sdk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nqs_sdk.html#module-nqs_sdk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference_protocols.html">Protocols metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config_file_grammar.html">Config file schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro_language.html">Micro-Language Expression Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment_variables.html">Environment variables</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api_reference.html">API Reference</a><ul>
+  <li><a href="nqs_sdk.html">nqs_sdk package</a><ul>
+  <li><a href="nqs_sdk.bindings.html">nqs_sdk.bindings package</a><ul>
+  <li><a href="nqs_sdk.bindings.protocols.html">nqs_sdk.bindings.protocols package</a><ul>
+  <li><a href="nqs_sdk.bindings.protocols.uniswap_v3.html">nqs_sdk.bindings.protocols.uniswap_v3 package</a><ul>
+      <li>Previous: <a href="nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.univswap_v3_random.html" title="previous chapter">nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.univswap_v3_random module</a></li>
+      <li>Next: <a href="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_arbitrager.html" title="next chapter">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_arbitrager module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils">
+<span id="nqs-sdk-bindings-protocols-uniswap-v3-uniswap-utils-module"></span><h1>nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils module<a class="headerlink" href="#module-nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils" title="Link to this heading">¶</a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.InvalidPriceError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">InvalidPriceError</span></span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#InvalidPriceError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.InvalidPriceError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Raised when price value is invalid (not strictly positive and finite).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.price_to_tick">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">price_to_tick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimals0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimals1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#price_to_tick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.price_to_tick" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a price to a tick value for Uniswap V3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>price</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code></span>) – The price to convert (must be strictly positive and finite)</p></li>
+<li><p><strong>decimals0</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Number of decimals for token0</p></li>
+<li><p><strong>decimals1</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Number of decimals for token1</p></li>
+<li><p><strong>tick_spacing</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Spacing between valid ticks (default: 1)</p></li>
+<li><p><strong>lower</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to round down (True) or up (False) when between ticks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The corresponding tick value</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.InvalidPriceError" title="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.InvalidPriceError"><strong>InvalidPriceError</strong></a> – When the price is not strictly positive and finite
+    (e.g., negative, zero, infinity, or NaN)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.tick_to_price">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">tick_to_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tick</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimals0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimals1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#tick_to_price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.tick_to_price" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.price_to_sqrtp">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">price_to_sqrtp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#price_to_sqrtp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.price_to_sqrtp" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.calculate_max_amounts">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_max_amounts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price_lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_upper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#calculate_max_amounts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.calculate_max_amounts" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the maximum liquidity that can be minted for a Uniswap V3 position.</p>
+<p>This function determines the maximum amount of liquidity that can be created
+from the available token amounts (amount0 and amount1) for a concentrated
+liquidity position with specified price bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>price_lower</strong> (<em>Decimal</em>) – Lower price bound of the position (must be positive)</p></li>
+<li><p><strong>price</strong> (<em>Decimal</em>) – Current price of the pool (must be positive)</p></li>
+<li><p><strong>price_upper</strong> (<em>Decimal</em>) – Upper price bound of the position (must be &gt; price_lower)</p></li>
+<li><p><strong>amount0</strong> (<em>Decimal</em>) – Available amount of token0 (must be &gt;= 0)</p></li>
+<li><p><strong>amount1</strong> (<em>Decimal</em>) – Available amount of token1 (must be &gt;= 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum liquidity that can be minted with the given token amounts</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decimal</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If any of the following conditions are not met:
+    - amount0 &gt;= 0
+    - amount1 &gt;= 0
+    - price_lower &lt; price_upper
+    - calculated liquidity &gt;= 0</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The calculation depends on where the current price falls relative to the position bounds:</p>
+<ul class="simple">
+<li><p>If price &lt;= price_lower: Only token0 is needed, liquidity is limited by amount0</p></li>
+<li><p>If price_lower &lt; price &lt; price_upper: Both tokens are needed, liquidity is limited
+by whichever token provides less liquidity</p></li>
+<li><p>If price &gt;= price_upper: Only token1 is needed, liquidity is limited by amount1</p></li>
+</ul>
+<p>This follows the standard Uniswap V3 concentrated liquidity formulas:
+- L = Δx / (1/√P - 1/√P_upper) for token0
+- L = Δy / (√P - √P_lower) for token1</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">price_lower</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">price_upper</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;2.5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amount0</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;100&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amount1</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;200&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">liquidity</span> <span class="o">=</span> <span class="n">calculate_max_amounts</span><span class="p">(</span><span class="n">price_lower</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">price_upper</span><span class="p">,</span> <span class="n">amount0</span><span class="p">,</span> <span class="n">amount1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.token_amounts_from_liquidity">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">token_amounts_from_liquidity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price_lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_upper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liquidity_amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#token_amounts_from_liquidity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.token_amounts_from_liquidity" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.calculate_optimal_rebalancing">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_optimal_rebalancing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price_lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_upper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#calculate_optimal_rebalancing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.calculate_optimal_rebalancing" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.get_tick_spacing">
+<span class="sig-prename descclassname"><span class="pre">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.</span></span><span class="sig-name descname"><span class="pre">get_tick_spacing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fee_tier</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nqs_sdk/bindings/protocols/uniswap_v3/uniswap_utils.html#get_tick_spacing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nqs_sdk.bindings.protocols.uniswap_v3.uniswap_utils.get_tick_spacing" title="Link to this definition">¶</a></dt>
+<dd><p>Get the tick spacing for a given fee tier using string formatting with controlled precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

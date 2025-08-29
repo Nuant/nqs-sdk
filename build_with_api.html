@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API based approach &#8212; NQS SDK 0.6.9.dev0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=8c38d6ca" />
+    <script src="_static/documentation_options.js?v=8539da10"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api_reference.html" />
+    <link rel="prev" title="Configuration-based approach" href="build_with_config.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NQS SDK</a></h1>
+
+
+
+<p class="blurb">Python SDK for NQS</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Nuant&repo=nqs-sdk&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="build.html">Build</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="build_with_config.html">Configuration-based approach</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API based approach</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getting-started-with-the-api">Getting Started with the API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#core-components">Core Components</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#codingenv">CodingEnv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#policycaller">PolicyCaller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#protocols">Protocols</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spot-generators">Spot Generators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#practical-examples">Practical Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-1-spot-tracking-strategy">Example 1: Spot Tracking Strategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-2-lower-level-api-with-transaction-handling">Example 2: Lower-Level API with Transaction Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="build.html">Build</a><ul>
+      <li>Previous: <a href="build_with_config.html" title="previous chapter">Configuration-based approach</a></li>
+      <li>Next: <a href="api_reference.html" title="next chapter">API Reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="api-based-approach">
+<h1>API based approach<a class="headerlink" href="#api-based-approach" title="Link to this heading">¶</a></h1>
+<p>The API-based approach gives you programmatic control over every aspect of the simulation. This approach is:</p>
+<ul class="simple">
+<li><p><strong>Flexible</strong>: Full control over simulation logic and execution flow</p></li>
+<li><p><strong>Extensible</strong>: Easily integrate custom components and algorithms</p></li>
+<li><p><strong>Interactive</strong>: Dynamically adjust simulation parameters during execution</p></li>
+<li><p><strong>Powerful</strong>: Access to low-level functionality for advanced use cases</p></li>
+</ul>
+<p>This approach is recommended for:</p>
+<ul class="simple">
+<li><p>Developers who need maximum flexibility and control</p></li>
+<li><p>Complex strategies that require custom logic or state management</p></li>
+<li><p>When you need to integrate with external systems or data sources</p></li>
+<li><p>For research and development of new trading algorithms</p></li>
+</ul>
+<p id="api-approach-end">The NQS SDK provides a powerful API for running simulations programmatically. This approach gives you full control over the simulation environment, protocols, agents, and market conditions.</p>
+<section id="getting-started-with-the-api">
+<h2>Getting Started with the API<a class="headerlink" href="#getting-started-with-the-api" title="Link to this heading">¶</a></h2>
+<p>To use the API-based approach, you’ll need to:</p>
+<ol class="arabic simple">
+<li><p>Create a simulation environment</p></li>
+<li><p>Register protocols, agents, and spot generators</p></li>
+<li><p>Configure simulation parameters</p></li>
+<li><p>Run the simulation</p></li>
+<li><p>Analyze the results</p></li>
+</ol>
+<p>Here’s a basic example that demonstrates these steps:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.coding_envs.coding_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodingEnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.coding_envs.policy_caller</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolicyCaller</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Pool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3CodingProtocol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.spots.historical_uniswap_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">HistoricalSpotGenerator</span>
+
+<span class="c1"># 1. Create a simulation environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">CodingEnv</span><span class="p">(</span><span class="n">do_backtest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 2. Register protocols, spot generators, and agents</span>
+<span class="c1"># Create a Uniswap V3 pool</span>
+<span class="n">uniswap_pool</span> <span class="o">=</span> <span class="n">UniswapV3Pool</span><span class="o">.</span><span class="n">from_params</span><span class="p">(</span><span class="n">token0</span><span class="o">=</span><span class="s2">&quot;USDT&quot;</span><span class="p">,</span> <span class="n">token1</span><span class="o">=</span><span class="s2">&quot;USDC&quot;</span><span class="p">,</span> <span class="n">fee_tier</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">block_number</span><span class="o">=</span><span class="mi">18725000</span><span class="p">)</span>
+<span class="n">uniswap_v3_coding_env</span> <span class="o">=</span> <span class="n">UniswapV3CodingProtocol</span><span class="p">(</span><span class="n">uniswap_pool</span><span class="p">)</span>
+
+<span class="c1"># Register the protocol</span>
+<span class="n">env</span><span class="o">.</span><span class="n">register_protocol</span><span class="p">(</span><span class="n">uniswap_v3_coding_env</span><span class="p">)</span>
+
+<span class="c1"># Create and register a spot generator</span>
+<span class="n">spot_generator</span> <span class="o">=</span> <span class="n">HistoricalSpotGenerator</span><span class="p">([</span><span class="n">uniswap_v3_coding_env</span><span class="o">.</span><span class="n">protocol</span><span class="p">])</span>
+<span class="n">env</span><span class="o">.</span><span class="n">register_spot_generator</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">)</span>
+
+<span class="c1"># 3. Configure simulation parameters</span>
+<span class="n">env</span><span class="o">.</span><span class="n">set_simulation_time</span><span class="p">(</span><span class="mi">18725000</span><span class="p">,</span> <span class="mi">18726000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># start_block, end_block, step_size</span>
+<span class="n">env</span><span class="o">.</span><span class="n">set_numeraire</span><span class="p">(</span><span class="s2">&quot;USDC&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">set_gas_fee</span><span class="p">(</span><span class="mi">10000000</span><span class="p">,</span> <span class="s2">&quot;USDC&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create and register an agent</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyStrategy</span><span class="p">(</span><span class="n">PolicyCaller</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">policy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">protocols</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Implement your strategy here</span>
+        <span class="k">pass</span>
+
+<span class="n">env</span><span class="o">.</span><span class="n">register_agent</span><span class="p">(</span><span class="s2">&quot;agent_1&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;USDC&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span> <span class="s2">&quot;USDT&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="n">MyStrategy</span><span class="p">())</span>
+
+<span class="c1"># 4. Run the simulation</span>
+<span class="n">observables</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1"># 5. Analyze the results</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulation completed with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">observables</span><span class="p">)</span><span class="si">}</span><span class="s2"> observables&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="core-components">
+<h2>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">¶</a></h2>
+<p>The API-based approach involves several key components:</p>
+<section id="codingenv">
+<h3>CodingEnv<a class="headerlink" href="#codingenv" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">CodingEnv</span></code> class is the main entry point for API-based simulations. It provides methods for registering protocols, agents, and spot generators, as well as configuring simulation parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">CodingEnv</span><span class="p">(</span><span class="n">do_backtest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Set do_backtest=True for backtest mode; the default mode is for simulation.</span>
+</pre></div>
+</div>
+<p>Key methods:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">register_protocol(protocol)</span></code> - Register a protocol with the environment</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_agent(agent_name,</span> <span class="pre">wallet,</span> <span class="pre">strategy)</span></code> - Register an agent with the environment</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_spot_generator(spot_generator)</span></code> - Register a spot generator with the environment</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">set_simulation_time(init_time,</span> <span class="pre">end_time,</span> <span class="pre">step_size)</span></code> - Set the simulation time parameters</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">set_numeraire(numeraire)</span></code> - Set the base currency for calculations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">set_gas_fee(gas_fee,</span> <span class="pre">gas_fee_ccy)</span></code> - Set the gas fee for transactions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run()</span></code> - Run the simulation and return the observables</p></li>
+</ul>
+</section>
+<section id="policycaller">
+<h3>PolicyCaller<a class="headerlink" href="#policycaller" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">PolicyCaller</span></code> class is the base class for implementing DeFi strategies. You must subclass it and implement the <code class="docutils literal notranslate"><span class="pre">policy</span></code> method, which will be called at each simulation step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyStrategy</span><span class="p">(</span><span class="n">PolicyCaller</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Initialize your strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span> <span class="o">=</span> <span class="s2">&quot;my_position&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_position</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">policy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">protocols</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># This method is called at each simulation step</span>
+        <span class="c1"># Implement your logic here</span>
+        <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="c1"># Example: Get the current spot price</span>
+            <span class="n">current_spot</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">dex_spot</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># Example: Create a position if we don&#39;t have one</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_position</span><span class="p">:</span>
+                <span class="n">protocol</span><span class="o">.</span><span class="n">mint</span><span class="p">(</span>
+                    <span class="n">lower_bound</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+                    <span class="n">upper_bound</span><span class="o">=</span><span class="mf">1.01</span><span class="p">,</span>
+                    <span class="n">amount0</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                    <span class="n">amount1</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                    <span class="n">position_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position_id</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_position</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="protocols">
+<h3>Protocols<a class="headerlink" href="#protocols" title="Link to this heading">¶</a></h3>
+<p>Protocols represent the DeFi protocols you want to simulate. The NQS SDK provides implementations for various protocols, such as Uniswap V3.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Uniswap V3 pool</span>
+<span class="n">uniswap_pool</span> <span class="o">=</span> <span class="n">UniswapV3Pool</span><span class="o">.</span><span class="n">from_params</span><span class="p">(</span>
+    <span class="n">token0</span><span class="o">=</span><span class="s2">&quot;USDT&quot;</span><span class="p">,</span>
+    <span class="n">token1</span><span class="o">=</span><span class="s2">&quot;USDC&quot;</span><span class="p">,</span>
+    <span class="n">fee_tier</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">block_number</span><span class="o">=</span><span class="mi">18725000</span>
+<span class="p">)</span>
+
+<span class="c1"># Or load a pool from a specific address</span>
+<span class="n">uniswap_pool</span> <span class="o">=</span> <span class="n">UniswapV3Pool</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span>
+    <span class="s2">&quot;0x3416cf6c708da44db2624d63ea0aaef7113527c6&quot;</span><span class="p">,</span>  <span class="c1"># Pool address</span>
+    <span class="mi">18725000</span>  <span class="c1"># Block number</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a coding environment for the protocol</span>
+<span class="n">uniswap_v3_coding_env</span> <span class="o">=</span> <span class="n">UniswapV3CodingProtocol</span><span class="p">(</span><span class="n">uniswap_pool</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="spot-generators">
+<h3>Spot Generators<a class="headerlink" href="#spot-generators" title="Link to this heading">¶</a></h3>
+<p>Spot generators provide price data for the simulation. You can use historical data or custom price models.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use historical data</span>
+<span class="n">spot_generator</span> <span class="o">=</span> <span class="n">HistoricalSpotGenerator</span><span class="p">([</span><span class="n">uniswap_v3_coding_env</span><span class="o">.</span><span class="n">protocol</span><span class="p">])</span>
+
+<span class="c1"># Register the spot generator</span>
+<span class="n">env</span><span class="o">.</span><span class="n">register_spot_generator</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="practical-examples">
+<h2>Practical Examples<a class="headerlink" href="#practical-examples" title="Link to this heading">¶</a></h2>
+<p>Here are two comprehensive examples demonstrating how to use the API for different use cases.</p>
+<section id="example-1-spot-tracking-strategy">
+<h3>Example 1: Spot Tracking Strategy<a class="headerlink" href="#example-1-spot-tracking-strategy" title="Link to this heading">¶</a></h3>
+<p>This example demonstrates a strategy that tracks the spot price and adjusts liquidity positions accordingly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.spots.historical_uniswap_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">HistoricalSpotGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Pool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.coding_envs.coding_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">CodingEnv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.coding_envs.policy_caller</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolicyCaller</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.coding_envs.protocols.uniswap_v3.uniswap_v3_coding_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3CodingProtocol</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SpotTrackingStrategy</span><span class="p">(</span><span class="n">PolicyCaller</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span> <span class="o">=</span> <span class="s2">&quot;tracking_position&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_position</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_range_pct</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># +/- 0.1%</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">policy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">protocols</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">protocol</span> <span class="ow">in</span> <span class="n">protocols</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="c1"># Get the current spot price</span>
+            <span class="n">current_spot</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">dex_spot</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_position</span><span class="p">:</span>
+                <span class="c1"># Create a new position around the current spot price</span>
+                <span class="n">lower_bound</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">current_spot</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_range_pct</span><span class="p">)</span>
+                <span class="n">upper_bound</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">current_spot</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_range_pct</span><span class="p">)</span>
+
+                <span class="n">protocol</span><span class="o">.</span><span class="n">mint</span><span class="p">(</span>
+                    <span class="n">lower_bound</span><span class="p">,</span>
+                    <span class="n">upper_bound</span><span class="p">,</span>
+                    <span class="n">protocol</span><span class="o">.</span><span class="n">get_wallet_holdings</span><span class="p">(</span><span class="s2">&quot;USDC&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">protocol</span><span class="o">.</span><span class="n">get_wallet_holdings</span><span class="p">(</span><span class="s2">&quot;USDT&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">has_position</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Check if the spot price is outside our position bounds</span>
+                <span class="n">position_lower</span><span class="p">,</span> <span class="n">position_upper</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">position_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position_id</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">current_spot</span> <span class="o">&lt;=</span> <span class="n">position_lower</span> <span class="ow">or</span> <span class="n">current_spot</span> <span class="o">&gt;=</span> <span class="n">position_upper</span><span class="p">:</span>
+                    <span class="c1"># Burn the current position</span>
+                    <span class="n">protocol</span><span class="o">.</span><span class="n">burn</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span><span class="p">)</span>
+
+                    <span class="c1"># Create a new position around the current spot price</span>
+                    <span class="n">lower_bound</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">current_spot</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_range_pct</span><span class="p">)</span>
+                    <span class="n">upper_bound</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">current_spot</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_range_pct</span><span class="p">)</span>
+
+                    <span class="n">protocol</span><span class="o">.</span><span class="n">mint</span><span class="p">(</span>
+                        <span class="n">lower_bound</span><span class="p">,</span>
+                        <span class="n">upper_bound</span><span class="p">,</span>
+                        <span class="n">protocol</span><span class="o">.</span><span class="n">get_wallet_holdings</span><span class="p">(</span><span class="s2">&quot;USDC&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">protocol</span><span class="o">.</span><span class="n">token_amount</span><span class="p">(</span><span class="s2">&quot;USDC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="n">protocol</span><span class="o">.</span><span class="n">get_wallet_holdings</span><span class="p">(</span><span class="s2">&quot;USDT&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">protocol</span><span class="o">.</span><span class="n">token_amount</span><span class="p">(</span><span class="s2">&quot;USDT&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">position_id</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create a Uniswap V3 pool</span>
+    <span class="n">uniswap_pool</span> <span class="o">=</span> <span class="n">UniswapV3Pool</span><span class="o">.</span><span class="n">from_params</span><span class="p">(</span><span class="n">token0</span><span class="o">=</span><span class="s2">&quot;USDT&quot;</span><span class="p">,</span> <span class="n">token1</span><span class="o">=</span><span class="s2">&quot;USDC&quot;</span><span class="p">,</span> <span class="n">fee_tier</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">block_number</span><span class="o">=</span><span class="mi">18725000</span><span class="p">)</span>
+    <span class="n">uniswap_v3_coding_env</span> <span class="o">=</span> <span class="n">UniswapV3CodingProtocol</span><span class="p">(</span><span class="n">uniswap_pool</span><span class="p">)</span>
+
+    <span class="c1"># Create a spot generator</span>
+    <span class="n">spot_generator</span> <span class="o">=</span> <span class="n">HistoricalSpotGenerator</span><span class="p">([</span><span class="n">uniswap_v3_coding_env</span><span class="o">.</span><span class="n">protocol</span><span class="p">])</span>
+
+    <span class="c1"># Create and configure the simulation environment</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">CodingEnv</span><span class="p">(</span><span class="n">do_backtest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">register_protocol</span><span class="p">(</span><span class="n">uniswap_v3_coding_env</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">register_spot_generator</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">set_simulation_time</span><span class="p">(</span><span class="mi">18725000</span><span class="p">,</span> <span class="mi">18726010</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">set_numeraire</span><span class="p">(</span><span class="s2">&quot;USDC&quot;</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">set_gas_fee</span><span class="p">(</span><span class="mi">10000000</span><span class="p">,</span> <span class="s2">&quot;USDC&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Register an agent with the strategy</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">register_agent</span><span class="p">(</span><span class="s2">&quot;agent_1&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;USDC&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span> <span class="s2">&quot;USDT&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span> <span class="n">SpotTrackingStrategy</span><span class="p">())</span>
+
+    <span class="c1"># Run the simulation</span>
+    <span class="n">observables</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulation completed with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">observables</span><span class="p">)</span><span class="si">}</span><span class="s2"> observables&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2-lower-level-api-with-transaction-handling">
+<h3>Example 2: Lower-Level API with Transaction Handling<a class="headerlink" href="#example-2-lower-level-api-with-transaction-handling" title="Link to this heading">¶</a></h3>
+<p>This example demonstrates how to use the lower-level API for more control over transaction handling.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.env_builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimulatorEnvBuilder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.spots.historical_uniswap_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">HistoricalSpotGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3HistoricalTxGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Factory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniswapV3Pool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.bindings.protocols.uniswap_v3.uniswap_v3_transactions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RawSwapTransaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.observable_consumer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ObservableConsumer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nqs_sdk.interfaces.tx_generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">TxGenerator</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentTransaction</span><span class="p">(</span><span class="n">TxGenerator</span><span class="p">,</span> <span class="n">ObservableConsumer</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">required_metrics</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_name</span> <span class="o">=</span> <span class="n">agent_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_metrics</span> <span class="o">=</span> <span class="n">required_metrics</span>
+
+    <span class="c1"># Implement required methods...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">append_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">uniswap_pool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txns</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tx</span><span class="p">,</span> <span class="n">uniswap_pool</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create a Uniswap V3 pool</span>
+    <span class="n">uniswap_pool</span> <span class="o">=</span> <span class="n">UniswapV3Pool</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="s2">&quot;0x3416cf6c708da44db2624d63ea0aaef7113527c6&quot;</span><span class="p">,</span> <span class="mi">18725000</span><span class="p">)</span>
+
+    <span class="c1"># Create and configure the simulation environment</span>
+    <span class="n">env_builder</span> <span class="o">=</span> <span class="n">SimulatorEnvBuilder</span><span class="p">()</span>
+    <span class="n">uniswap_factory</span> <span class="o">=</span> <span class="n">UniswapV3Factory</span><span class="p">()</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">register_factory</span><span class="p">(</span><span class="n">uniswap_factory</span><span class="p">)</span>
+
+    <span class="c1"># Register the protocol and transaction generator</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">register_protocol</span><span class="p">(</span><span class="n">uniswap_pool</span><span class="p">)</span>
+    <span class="n">tx_generator</span> <span class="o">=</span> <span class="n">UniswapV3HistoricalTxGenerator</span><span class="p">(</span><span class="n">uniswap_pool</span><span class="p">)</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">register_tx_generator</span><span class="p">(</span><span class="n">tx_generator</span><span class="p">)</span>
+
+    <span class="c1"># Create and register a spot generator</span>
+    <span class="n">spot_generator</span> <span class="o">=</span> <span class="n">HistoricalSpotGenerator</span><span class="p">([</span><span class="n">uniswap_pool</span><span class="p">])</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">register_spot_generator</span><span class="p">(</span><span class="n">spot_generator</span><span class="p">)</span>
+
+    <span class="c1"># Configure simulation parameters</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">set_simulator_time</span><span class="p">(</span><span class="mi">18725000</span><span class="p">,</span> <span class="mi">18725010</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">set_numeraire</span><span class="p">(</span><span class="s2">&quot;USDC&quot;</span><span class="p">)</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">set_gas_fee</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;USDC&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Register an agent</span>
+    <span class="n">agent_name</span> <span class="o">=</span> <span class="s2">&quot;swapper_agent&quot;</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">register_agent</span><span class="p">(</span><span class="n">agent_name</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;USDT&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;USDC&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">})</span>
+
+    <span class="c1"># Create a custom transaction handler for the agent</span>
+    <span class="n">agent_handler</span> <span class="o">=</span> <span class="n">AgentTransaction</span><span class="p">(</span><span class="n">agent_name</span><span class="p">,</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">agent_name</span><span class="si">}</span><span class="s1">.all.wallet_holdings:</span><span class="se">{{</span><span class="s1">token=&quot;USDT&quot;</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">agent_name</span><span class="si">}</span><span class="s1">.all.wallet_holdings:</span><span class="se">{{</span><span class="s1">token=&quot;USDC&quot;</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uniswap_pool</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.dex_spot&quot;</span>
+    <span class="p">])</span>
+    <span class="n">env_builder</span><span class="o">.</span><span class="n">register_tx_generator</span><span class="p">(</span><span class="n">agent_handler</span><span class="p">)</span>
+
+    <span class="c1"># Build and run the simulation</span>
+    <span class="n">simulation</span> <span class="o">=</span> <span class="n">env_builder</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">simulation</span><span class="p">:</span>
+        <span class="c1"># Process simulation output</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">block</span>
+        <span class="n">dex_spot</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uniswap_pool</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.dex_spot&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Example: Create a swap transaction when the price is below 1</span>
+        <span class="k">if</span> <span class="n">dex_spot</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">raw_swap_tx</span> <span class="o">=</span> <span class="n">RawSwapTransaction</span><span class="p">(</span><span class="n">amount</span><span class="o">=</span><span class="mi">100000000</span><span class="p">,</span> <span class="n">zero_for_one</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sqrt_price_limit_x96</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">agent_handler</span><span class="o">.</span><span class="n">append_tx</span><span class="p">(</span><span class="n">raw_swap_tx</span><span class="p">,</span> <span class="n">uniswap_pool</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">¶</a></h2>
+<p>The API-based approach provides maximum flexibility and control over your simulations. It allows you to:</p>
+<ol class="arabic simple">
+<li><p>Create custom DeFi strategies by implementing the <code class="docutils literal notranslate"><span class="pre">PolicyCaller</span></code> interface</p></li>
+<li><p>Configure simulation parameters programmatically</p></li>
+<li><p>Access detailed observables during and after the simulation</p></li>
+<li><p>Implement complex logic for transaction handling</p></li>
+</ol>
+<p>For simpler use cases, consider using the configuration-based approach described in <a class="reference internal" href="build_with_config.html"><span class="doc">Configuration-based approach</span></a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2025, NQS Team.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

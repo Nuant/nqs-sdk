@@ -1,0 +1,19 @@
+nqs\_sdk.core package
+=====================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nqs_sdk.core.config
+   nqs_sdk.core.simulation
+
+Module contents
+---------------
+
+.. automodule:: nqs_sdk.core
+   :members:
+   :show-inheritance:
+   :undoc-members:

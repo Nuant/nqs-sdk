@@ -1,0 +1,7 @@
+nqs\_sdk.bindings.tx\_generators.historical\_tx\_generator module
+=================================================================
+
+.. automodule:: nqs_sdk.bindings.tx_generators.historical_tx_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:

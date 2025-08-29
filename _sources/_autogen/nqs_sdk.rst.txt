@@ -1,0 +1,34 @@
+nqs\_sdk package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nqs_sdk.bindings
+   nqs_sdk.coding_envs
+   nqs_sdk.core
+   nqs_sdk.interfaces
+   nqs_sdk.protocols
+   nqs_sdk.state
+   nqs_sdk.utils
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nqs_sdk.nqs_sdk
+   nqs_sdk.tools
+   nqs_sdk.version
+
+Module contents
+---------------
+
+.. automodule:: nqs_sdk
+   :members:
+   :show-inheritance:
+   :undoc-members:
