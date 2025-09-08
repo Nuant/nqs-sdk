@@ -164,3 +164,4 @@ cython_debug/
 
 # local script to update this repo
 update_me.sh
+examples/06_spot_tracker_using_api_dbg.py

@@ -148,47 +148,53 @@
       "properties": {
         "args": {
           "type": "object",
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [
+                "amount0_in"
+              ],
+              "properties": {
+                "amount0_in": {
+                  "$ref": "#/definitions/Amount"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "amount1_in"
+              ],
+              "properties": {
+                "amount1_in": {
+                  "$ref": "#/definitions/Amount"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "amount0_out"
+              ],
+              "properties": {
+                "amount0_out": {
+                  "$ref": "#/definitions/Amount"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "amount1_out"
+              ],
+              "properties": {
+                "amount1_out": {
+                  "$ref": "#/definitions/Amount"
+                }
+              }
+            }
+          ],
           "properties": {
-            "amount0_in": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Amount"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "amount0_out": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Amount"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "amount1_in": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Amount"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
-            "amount1_out": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Amount"
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
             "from": {
               "description": "override address of sender, useful with agents. if the wallet does not exist it has infinite liquidity",
               "anyOf": [
@@ -201,24 +207,10 @@
               ]
             },
             "price_limit": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Amount"
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "$ref": "#/definitions/Amount"
             },
             "sqrt_price_limit_x96": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/SimUint160"
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "$ref": "#/definitions/SimUint160"
             }
           }
         },

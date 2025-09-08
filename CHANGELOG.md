@@ -6,6 +6,11 @@ Format: this file follows the principles of Keep a Changelog (https://keepachang
 
 Only changes relevant to Python users are listed below (either changes in the Python bindings/package itself, or functional changes in the Rust core that are exposed to / affect Python usage).
 
+## [0.6.9] - 2025-09-08
+
+### Fixed
+- Windows: cross-platform timeout handler for policy execution; uses SIGALRM on POSIX and a threading.Timer fallback on Windows, avoiding unsupported-signal and non-main-thread issues.
+
 ## [0.6.8] - 2025-08-29
 
 ### Performance
