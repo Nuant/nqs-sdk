@@ -1,0 +1,539 @@
+==========
+Uniswap V3
+==========
+
+.. contents::
+   :local:
+   :depth: 2
+
+Metrics
+-------
+
+The following metrics serve a dual role:
+
+* Observable output – Uniswap V3 reports each metric at every block during a simulation or backtest.
+
+    Examples from `06_spot_tracker_using_api.py <https://github.com/Nuant/nqs-sdk/tree/master/examples/06_spot_tracker_using_api.py>`_ observable outputs:
+        * ``univ3_usdc_usdt_001.dex_spot``
+        * ``agent_1.univ3_usdc_usdt_001.fees_not_collected``
+        * ``univ3_usdc_usdt_001.total_holdings:{token="USDT"}``
+        * ``agent_1.univ3_usdc_usdt_001.token_amount:{position="tracking_position_0", token="USDC"}``
+
+* Micro-language input – Use any metric or combination of metrics in :doc:`micro-language expressions <micro_language>` or conditions that trigger actions in a given strategy defined in a configuration file.
+
+    Examples from `basic_config.yml <https://github.com/Nuant/nqs-sdk/blob/master/examples/configs/basic_config.yml>`_
+        * ``common.market_spot:{"WETH/USDC"} < 2000.2 OR common.market_spot:{"DAI/WETH"} < 1 / 2000.6``
+
+Protocol Metrics
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - **Name**
+     - **Description**
+   * - ``DEX Spot``
+     - Price of token0 in units of token1 (**symbol**: ``dex_spot``)
+   * - ``Current Tick Liquidity``
+     - Liquidity parameter in the pool for the current tick (**symbol**: ``liquidity``)
+   * - ``Total Volume``
+     - Total volume of swaps in the pool in units of the user numéraire (**symbol**: ``total_volume_numeraire``)
+   * - ``Total Token Volume``
+     - Total volume of swaps in the pool for the token0 or token1 (**symbol**: ``total_volume``, **parameters**: ``token: Token``)
+   * - ``Total Token Holdings``
+     - Total holdings of token0 or token1 in the pool (**symbol**: ``total_holdings``, **parameters**: ``token: Token``)
+   * - ``Total Token Fees``
+     - Total fees of token0, token1 or numeraire (if omitted) in the pool (**symbol**: ``total_fees``, **parameters**: ``token: Option<Token>``)
+   * - ``Total Value Locked``
+     - Total value locked in the pool in units of the user numéraire (**symbol**: ``total_value_locked``)
+   * - ``Current Tick``
+     - Current tick of the pool (**symbol**: ``current_tick``)
+
+Agent Metrics
+~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - **Name**
+     - **Description**
+   * - ``Position Active Liquidity``
+     - Position active liquidity in the pool for the current tick (**symbol**: ``active_liquidity``, **parameters**: ``position: Option<String>``)
+   * - ``Position Liquidity``
+     - Position liquidity in the pool (**symbol**: ``liquidity``, **parameters**: ``position: Option<String>``)
+   * - ``User Token Amount``
+     - User actual amount of token0 or token1 in the pool (on the position if provided) (**symbol**: ``token_amount``, **parameters**: ``token: Token, position: Option<String>``)
+   * - ``User Position Value``
+     - Value of the agent's position in the pool, in units of numéraire (**symbol**: ``net_position``, **parameters**: ``position: Option<String>``)
+   * - ``Total Fees``
+     - Total fees collected or not by the position or the portfolio in units of the user numéraire (**symbol**: ``total_fees``, **parameters**: ``position: Option<String>``)
+   * - ``Total Fees Not Collected``
+     - Total fees not collected (**symbol**: ``fees_not_collected``, **parameters**: ``token: Option<Token>, position: Option<String>``)
+   * - ``Total Fees Collected``
+     - Total fees collected (**symbol**: ``fees_collected``, **parameters**: ``token: Option<Token>, position: Option<String>``)
+   * - ``Absolute Impermanent Loss``
+     - Impermanent loss in units of the user numéraire for the position or total portfolio (**symbol**: ``abs_impermanent_loss``, **parameters**: ``position: Option<String>``)
+   * - ``Relative Impermanent Loss``
+     - Impermanent loss in percentage points (**symbol**: ``perc_impermanent_loss``, **parameters**: ``position: Option<String>``)
+   * - ``Static Portfolio Value``
+     - Value of the static portfolio in units of the user numéraire (**symbol**: ``static_ptf_value``, **parameters**: ``position: Option<String>``)
+   * - ``Permanent/Realized Loss``
+     - Permanent/Realized loss in units of the user numéraire (**symbol**: ``permanent_loss``, **parameters**: ``position: Option<String>``)
+   * - ``Loss Versus Rebalancing``
+     - Loss versus rebalancing in units of the user numéraire (**symbol**: ``loss_versus_rebalancing``, **parameters**: ``position: Option<String>``)
+   * - ``Total Fees to LVR``
+     - Total accumulated fees as a percentage of the LVR (**symbol**: ``total_fees_relative_to_lvr``, **parameters**: ``position: Option<String>``)
+   * - ``Position Lower Bound``
+     - Lower bound of the position (**symbol**: ``lower_bound_price``, **parameters**: ``position: String``)
+   * - ``Position Relative Upper Bound pct``
+     - Upper bound of the position (**symbol**: ``upper_bound_price``, **parameters**: ``position: String``)
+
+Components
+----------
+
+Main Protocol Class
+~~~~~~~~~~~~~~~~~~~
+
+**UniswapV3**
+
+The main Uniswap V3 protocol implementation that handles all core functionality including swaps, liquidity provision, and fee collection.
+
+**Initialization and State Management**
+
+``__init__(state: StateUniv3, gas_fee: int = 0, gas_fee_ccy: Optional[str] = None)``
+   Initialize the Uniswap V3 protocol with state and gas configuration.
+
+   :param state: The initial protocol state
+   :param gas_fee: Gas fee amount (default: 0)
+   :param gas_fee_ccy: Gas fee currency (optional)
+
+``get_state(block_timestamp: int) -> StateUniv3``
+   Get the current protocol state at a specific block timestamp.
+
+   :param block_timestamp: The block timestamp
+   :returns: Current protocol state
+
+``get_spot() -> float``
+   Get the current spot price of the pool.
+
+   :returns: Current spot price
+
+``restore_from_state(state: ABCProtocolState) -> None``
+   Restore protocol from a saved state.
+
+   :param state: The saved protocol state
+
+**Transaction Processing**
+
+``process_transactions(transactions: list[ABCTransaction]) -> None``
+   Process multiple transactions in sequence.
+
+   :param transactions: List of transactions to process
+
+``process_single_transaction(transaction: ABCTransaction) -> None``
+   Process a single transaction.
+
+   :param transaction: Transaction to process
+
+**Liquidity and Position Management**
+
+``get_total_tokens_owed(token: LPTokenUniv3, fee_growth_inside_0_last_x128_last: int | None = None, fee_growth_inside_1_last_x128_last: int | None = None) -> tuple[int, int]``
+   Calculate the total tokens owed to a liquidity provider.
+
+   :param token: The LP token
+   :param fee_growth_inside_0_last_x128_last: Last recorded fee growth for token0 (optional)
+   :param fee_growth_inside_1_last_x128_last: Last recorded fee growth for token1 (optional)
+   :returns: Tuple of (token0_owed, token1_owed)
+
+``tick_cross(tick: int, fee_growth_global_0_x128: int, fee_growth_global_1_x128: int) -> int``
+   Handle tick crossing during swap operations.
+
+   :param tick: The tick being crossed
+   :param fee_growth_global_0_x128: Global fee growth for token0
+   :param fee_growth_global_1_x128: Global fee growth for token1
+   :returns: Net liquidity change
+
+``get_next_tick(tick: int, sqrt_price_ratio_x96: int, zero_for_one: bool) -> int``
+   Find the next initialized tick for swap operations.
+
+   :param tick: Current tick
+   :param sqrt_price_ratio_x96: Square root price ratio
+   :param zero_for_one: Direction of the swap
+   :returns: Next tick index
+
+Mathematical Libraries
+~~~~~~~~~~~~~~~~~~~~~~
+
+**TickMath**
+
+Provides mathematical functions for converting between ticks and prices in Uniswap V3.
+
+``get_sqrt_ratio_at_tick(tick: int) -> int``
+   Calculate the square root price ratio at a given tick.
+
+   :param tick: The tick index
+   :returns: Square root price ratio in Q64.96 format
+
+``get_tick_at_sqrt_ratio(sqrt_price_x96: int) -> int``
+   Calculate the tick index from a square root price ratio.
+
+   :param sqrt_price_x96: Square root price in Q64.96 format
+   :returns: Tick index
+
+``price_to_tick(price: float, decimal0: int, decimal1: int) -> int``
+   Convert a price to the corresponding tick index.
+
+   :param price: The price to convert
+   :param decimal0: Decimals for token0
+   :param decimal1: Decimals for token1
+   :returns: Tick index
+
+``tick_to_price(tick: int, decimal0: int, decimal1: int) -> float``
+   Convert a tick index to the corresponding price.
+
+   :param tick: The tick index
+   :param decimal0: Decimals for token0
+   :param decimal1: Decimals for token1
+   :returns: Price
+
+``sqrt_price_x96_to_price(sqrt_price_x96: int, decimal0: int, decimal1: int) -> float``
+   Convert fixed-point sqrt price to actual price.
+
+   :param sqrt_price_x96: Square root price in Q64.96 format
+   :param decimal0: Decimals for token0
+   :param decimal1: Decimals for token1
+   :returns: Price
+
+``price_to_sqrt_price_x96(price: float, decimal0: int, decimal1: int) -> int``
+   Convert price to fixed-point sqrt price.
+
+   :param price: The price to convert
+   :param decimal0: Decimals for token0
+   :param decimal1: Decimals for token1
+   :returns: Square root price in Q64.96 format
+
+**SwapMath**
+
+Core mathematical functions for computing swap steps and price movements.
+
+``compute_swap_step(sqrt_ratio_current_x96: int, sqrt_ratio_target_x96: int, liquidity: int, amount_remaining: int, fee_pips: int) -> Tuple[int, int, int, int]``
+   Compute a single swap step, handling price movement and fees.
+
+   :param sqrt_ratio_current_x96: Current square root price ratio
+   :param sqrt_ratio_target_x96: Target square root price ratio
+   :param liquidity: Available liquidity
+   :param amount_remaining: Remaining amount to swap
+   :param fee_pips: Fee in pips (1/10000)
+   :returns: Tuple of (next_sqrt_price, amount_in, amount_out, fee_amount)
+
+**SqrtPriceMath**
+
+Mathematical functions for calculating square root prices and token amounts.
+
+``get_next_sqrt_price_from_input(sqrt_p_x96: int, liquidity: int, amount_in: int, zero_for_one: bool) -> int``
+   Calculate the next square root price given an input amount.
+
+   :param sqrt_p_x96: Current square root price
+   :param liquidity: Available liquidity
+   :param amount_in: Input amount
+   :param zero_for_one: Swap direction
+   :returns: Next square root price
+
+``get_next_sqrt_price_from_output(sqrt_p_x96: int, liquidity: int, amount_out: int, zero_for_one: bool) -> int``
+   Calculate the next square root price given an output amount.
+
+   :param sqrt_p_x96: Current square root price
+   :param liquidity: Available liquidity
+   :param amount_out: Output amount
+   :param zero_for_one: Swap direction
+   :returns: Next square root price
+
+``get_amount0_delta_unsigned(sqrt_ratio_a_x96: int, sqrt_ratio_b_x96: int, liquidity: int, round_up: bool) -> int``
+   Calculate the amount of token0 corresponding to a liquidity change.
+
+   :param sqrt_ratio_a_x96: Square root price A
+   :param sqrt_ratio_b_x96: Square root price B
+   :param liquidity: Liquidity amount
+   :param round_up: Whether to round up
+   :returns: Token0 amount delta
+
+``get_amount1_delta_unsigned(sqrt_ratio_a_x96: int, sqrt_ratio_b_x96: int, liquidity: int, round_up: bool) -> int``
+   Calculate the amount of token1 corresponding to a liquidity change.
+
+   :param sqrt_ratio_a_x96: Square root price A
+   :param sqrt_ratio_b_x96: Square root price B
+   :param liquidity: Liquidity amount
+   :param round_up: Whether to round up
+   :returns: Token1 amount delta
+
+``get_amount0_delta_signed(sqrt_ratio_a_x96: int, sqrt_ratio_b_x96: int, liquidity: int) -> int``
+   Calculate the signed amount of token0 corresponding to a liquidity change.
+
+   :param sqrt_ratio_a_x96: Square root price A
+   :param sqrt_ratio_b_x96: Square root price B
+   :param liquidity: Liquidity amount
+   :returns: Signed token0 amount delta
+
+``get_amount1_delta_signed(sqrt_ratio_a_x96: int, sqrt_ratio_b_x96: int, liquidity: int) -> int``
+   Calculate the signed amount of token1 corresponding to a liquidity change.
+
+   :param sqrt_ratio_a_x96: Square root price A
+   :param sqrt_ratio_b_x96: Square root price B
+   :param liquidity: Liquidity amount
+   :returns: Signed token1 amount delta
+
+**Utility Functions**
+
+General utility functions for liquidity calculations and amount conversions.
+
+``calculate_amounts(sqrt_price_lower: float, sqrt_price: float, sqrt_price_upper: float, user_input_amount0: int | None, user_input_amount1: int | None, user_input_amount: int | None, decimals0: int, decimals1: int) -> Tuple[float | int | None, float | int | None, float | int | None]``
+   Calculate the optimal amounts for liquidity operations.
+
+   :param sqrt_price_lower: Lower bound square root price
+   :param sqrt_price: Current square root price
+   :param sqrt_price_upper: Upper bound square root price
+   :param user_input_amount0: User input for token0 (optional)
+   :param user_input_amount1: User input for token1 (optional)
+   :param user_input_amount: User input amount (optional)
+   :param decimals0: Token0 decimals
+   :param decimals1: Token1 decimals
+   :returns: Tuple of (amount0, amount1, liquidity)
+
+``lp_from_liquidity_to_amount0_amount1(sqrt_price: float, sqrt_price_lower: float, sqrt_price_upper: float, liquidity: float) -> tuple[float | None, float | None]``
+   Convert liquidity to token amounts.
+
+   :param sqrt_price: Current square root price
+   :param sqrt_price_lower: Lower bound square root price
+   :param sqrt_price_upper: Upper bound square root price
+   :param liquidity: Liquidity amount
+   :returns: Tuple of (amount0, amount1)
+
+``lp_from_amount0_to_liquidity_amount1(sqrt_price: float, sqrt_price_lower: float, sqrt_price_upper: float, amount0: float) -> tuple[float | None, float | None]``
+   Convert token0 amount to liquidity and token1 amount.
+
+   :param sqrt_price: Current square root price
+   :param sqrt_price_lower: Lower bound square root price
+   :param sqrt_price_upper: Upper bound square root price
+   :param amount0: Token0 amount
+   :returns: Tuple of (liquidity, amount1)
+
+``lp_from_amount1_to_liquidity_amount0(sqrt_price: float, sqrt_price_lower: float, sqrt_price_upper: float, amount1: float) -> tuple[float | None, float | None]``
+   Convert token1 amount to liquidity and token0 amount.
+
+   :param sqrt_price: Current square root price
+   :param sqrt_price_lower: Lower bound square root price
+   :param sqrt_price_upper: Upper bound square root price
+   :param amount1: Token1 amount
+   :returns: Tuple of (liquidity, amount0)
+
+Transaction Types
+~~~~~~~~~~~~~~~~~
+
+**MintTransactionUniv3**
+
+Transaction for adding liquidity to a Uniswap V3 pool within a specific price range.
+
+**BurnTransactionUniv3**
+
+Transaction for removing liquidity from a Uniswap V3 pool position.
+
+**SwapTransactionUniv3**
+
+Transaction for swapping tokens in a Uniswap V3 pool.
+
+**CollectTransactionUniv3**
+
+Transaction for collecting accumulated fees from a liquidity position.
+
+**Transaction Creation Functions**
+
+``create_mint_transaction(**kwargs) -> MintTransactionUniv3``
+   Create a mint transaction for adding liquidity.
+
+   :param kwargs: Transaction parameters (pool_name, agent_name, tick_lower, tick_upper, amount, amount0, amount1, etc.)
+   :returns: Mint transaction
+
+``create_burn_transaction(**kwargs) -> BurnTransactionUniv3``
+   Create a burn transaction for removing liquidity.
+
+   :param kwargs: Transaction parameters (pool_name, agent_name, token_id, amount, etc.)
+   :returns: Burn transaction
+
+``create_swap_transaction(**kwargs) -> SwapTransactionUniv3``
+   Create a swap transaction for token exchange.
+
+   :param kwargs: Transaction parameters (pool_name, agent_name, amount0_in, amount0_out, amount1_in, amount1_out, etc.)
+   :returns: Swap transaction
+
+``create_collect_transaction(**kwargs) -> CollectTransactionUniv3``
+   Create a collect transaction for fee collection.
+
+   :param kwargs: Transaction parameters (pool_name, agent_name, token_id, amount0, amount1, etc.)
+   :returns: Collect transaction
+
+``adjust_mint_amounts(transaction: MintTransactionUniv3, symbol0: str, symbol1: str, sqrt_price: int) -> MintTransactionUniv3``
+   Adjust mint transaction amounts based on wallet balance and pool state.
+
+   :param transaction: The mint transaction to adjust
+   :param symbol0: Symbol of token0
+   :param symbol1: Symbol of token1
+   :param sqrt_price: Current square root price
+   :returns: Adjusted mint transaction
+
+``convert_amounts_to_integers(transaction: TransactionUniv3, **kwargs: str) -> TransactionUniv3``
+   Convert transaction amounts from float to integer format.
+
+   :param transaction: The transaction to convert
+   :param kwargs: Additional conversion parameters
+   :returns: Transaction with integer amounts
+
+Observability and Metrics
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**UniswapV3Observer**
+
+Provides comprehensive metrics and observability for Uniswap V3 pools and positions.
+
+**Pool Metrics**
+
+``get_all_observables(block_number: int, block_timestamp: int) -> dict[str, SingleObservable]``
+   Get all observable metrics for the pool.
+
+   :param block_number: Block number
+   :param block_timestamp: Block timestamp
+   :returns: Dictionary of observable metrics including spot price, liquidity, volumes, fees
+
+``get_agent_observables(block_number: int, block_timestamp: int, wallet: Wallet) -> dict[str, SingleObservable]``
+   Get agent-specific observable metrics.
+
+   :param block_number: Block number
+   :param block_timestamp: Block timestamp
+   :param wallet: Agent wallet
+   :returns: Dictionary of agent observables including position values, fees, IL, LVR
+
+**Key Observable Metrics:**
+
+- **Pool Metrics**: DEX spot price, total liquidity, current tick, trading volumes, accumulated fees
+- **Position Metrics**: Portfolio value, impermanent loss (IL), loss vs rebalancing (LVR), fee earnings, liquidity amounts, position bounds
+- **Agent Metrics**: Individual position performance, fee collection history, position management statistics
+
+**Arbitrage Functions**
+
+``exists_arbitrage_opportunity(block_number: int, block_timestamp: int) -> bool``
+   Check if arbitrage opportunities exist between the pool and external market prices.
+
+   :param block_number: Block number
+   :param block_timestamp: Block timestamp
+   :returns: True if arbitrage opportunity exists
+
+``create_arbitrage_transactions(block_number: int, block_timestamp: int, arbitrageur_wallet: Wallet) -> Sequence[ABCTransaction]``
+   Create transactions to capture arbitrage opportunities.
+
+   :param block_number: Block number
+   :param block_timestamp: Block timestamp
+   :param arbitrageur_wallet: Arbitrageur's wallet
+   :returns: Sequence of arbitrage transactions
+
+Protocol Factory and Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**UniswapV3Factory**
+
+Factory class for building and configuring Uniswap V3 protocol instances.
+
+``build(time: SimulationTime, builder_state: MutBuilderSharedState, common_config: dict, backtest: bool, config: dict) -> Tuple[List[Protocol], List[TxGenerator]]``
+   Build Uniswap V3 protocol instances with specified configuration.
+
+   :param time: Simulation time configuration
+   :param builder_state: Mutable builder state
+   :param common_config: Common simulation configuration
+   :param backtest: Whether this is a backtest simulation
+   :param config: Protocol-specific configuration
+   :returns: Tuple of (protocol instances, transaction generators)
+
+``build_historical_state(time: SimulationTime, builder_state: MutBuilderSharedState, protocol_info: dict) -> Tuple[UniswapV3Wrapper, HistoricalTxGenerator]``
+   Build protocol instance from historical data.
+
+   :param time: Simulation time configuration
+   :param builder_state: Mutable builder state
+   :param protocol_info: Historical protocol information
+   :returns: Tuple of (protocol wrapper, historical transaction generator)
+
+``build_simulation_state(time: SimulationTime, builder_state: MutBuilderSharedState, custom_state: dict) -> UniswapV3Wrapper``
+   Build protocol instance with custom simulation state.
+
+   :param time: Simulation time configuration
+   :param builder_state: Mutable builder state
+   :param custom_state: Custom state configuration
+   :returns: Protocol wrapper instance
+
+**UniswapV3Wrapper**
+
+Protocol wrapper that provides a standardized interface for the simulation framework.
+
+``build_tx_payload(source: str, sender: str, call: Dict[str, Any]) -> TxRequest``
+   Build transaction payload from call parameters.
+
+   :param source: Transaction source identifier
+   :param sender: Transaction sender address
+   :param call: Transaction call parameters
+   :returns: Transaction request object
+
+``execute_tx(clock: SimulationClock, state: MutSharedState, tx: TxRequest) -> None``
+   Execute transaction within the simulation framework.
+
+   :param clock: Simulation clock
+   :param state: Mutable shared state
+   :param tx: Transaction request to execute
+
+``observe(metric: Optional[List[MetricName]], clock: SimulationClock, state: RefSharedState) -> Dict[MetricName, Decimal]``
+   Observe specified metrics at current simulation state.
+
+   :param metric: List of metrics to observe (optional, observes all if None)
+   :param clock: Simulation clock
+   :param state: Read-only shared state
+   :returns: Dictionary of metric values
+
+Random Transaction Generation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Random Transaction Generators**
+
+Functions for generating random transactions for simulation and testing purposes.
+
+``generate_mint_transactions_at_block(block_number: int, value_dict: dict[str, float | list[float]]) -> MintTransactionUniv3``
+   Generate random mint transactions with specified parameters.
+
+   :param block_number: Target block number
+   :param value_dict: Dictionary of randomization parameters
+   :returns: Random mint transaction
+
+``generate_burn_transactions_at_block(block_number: int, value_dict: dict[str, float]) -> BurnTransactionUniv3``
+   Generate random burn transactions.
+
+   :param block_number: Target block number
+   :param value_dict: Dictionary of randomization parameters
+   :returns: Random burn transaction
+
+``generate_swap_transactions_at_block(block_number: int, value_dict: dict[str, float]) -> SwapTransactionUniv3``
+   Generate random swap transactions.
+
+   :param block_number: Target block number
+   :param value_dict: Dictionary of randomization parameters
+   :returns: Random swap transaction
+
+``generate_calibrated_mint_transactions_at_block(block_number: int, value_dict: dict[str, float | list[float]]) -> MintTransactionUniv3``
+   Generate calibrated mint transactions based on market conditions.
+
+   :param block_number: Target block number
+   :param value_dict: Dictionary of calibration parameters
+   :returns: Calibrated mint transaction
+
+``generate_calibrated_swap_transactions_at_block(block_number: int, value_dict: dict[str, float]) -> SwapTransactionUniv3``
+   Generate calibrated swap transactions based on market conditions.
+
+   :param block_number: Target block number
+   :param value_dict: Dictionary of calibration parameters
+   :returns: Calibrated swap transaction

@@ -1,0 +1,160 @@
+Core Concepts
+=============
+
+**Nuant Quantitative System** is a modular engine for simulating and testing DeFi protocols and strategies across historical and synthetic data. It orchestrates agents, transactions, and on-chain state to replicate real market behavior in a controlled environment. Built for researchers and developers, NQS enables rapid strategy iteration, protocol design, and performance evaluation.
+
+Architecture Components
+-----------------------
+
+The core engine is composed of several interconnected modules:
+
+- **Protocols**: Maintain internal state and process transactions (Uniswap, Compound, etc.)
+- **Transactions**: Contain instructions to be executed by smart contracts
+- **States**: Represent point-in-time snapshots of protocol state
+- **Events**: Output results from processed transactions
+- **Wallets**: Track positions and balances for agents
+- **Observers**: Collect metrics and simulation data
+- **Oracles**: Provide off-chain data like CEX prices
+
+Simulations
+-----------
+
+Simulations orchestrate the execution of multi-protocol simulations. They coordinate between protocol factories, handle configuration loading, and execute the simulation from start to finish.
+
+**Key features**:
+
+- Multi-protocol coordination
+- Agent behavior simulation
+- Block progression and timing
+- Result aggregation and analysis
+
+Protocol Factory
+-----------------
+
+Protocol Factory handle individual protocol integrations (e.g., Uniswap V3, Compound V2).
+
+**Key features**:
+
+- Protocol-specific configuration handling
+- State management and persistence
+- Transaction processing and validation
+- Event emission and logging
+
+Agents
+------
+
+An agent is an entity that can interact with various other entities of the simulation. 
+The behaviour of the agent is defined by the user. 
+The agent starts the simulation with a certain amount of tokens in his wallet and can perform two kind of actions:
+
+- **timed actions**: Timed actions are actions that are performed at a certain time of the simulation. The user can define the time at which the action is performed and the action itself. See action for the description of the action.
+- **continuous actions**: Continuous actions are actions that are performed continuously during the simulation. The user can define the frequency of the action and the action itself. See action for the description of the action.
+
+Agent Action
+------------
+
+An agent action is defined by a protocol, an action to perform on that protocol and the arguments of that action. 
+A condition can be attached to the action. 
+In that case the action can be executed only if the condition is satisfied.
+
+Data Flow
+---------
+
+Understanding how data flows through the simulation:
+
+1. **Configuration Loading**: Simulation parameters and protocol settings are loaded
+2. **Protocol Initialization**: Each protocol factory sets up its initial state
+3. **Agent Creation**: Market participants are instantiated with their strategies
+4. **Block Processing**: For each simulation block:
+   
+   - Agents generate transactions based on their strategies
+   - Miners collect and order transactions
+   - Protocols process transactions and update their state
+   - Events are emitted and collected by observers
+   - Wallets are updated with new positions
+
+5. **Result Aggregation**: Final metrics and analysis are compiled
+
+Generator
+---------
+
+Generators are introduced to manage the creation of the simulated or historical real-world objects needed by the simulation. These include:
+
+initial entities state, such as Tokens or Protocols.
+protocol transactions.
+There are two main classes of generators, random and historical which are used in simulation and backtesting mode respectively.
+
+Historical Generator
+~~~~~~~~~~~~~~~~~~~~
+
+The historical generator loads data from the Nuant proprietary data service DataQuasar (DTQ). It is used during backtesting to load all the events emitted by the protocol between two given timestamps (or block numbers). The events data are used to create the historical transactions that are replayed during the backtest.
+
+The generator also fetches protocols state at a given timestamp (or block) in the past, which includes all the protocols internal variables and balances. This provides the initial state of the protocol during backtesting, but can also be used as a starting point for a forward-looking simulation.
+
+Random Generator
+~~~~~~~~~~~~~~~~
+
+The random generator is used for forward-looking simulations, where it generates random transactions across all protocols. 
+It is made up of two main components:
+
+- The random transaction generator.
+- The random number generator.
+
+Observer
+--------
+
+Observers are used to collect metrics from the different entities of the simulation.
+Any component of the architecture, needing to use the state or a metric produced by another member of the simulation, can do so by querying the corresponding observer.
+
+All observers provide their metrics through a dictionary attribute and need to implement a function collect_observables which gathers all observables generated at a given block.
+
+Protocol
+--------
+
+This module defines the logic of the protocols supported by the Nuant Core Engine.
+
+Although each protocol Nuant Core Engine is instantiated in a different class, all of them need to extend a common interface thus providing some basic, common functionalities, which are:
+
+- the possibility to be initialised from a state object.
+- a method returning the current state of the protocol.
+- a function to process transactions sent to the protocol.
+- a method to execute a list of transactions.
+
+Spots
+-----
+
+The spot oracle is responsible for orchestrating the generation of all processes and provide spot values to all entities of the simulation.
+
+An instance of SpotOracle is constructed from:
+
+- a DeterministicSpotProcessArray representing the deterministic spot processes in the simulation
+- a StochasticSpotProcessArray, containing all stochastic processes to simulate and their correlation matrix
+- the numéraire used in the simulation
+- the start and end timestamp
+- an optional RandomGenerator, used to generate the random increments needed to evolve the stochastic processes
+- a seed, used in the random number generation
+
+State
+-----
+
+States are a collection of dataclasses representing the snapshot of an entity of the simulation at a given block.
+An instance of the particular state class can be used to initialise the corresponding entity.
+
+Entities that currently implement a state class are
+
+- tokens
+- wallets
+- protocols
+
+Transaction
+-----------
+
+As in the blockchain, in the Nuant Core Engine each Agent willing to interact with protocols has to submit transactions.
+
+The Transaction class defines an interface that every protocol transaction needs to extend.
+These are the basic attributes that every transaction needs to provide:
+
+- block_number: the block number at which the transaction is executed
+- block_index: the block index at which the transaction is executed
+- block_timestamp: the block timestamp corresponding to block_number
+- sender_wallet: this is an optional attribute specifying the wallet submitting the transaction. The variable is optional as the Nuant Core Engine can accept (if possible) transactions without any information about the transaction sender, when this is not necessary to track any metrics or to perform any sanity check.

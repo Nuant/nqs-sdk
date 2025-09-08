@@ -1,0 +1,336 @@
+Configuration-based approach
+============================
+
+The configuration-based approach allows you to define your simulation using YAML or JSON configuration files. This approach is:
+
+* **Declarative**: Define what you want to simulate rather than how to simulate it
+* **Structured**: Clear organization of simulation parameters, market conditions, and agent strategies
+* **Reusable**: Easily share, version, and modify configurations without changing code
+* **Accessible**: Ideal for users who prefer configuration over programming
+
+This approach is recommended for:
+
+* Users who want to quickly set up and run simulations without writing much code
+* Scenarios where you need to run many variations of similar simulations
+* When you want to clearly separate simulation parameters from execution logic
+* For reproducible research where configuration can be shared and versioned
+
+.. _configuration_approach_end:
+
+Let's start with a comprehensive configuration file that demonstrates all the key features of the NQS SDK.
+This example shows how to set up a complex simulation with multiple protocols, agents, and market conditions.
+
+For detailed configuration syntax, see :doc:`config_file_grammar`.
+
+Configuration File Structure
+----------------------------
+
+Here's a complete configuration file with inline comments explaining each section:
+
+.. code-block:: yaml
+
+    version: 1.0.0                     # Configuration format version
+
+    # Global simulation parameters
+    common:
+      block_number_start: 18725000     # Starting Ethereum block number
+      block_number_end: 18726000       # Ending block (1000 blocks total)
+      block_step_metrics: 100          # Collect metrics every 100 blocks
+      arbitrage_block_frequency: 5     # Check arbitrage opportunities every 5 blocks
+      plot_output: False               # Disable chart generation
+      save_metrics: False              # Don't save metrics to file
+      numeraire: USDC                  # Base currency for calculations
+      gas_fee_ccy: ETH                 # Currency for gas fees
+      gas_fee: 0.0000000001            # Gas cost per transaction (very low for testing)
+
+    # Price simulation models for different token pairs
+    spot:
+      spot_list:
+        - name: USDC/DAI               # Stable coin pair
+          WGN:                         # White Gaussian Noise model (for stable assets)
+            s0: 1.001                  # Starting price: $1.001
+            mean: 1.                   # Mean revert to $1.00
+            vol: 0.0008                # Low volatility (0.08%)
+        - name: USDC/USDT              # Another stable pair
+          WGN:
+            s0: 1.001
+            mean: 1.
+            vol: 0.0008
+        - name: WETH/DAI               # Volatile asset pair
+          GBM:                         # Geometric Brownian Motion (for volatile assets)
+            s0: 2000.                  # Starting price: $2000
+            mu: 0.1                    # 10% annual drift
+            vol: 0.                    # Zero volatility for this example
+        - name: WETH/WBTC              # Cross-asset pair
+          GBM:
+            s0: 0.1                    # WETH/WBTC ratio
+            mu: 0.3                    # 30% annual drift
+            vol: 0.
+        - name: wstETH/WETH            # Liquid staking pair
+          GBM:
+            s0: 0.1
+            mu: 0.3
+            vol: 0.
+      # Correlation matrix between the 5 price pairs above
+      correlation:
+        [
+          [1., 0.5, 0.5, 0.2, 0.2],    # USDC/DAI correlations
+          [0.5, 1., 0.5, 0.2, 0.2],    # USDC/USDT correlations
+          [0.2, 0.2, 1., 0.5, 0.5],    # WETH/DAI correlations
+          [0.2, 0.2, 0.5, 1., 0.5],    # WETH/WBTC correlations
+          [0.2, 0.2, 0.5, 0.5, 1.],    # wstETH/WETH correlations
+        ]
+
+    # Historical data and protocol setup
+    backtest_environment:
+      # Real Ethereum token contract addresses
+      token_addresses:
+        DAI: "0x6b175474e89094c44da98b954eedeac495271d0f"      # DAI stablecoin
+        USDC: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"     # USD Coin
+        USDT: "0xdac17f958d2ee523a2206206994597c13d831ec7"     # Tether
+        WETH: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"     # Wrapped Ether
+        WBTC: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"     # Wrapped Bitcoin
+      # Protocols and pools to include in simulation
+      protocols_to_replay:
+        uniswap_v3:
+          pools:
+            - pool_name: univ3_usdc_usdt                        # USDC/USDT pool
+              address: "0x3416cf6c708da44db2624d63ea0aaef7113527c6"
+            - pool_name: univ3_wbtc_eth                         # WBTC/WETH pool
+              address: "0xCBCdF9626bC03E24f779434178A73a0B4bad62eD"
+
+    # simulation_environment:  # Can be used instead of backtest_environment for simulation-specific settings
+
+    # DeFi agents and their strategies
+    agents:
+      - name: agent_1                  # First trading agent
+        wallet:                        # Initial portfolio
+          USDT: 100000                 # $100k USDT
+          USDC: 100000                 # $100k USDC
+          DAI: 100000                  # $100k DAI
+          ETH: 100                     # 100 ETH (~$200k at $2000/ETH)
+        strategy:
+          continuous_events:           # Repeating actions during simulation
+            - name: event1
+              block_number: 18725000   # Start at this block
+              frequency: 100           # Execute every 100 blocks
+              actions:
+                - action_name: action1
+                  # Complex condition: execute when ETH < $2000.2 OR DAI/ETH < 1/2000.6
+                  condition: common.market_spot:{"WETH/USDC"} < 2000.2 OR common.market_spot:{"DAI/WETH"} < 1 / 2000.6
+                  protocol_id: univ3_usdc_usdt     # Target the USDC/USDT pool
+                  name: mint                       # Provide liquidity
+                  args:
+                    amount: 10.                    # Amount to provide
+                    price_lower: 0.5               # Lower price bound
+                    price_upper: 1.5               # Upper price bound
+                - action_name: action2
+                                                   # Always execute (no condition)
+                  protocol_id: univ3_wbtc_eth      # Target WBTC/ETH pool
+                  name: swap                       # Perform a swap
+                  args:
+                    amount1_in: 1.                 # Swap 1 unit of token
+
+Working with Configurations
+---------------------------
+
+Configurations can be provided in multiple formats:
+
+.. code-block:: python
+
+    # From a YAML file
+    sim = Simulation(protocols, "config.yaml")
+
+    # From a JSON file
+    sim = Simulation(protocols, "config.json")
+
+    # From a dictionary
+    config = {
+        "simulation": {"blocks": 1000},
+        "agents": [],
+        "protocols": {}
+    }
+    sim = Simulation(protocols, config)
+
+    # From a YAML string
+    yaml_config = """
+    simulation:
+      blocks: 1000
+    agents: []
+    protocols: {}
+    """
+    sim = Simulation(protocols, yaml_config)
+
+Running A Configuration
+-----------------------
+
+To use a configuration in your simulation, simply save it as a YAML file and load it as shown in the :doc:`getting_started` guide.
+
+.. code-block:: python
+
+    from nqs_sdk import Simulation
+    from nqs_sdk.protocols import UniswapV3
+    import json
+
+    # Initialize simulation with protocols and configuration
+    uniswap_v3 = UniswapV3Factory() # factory for all UniswapV3 instances
+    sim = Simulation([uniswap_v3], "your_config.yml")
+
+    # Run the simulation
+    all_observables_str = sim.run() # this intermediate step will be fixed soon
+    all_observables = json.loads(all_observables_str)
+
+    # Access results
+    print(f"Simulation completed with {len(all_observables)} observables")
+
+
+This configuration demonstrates advanced features like conditional trading, multi-token portfolios, and realistic market simulation with correlation between assets.
+
+Practical Examples
+------------------
+
+Here are four comprehensive examples demonstrating realistic end-to-end operations with Uniswap V3. Each example shows a different strategy and use case.
+
+Example 1: Basic Liquidity Management
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Use Case**: This strategy is perfect for stablecoin pairs where you want to earn fees with minimal impermanent loss. The tight tick range around $1.00 maximizes fee collection for stable assets.
+
+.. code-block:: yaml
+
+    version: 1.0.0
+
+    # Simulation parameters - short 3-block simulation for demonstration
+    common:
+      block_number_start: 18725000        # Start at a specific historical block
+      block_number_end: 18725002          # Run for just 3 blocks
+      block_step_metrics: 1               # Collect metrics every block
+      numeraire: USDC                     # Use USDC as base currency
+      gas_fee: 10                         # Gas cost per transaction
+      gas_fee_ccy: USDC                   # Pay gas in USDC
+      arbitrage_block_frequency: 100      # Low arbitrage frequency
+
+    # Price model for USDC/USDT (stable pair)
+    spot:
+      spot_list:
+        - name: USDC/USDT
+          custom:                         # Custom price path
+            timestamps: [1701838079, 1701838091, 1701838103]
+            path: [1.0, 1.0, 1.0]         # Stable $1.00 price
+
+    # Protocol and pool setup
+    simulation_environment:
+      tokens_info:
+        USDC: {decimals: 6}               # USDC has 6 decimal places
+        USDT: {decimals: 6}               # USDT has 6 decimal places
+      protocols_to_simulate:
+        uniswap_v3:
+          initial_state:
+            custom_state:
+              pools:
+                - pool_name: univ3_usdc_usdt_001
+                  symbol_token0: USDC
+                  symbol_token1: USDT
+                  fee_tier: 0.01          # 0.01% fee tier (1 basis point)
+                  initial_balance:
+                    amount: 100000000     # 100M initial pool liquidity
+                    unit: token0
+
+    # Trading agent strategy
+    agents:
+      - name: liquidity_provider
+        wallet:
+          USDC: 10000                     # Start with $10k USDC
+          USDT: 10000                     # Start with $10k USDT
+        strategy:
+          timed_events:
+            # Block 1: Create liquidity position
+            - name: create_position
+              block_number: 18725001
+              actions:
+                - action_name: mint_liquidity
+                  protocol_id: univ3_usdc_usdt_001
+                  name: raw_mint            # Low-level mint operation
+                  args:
+                    tick_lower: -101        # Lower price bound (around $0.99)
+                    tick_upper: 101         # Upper price bound (around $1.01)
+                    amount: 1985301236174   # Precise liquidity amount
+                    token_id: stable_position
+
+            # Block 2: Close position
+            - name: close_position
+              block_number: 18725002
+              actions:
+                - action_name: burn_liquidity
+                  protocol_id: univ3_usdc_usdt_001
+                  name: raw_burn            # Remove liquidity
+                  args:
+                    tick_lower: -101
+                    tick_upper: 101
+                    amount: 1985301236174   # Remove all liquidity
+                    collect: true           # Automatically collect fees + principal
+
+Example 2: Dynamic Market Making
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Use Case**: Demonstrates the simulator's power with minimal configuration. Shows realistic price volatility effects on liquidity positions, perfect for understanding impermanent loss vs fee collection dynamics in volatile markets.
+
+.. code-block:: yaml
+
+    version: 1.0.0
+
+    # Simulation parameters - 1000 blocks with high volatility price action
+    common:
+      block_number_start: 18725000      # Historical Ethereum block number
+      block_number_end: 18726000        # 1000 blocks simulation (~3-4 hours)
+      block_step_metrics: 50            # Collect metrics every 50 blocks
+      numeraire: USDC                   # Use USDC as base currency for calculations
+      plot_output: true                 # Generate performance charts
+      save_metrics: false               # Don't save detailed metrics to file
+      arbitrage_block_frequency: 5      # Check arbitrage opportunities every 5 blocks
+
+    # Price model for ETH/USDC (volatile pair)
+    spot:
+      spot_list:
+        - name: WETH/USDC
+          gbm:                          # Geometric Brownian Motion model
+            s0: 2000                    # Starting price: $2000 per ETH
+            mu: 0.                      # No drift (neutral market expectation)
+            vol: 0.4                    # 40% annual volatility (high volatility)
+      correlation: [[1]]                # Single asset, perfect self-correlation
+
+    # Protocol and pool setup
+    simulation_environment:
+      protocols_to_simulate:
+        uniswap_v3:
+          initial_state:
+            custom_state:
+              pools:
+                - pool_name: uniswapv3_eth_usdc
+                  symbol_token0: ETH    # First token in the pair
+                  symbol_token1: USDC   # Second token in the pair
+                  fee_tier: 0.0005      # 0.05% fee tier (5 basis points)
+                  initial_balance:
+                    amount: 10000000    # 10M USDC initial pool liquidity
+                    unit: token1        # Specify liquidity amount in USDC
+
+    # Market maker agent strategy
+    agents:
+      - name: market_maker
+        wallet:
+          USDC: 50000                   # Start with $50k USDC
+          ETH: 25                       # Start with 25 ETH (~$50k at $2000)
+        strategy:
+          timed_events:
+            # Create liquidity position at simulation start
+            - name: initial_position
+              block_number: 18725001    # Execute on block 1
+              actions:
+                - action_name: create_position
+                  protocol_id: uniswapv3_eth_usdc
+                  name: mint            # Provide liquidity
+                  args:
+                    amount1: 20000      # Use $20k USDC for liquidity
+                    price_lower: 1800   # Lower price bound ($1800)
+                    price_upper: 2200   # Upper price bound ($2200)
+                    token_id: mm_position  # Position identifier

@@ -1,0 +1,359 @@
+===============================
+Micro-Language Expression Guide
+===============================
+
+This guide explains how to use micro-language expressions and conditions for data analysis and metrics evaluation in the Nuant Quantitative System.
+
+Overview
+--------
+
+Micro-expressions are a powerful domain-specific language used to define conditions, calculate values, and create dynamic behaviors in simulation configurations. They allow you to reference protocol metrics, perform calculations, and create complex logical conditions.
+
+Usage in Configuration Files
+----------------------------
+
+Micro-expressions are primarily used within configuration files to define quantities through formulas or conditions. They provide a powerful way to:
+
+1. **Access protocol metrics** - Reference values from the simulation environment
+2. **Define conditions** - Create triggers for actions based on market conditions
+3. **Calculate values** - Compute amounts dynamically based on current state
+
+Common use cases include:
+
+* **Conditional execution of actions** - Execute trades only when specific market conditions are met
+* **Dynamic parameter calculation** - Set position sizes or price ranges based on current market data
+* **Complex decision logic** - Combine multiple conditions with logical operators
+
+For detailed information on how to use micro-expressions in configuration files, see :doc:`config_file_grammar`.
+
+Examples from Configuration Files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. **Price comparison condition**::
+
+    condition: common.market_spot:{"WETH/USDC"} < 2000.2 OR common.market_spot:{"DAI/WETH"} < 1 / 2000.6
+
+   This condition triggers an action when either ETH price falls below $2000.2 or when the DAI/ETH rate indicates ETH is below $2000.6.
+
+2. **Protocol metric evaluation**::
+
+    dex_pool.dex_spot > 2 AND max of dex_pool.dex_spot between last_update and t > 2
+
+   This expression combines a current value check with a historical maximum check over a time window.
+
+3. **Mathematical formula**::
+
+    dex_pool.dex_spot / 2 + dex_pool.total_value_locked > 2e9
+
+   This expression performs arithmetic operations on protocol metrics to create a complex condition.
+
+Basic Syntax
+------------
+
+This section covers the fundamental syntax elements of the micro-language.
+
+Metrics Structure
+~~~~~~~~~~~~~~~~~
+
+Metrics are the core building blocks of micro-expressions, allowing you to access protocol and simulation data.
+
+Metrics can be accessed in two forms:
+
+* **Basic metric without options**::
+
+    protocol.metric_name
+
+* **Metric with options**::
+
+    protocol.metric_name:{positional_option, named_option="value"}
+
+For example, to access the spot price of a specific token pair::
+
+    common.market_spot:{"WETH/USDC"}
+
+.. note::
+    Using '@' as a prefix triggers a contextual popup in the Nuant's IDE for any metric, providing documentation and available options.
+
+For a list of available protocol metrics, see:
+
+* :doc:`protocols_uniswap_v3` - Metrics for Uniswap V3 protocol
+
+Expression Types
+----------------
+
+The micro-language supports both numerical and boolean expressions, allowing for complex calculations and conditions.
+
+Numerical Expressions
+~~~~~~~~~~~~~~~~~~~~~
+
+Numerical expressions allow you to perform mathematical operations on metrics and values.
+
+The following operators are supported:
+
+* Addition: ``+``
+* Subtraction: ``-``
+* Multiplication: ``*``
+* Division: ``/``
+* Exponentiation: ``**`` or ``^``
+* Parentheses for grouping: ``(expression)``
+* Function calls: ``function_name(args...)``
+* Numeric literals (e.g., ``123``, ``45.67``, ``1.23e4``)
+* Aggregations: ``aggregation of expression on window``
+
+Example::
+
+    (dex_pool.dex_spot * 2) + sqrt(dex_pool.total_value_locked) / 1e6
+
+Boolean Expressions
+~~~~~~~~~~~~~~~~~~~
+
+Boolean expressions evaluate to either true or false and are used for conditions.
+
+Comparison operators:
+
+* Equal: ``=``
+* Less than: ``<``
+* Less than or equal: ``<=``
+* Greater than: ``>``
+* Greater than or equal: ``>=``
+
+Logical operators:
+
+* AND (``and`` or ``AND``)
+* OR (``or`` or ``OR``)
+* Parentheses for grouping: ``(boolean_expression)``
+* Boolean literals: ``true``, ``false``
+
+Example::
+
+    (dex_pool.dex_spot > 1500) AND (dex_pool.liquidity > 1000000)
+
+Aggregation Operations
+----------------------
+
+Aggregation operations allow you to analyze metric values over time windows.
+
+Syntax::
+
+    <operator> of <expression> on <window>
+
+Where ``<window>`` can be specified as:
+
+* ``between t1 and t2`` - A specific time range
+* ``between last_update and t`` - From the last update to the current time
+* ``over last n blocks`` - Over the last n blocks
+
+Available aggregation operators:
+
+* ``last_value`` - Last observed value
+* ``min`` - Minimum value
+* ``max`` - Maximum value
+* ``mean`` - Average value
+* ``sharpe_ratio`` - Sharpe ratio calculation (risk-adjusted return)
+* ``sortino_ratio`` - Sortino ratio calculation (downside risk-adjusted return)
+* ``calmar_ratio`` - Calmar ratio calculation (drawdown-adjusted return)
+* ``max_drawdown`` - Maximum drawdown (largest peak-to-trough decline)
+* ``volatility`` - Volatility measurement (standard deviation of returns)
+* ``return`` - Return calculation
+* ``abs_return`` - Absolute return
+* ``ewma`` - Exponentially weighted moving average
+* ``sum`` - Sum of values
+
+Example::
+
+    max of dex_pool.dex_spot between last_update and t > 2000
+
+Built-in Functions
+------------------
+
+The micro-language includes a variety of built-in mathematical functions to support complex calculations.
+
+Mathematical functions available:
+
+* ``min(a, b, ...)`` - Minimum of arguments
+* ``max(a, b, ...)`` - Maximum of arguments
+* ``abs(x)`` - Absolute value
+* ``sqrt(x)`` - Square root
+* ``exp(x)`` - Exponential function (e^x)
+* ``ln(x)`` - Natural logarithm
+* ``pow(x, y)`` - Power function (x^y)
+* ``log10(x)`` - Base-10 logarithm
+* ``log(x, base)`` - Logarithm with specified base
+* ``erf(x)`` - Error function
+* ``normal_cdf(x)`` - Normal cumulative distribution function
+
+Example::
+
+    sqrt(dex_pool.dex_spot) > 30
+
+Custom Functions
+----------------
+
+.. warning::
+    Custom function definitions are temporarily disabled in the current version.
+
+You can define your own functions to encapsulate complex logic and calculations.
+
+Define custom functions using the following syntax::
+
+    function name(arg1, arg2...) {
+        statements...
+    }
+
+Supported statements:
+
+* **Assignment**: ``identifier = expression``
+* **Conditional**: ``if condition { statements... } else { statements... }``
+* **Return**: ``return expression``
+
+Example::
+
+    function risk_adjusted_return(price, tvl) {
+        volatility = sqrt(price)
+        if volatility > 0 {
+            return price / volatility + ln(tvl)
+        } else {
+            return 0
+        }
+    }
+
+    risk_adjusted_return(dex_pool.dex_spot, dex_pool.total_value_locked) > 10
+
+
+
+Practical Examples
+------------------
+
+This section provides practical examples of micro-expressions for common use cases in configuration files.
+
+Basic Conditions
+~~~~~~~~~~~~~~~~
+
+Simple price threshold::
+
+    dex_pool.dex_spot > 2000
+
+This condition is true when the spot price in the DEX pool exceeds 2000.
+
+Time-Based Analysis
+~~~~~~~~~~~~~~~~~~~
+
+Analyzing metrics over time windows::
+
+    max of dex_pool.dex_spot between last_update and t > 2000
+
+This condition checks if the maximum spot price since the last update exceeds 2000.
+
+Volatility detection::
+
+    volatility of dex_pool.dex_spot over last 100 blocks > 0.05
+
+This condition is true when price volatility over the last 100 blocks exceeds 5%.
+
+Combined Conditions
+~~~~~~~~~~~~~~~~~~~
+
+Combining multiple conditions with logical operators::
+
+    (dex_pool.dex_spot > 2000) AND (dex_pool.liquidity > 1000000)
+
+This condition requires both high price and sufficient liquidity.
+
+Market trend analysis::
+
+    (dex_pool.dex_spot > mean of dex_pool.dex_spot over last 200 blocks) AND 
+    (volatility of dex_pool.dex_spot over last 50 blocks < 0.03)
+
+This condition identifies an uptrend with low recent volatility.
+
+Complex Calculations
+~~~~~~~~~~~~~~~~~~~~
+
+Arithmetic operations::
+
+    dex_pool.dex_spot / 2 + dex_pool.total_value_locked > 2e9
+
+This expression combines price and TVL metrics in a calculation.
+
+Risk-adjusted metrics::
+
+    function risk_score(price, vol) {
+        return price / (vol * 100)
+    }
+
+    risk_score(dex_pool.dex_spot, volatility of dex_pool.dex_spot over last 100 blocks) > 5
+
+This example defines and uses a custom risk scoring function.
+
+Real-World Use Cases
+~~~~~~~~~~~~~~~~~~~~
+
+Dynamic liquidity provision::
+
+    condition: volatility of common.market_spot:{"WETH/USDC"} over last 50 blocks < 0.02
+    action: mint_liquidity with narrow_range
+
+This condition triggers liquidity provision only during low volatility periods.
+
+Stop-loss implementation::
+
+    condition: common.market_spot:{"WETH/USDC"} < 1800 OR 
+              (max of common.market_spot:{"WETH/USDC"} over last 100 blocks - 
+               common.market_spot:{"WETH/USDC"}) / max of common.market_spot:{"WETH/USDC"} over last 100 blocks > 0.1
+    action: swap_all_to_stable
+
+This condition triggers a protective action when price falls below 1800 or drops more than 10% from recent maximum.
+
+Troubleshooting
+---------------
+
+This section helps you diagnose and fix common issues with micro-expressions.
+
+Common Errors
+~~~~~~~~~~~~~
+
+**Missing Market Price Error**
+
+If you encounter::
+
+    Undefined key 'common.market_price:{"WETH/USD"}'
+
+This indicates that the required market price entry is missing from the evaluator dictionary. Ensure that:
+
+1. The token pair is correctly specified (check for typos)
+2. The requested market price is available in your simulation
+3. You're using the correct metric name (e.g., `market_spot` vs `market_price`)
+
+**Syntax Errors**
+
+For syntax errors like::
+
+    Error parsing expression: unexpected token at position 15
+
+Check for:
+
+1. Missing or mismatched parentheses
+2. Incorrect operator usage
+3. Typos in function names or metrics
+4. Missing quotes around string parameters
+
+**Time Window Errors**
+
+If time window aggregations aren't working as expected, verify that:
+
+1. The specified time window is valid for your simulation
+2. The metric has sufficient historical data for the requested window
+3. The window syntax is correct (e.g., `between last_update and t`)
+
+Best Practices
+~~~~~~~~~~~~~~
+
+1. **Start simple**: Begin with basic expressions and gradually add complexity
+2. **Use parentheses**: Explicitly group expressions to ensure correct evaluation order
+3. **Test incrementally**: Validate each part of a complex expression separately
+4. **Check metric availability**: Ensure all referenced metrics are available in your simulation
+5. **Consider edge cases**: Account for potential division by zero or missing data
+
+For more help with specific protocols, refer to the protocol-specific documentation:
+
+* :doc:`protocols_uniswap_v3` - Uniswap V3 metrics and examples

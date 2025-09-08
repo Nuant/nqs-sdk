@@ -1,0 +1,7 @@
+nqs\_sdk.bindings.spots.spot\_generator module
+==============================================
+
+.. automodule:: nqs_sdk.bindings.spots.spot_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:

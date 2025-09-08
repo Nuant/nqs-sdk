@@ -1,0 +1,7 @@
+nqs\_sdk.bindings.protocols.uniswap\_v3.tx\_generators.uniswap\_v3\_historical module
+=====================================================================================
+
+.. automodule:: nqs_sdk.bindings.protocols.uniswap_v3.tx_generators.uniswap_v3_historical
+   :members:
+   :show-inheritance:
+   :undoc-members:

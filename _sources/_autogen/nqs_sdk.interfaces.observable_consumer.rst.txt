@@ -1,0 +1,7 @@
+nqs\_sdk.interfaces.observable\_consumer module
+===============================================
+
+.. automodule:: nqs_sdk.interfaces.observable_consumer
+   :members:
+   :show-inheritance:
+   :undoc-members:
